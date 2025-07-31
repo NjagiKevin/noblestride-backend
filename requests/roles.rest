@@ -1,0 +1,3 @@
+### Get all roles
+GET {{LIVE_URL}}/roles
+Authorization: Bearer {{token}}
