@@ -1,0 +1,46 @@
+### Create a social media account
+POST {{LOCAL}}/social-media-accounts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "link":"001",
+    "social_account_type_id":"36de3cb0-5629-4863-8cec-ea71c166fc29"
+}
+
+### Update a social media account
+PUT {{LOCAL}}/social-media-accounts/a84cbef3-a92e-4974-9d9f-3271347a65fb
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "link":"0ddd01",
+    "social_account_type_id":"36de3cb0-5629-4863-8cec-ea71c166fc29"
+}
+
+### Delete a social media account
+DELETE {{LOCAL}}/social-media-accounts/a84cbef3-a92e-4974-9d9f-3271347a65fb
+Authorization: Bearer {{token}}
+
+### Get user profile
+GET {{LIVE_URL}}/users/profile
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Update user profile
+GET {{LOCAL}}/users/profile
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Logout user
+POST {{LOCAL}}/users/logout
+Authorization: Bearer {{token}}
+
+### Upload profile image
+POST {{LOCAL}}/users/upload-profile-image
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data;
+
+{
+    "profile_image": "/Users/solutions/Downloads/ago_logo.png"
+}
