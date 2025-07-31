@@ -1,14 +1,9 @@
-const db = require("../Models");
-const Role = db.roles;
-
 const checkRole = (requiredRole) => {
-  return async (req, res, next) => {
+  return (req, res, next) => {
     try {
-      const userRole = req.user.role_id; // Assuming `req.user` contains the authenticated user's details
+      const userRole = req.user.userRole;
 
-      // Fetch the user's role
-      const role = await Role.findByPk(userRole);
-      if (!role || role.name !== requiredRole) {
+      if (!userRole || userRole.name !== requiredRole) {
         return res.status(403).json({
           status: false,
           message: "Access denied. You do not have the required role.",
