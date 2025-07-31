@@ -56,7 +56,7 @@ const checkRole = require("../Middlewares/roleMiddleware");
 const User = db.users;
 
 const router = express.Router();
-router.delete("/:id", authMiddleware, deleteUser);
+router.delete("/:id", authMiddleware, checkRole("Administrator"), deleteUser);
 //signup endpoint
 //passing the middleware function to the signup
 router.post("/upload-profile-image", authMiddleware, uploadProfileImage);
@@ -78,9 +78,9 @@ router.get(
   getEmployeesForInvestmentFirm
 );
 
-router.post("/add-employee", authMiddleware, addEmployee);
-router.put("/update-employee/:id", authMiddleware, updateEmployee);
-router.delete("/delete-employee/:id", authMiddleware, deleteEmployee);
+router.post("/add-employee", authMiddleware, checkRole("Administrator"), addEmployee);
+router.put("/update-employee/:id", authMiddleware, checkRole("Administrator"), updateEmployee);
+router.delete("/delete-employee/:id", authMiddleware, checkRole("Administrator"), deleteEmployee);
 router.post("/onboard-target-company", authMiddleware, onboardTargetCompany);
 router.post("/onboard-investor", onboardInvestor);
 router.post("/signup", userAuth.saveUser, signup);
@@ -125,10 +125,10 @@ router.post("/reset-password", resetPassword);
 
 //bulk-upload
 
-router.post("/bulk-upload", authMiddleware, bulkUploadUsers);
+router.post("/bulk-upload", authMiddleware, checkPermissions(["bulk-upload"]), bulkUploadUsers);
 router.get("/user/:id", authMiddleware, getUserById); // Add this line
 router.get("/profile", authMiddleware, getProfile); // Add this line
-router.put("/:id/status", authMiddleware, updateUserStatus); // Add this line
+router.put("/:id/status", authMiddleware, checkRole("Administrator"), updateUserStatus); // Add this line
 router.get("/employees", authMiddleware, getEmployees); // Add this line
 
 module.exports = router;
