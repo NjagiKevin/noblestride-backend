@@ -75,8 +75,8 @@ POST {{LOCAL}}/users/login
 Content-Type: application/json
 
 {
-    "email":"fhaddad@gulfcapital.com",
-    "password":"password"
+    "email":"aliciabakersconfectionersltd@example.com",
+    "password":"password123"
 }
 
 ### Verify OTP
@@ -84,8 +84,8 @@ POST {{LOCAL}}/users/verify-code
 Content-Type: application/json
 
 {
-    "email":"kelly@noblestride.co.ke",
-    "code":"701818",
+    "email":"aliciabakersconfectionersltd@example.com",
+    "code":"727226",
     "type":"login"
 }
 

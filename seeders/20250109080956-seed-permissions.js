@@ -1,1421 +1,971 @@
-"use strict";
+'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert(
-      "permissions",
-      [
-        // {
-        //   permission_id: Sequelize.literal("uuid_generate_v4()"),
-        //   name: "CREATE_DEAL",
-        //   createdAt: new Date(),
-        //   updatedAt: new Date(),
-        // },
-        // {
-        //   permission_id: Sequelize.literal("uuid_generate_v4()"),
-        //   name: "UPDATE_DEAL",
-        //   createdAt: new Date(),
-        //   updatedAt: new Date(),
-        // },
-        // {
-        //   permission_id: Sequelize.literal("uuid_generate_v4()"),
-        //   name: "DELETE_DEAL",
-        //   createdAt: new Date(),
-        //   updatedAt: new Date(),
-        // },
-        // {
-        //   permission_id: Sequelize.literal("uuid_generate_v4()"),
-        //   name: "VIEW_DEAL",
-        //   createdAt: new Date(),
-        //   updatedAt: new Date(),
-        // },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_AUDIT_LOG",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_AUDIT_LOGS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_AUDIT_LOG_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_CONTACT_PERSON",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_CONTACT_PERSONS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_CONTACT_PERSON_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_CONTACT_PERSON",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_CONTACT_PERSON",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_CONTACT_PERSONS_BY_USER",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_CONTINENT",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_CONTINENTS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_CONTINENT_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_CONTINENT",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_CONTINENT",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_CONTINENT_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_CONTINENT_PREFERENCES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_USER_CONTINENT_PREFERENCES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_CONTINENT_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_CONTINENT_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "BULK_CREATE_CONTINENT_PREFERENCES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_COUNTRY",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_COUNTRIES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_COUNTRY_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_COUNTRY",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_COUNTRY",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "FILTER_COUNTRIES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_COUNTRY_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_COUNTRY_PREFERENCES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_COUNTRY_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_COUNTRY_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "BULK_CREATE_COUNTRY_PREFERENCES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "ADD_CONTINENT_TO_DEAL",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "REMOVE_CONTINENT_FROM_DEAL",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_DEAL_CONTINENTS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        // // {
-        // //   permission_id: Sequelize.literal("uuid_generate_v4()"),
-        // //   name: "CREATE_DEAL",
-        // //   createdAt: new Date(),
-        // //   updatedAt: new Date(),
-        // // },
-        // // {
-        // //   permission_id: Sequelize.literal("uuid_generate_v4()"),
-        // //   name: "VIEW_ALL_DEALS",
-        // //   createdAt: new Date(),
-        // //   updatedAt: new Date(),
-        // // },
-        // // {
-        // //   permission_id: Sequelize.literal("uuid_generate_v4()"),
-        // //   name: "VIEW_DEAL_BY_ID",
-        // //   createdAt: new Date(),
-        // //   updatedAt: new Date(),
-        // // },
-        // // {
-        // //   permission_id: Sequelize.literal("uuid_generate_v4()"),
-        // //   name: "UPDATE_DEAL",
-        // //   createdAt: new Date(),
-        // //   updatedAt: new Date(),
-        // // },
-        // {
-        //   permission_id: Sequelize.literal("uuid_generate_v4()"),
-        //   name: "DELETE_DEAL",
-        //   createdAt: new Date(),
-        //   updatedAt: new Date(),
-        // },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "FILTER_DEALS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "MARK_DEAL_AS_ACTIVE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "MARK_DEAL_AS_CLOSED",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "MARK_DEAL_AS_ARCHIVED",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "GET_DEALS_BY_USER_PREFERENCES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "GET_TARGET_COMPANY_DEALS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "GET_DEAL_MILESTONES_AND_TASKS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "MARK_DEAL_AS_ON_HOLD",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "MARK_DEAL_AS_PENDING",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "MARK_DEAL_AS_CLOSED_AND_REOPENED",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "FILTER_DEALS_BY_LOCATION",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        // {
-        //   permission_id: Sequelize.literal("uuid_generate_v4()"),
-        //   name: "UPDATE_DEAL_STAGE",
-        //   createdAt: new Date(),
-        //   updatedAt: new Date(),
-        // },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "ADD_COUNTRY_TO_DEAL",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "REMOVE_COUNTRY_FROM_DEAL",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_COUNTRIES_FOR_DEAL",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_DEAL_MILESTONE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_DEAL_MILESTONES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_DEAL_MILESTONE_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_DEAL_MILESTONE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_DEAL_MILESTONE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_DEAL_MILESTONE_STATUS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_DEAL_MILESTONE_STATUSES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_DEAL_MILESTONE_STATUS_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_DEAL_MILESTONE_STATUS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_DEAL_MILESTONE_STATUS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "ADD_REGION_TO_DEAL",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "REMOVE_REGION_FROM_DEAL",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_REGIONS_FOR_DEAL",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_DEAL_STAGE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_DEAL_STAGES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_DEAL_STAGE_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_DEAL_STAGE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_DEAL_STAGE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_DEAL_TYPE_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_DEAL_TYPE_PREFERENCES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_DEAL_TYPE_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_DEAL_TYPE_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_MULTIPLE_DEAL_TYPE_PREFERENCES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_UNIQUE_DEAL_TYPE_PREFERENCES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_DOCUMENT",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_DOCUMENTS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_DOCUMENT_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_DOCUMENT",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_DOCUMENT",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "ARCHIVE_DOCUMENT",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "FILTER_DOCUMENTS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "GET_DOCUMENTS_BY_USER_DEALS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "GET_DOCUMENTS_FOR_USER_WITH_SHARE_STATUS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "GET_DOCUMENT_SIGNING_URL",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "SHARE_DOCUMENT",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "ACCEPT_DOCUMENT_SHARE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "REJECT_DOCUMENT_SHARE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_DOCUMENT_SHARES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_DOCUMENT_TYPE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_DOCUMENT_TYPES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_DOCUMENT_TYPE_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_DOCUMENT_TYPE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_DOCUMENT_TYPE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_FOLDER",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_FOLDERS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_FOLDER_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_FOLDER",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_FOLDER",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "ARCHIVE_FOLDER",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "FILTER_FOLDERS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "GET_FOLDERS_BY_USER",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "GET_ACCEPTED_AND_PENDING_FOLDER_INVITES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "ADD_INVESTOR_TO_DEAL_STAGE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_INVESTOR_DEAL_STAGE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_INVESTOR_DEAL_STAGES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "REMOVE_INVESTOR_FROM_DEAL_STAGE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_INVESTOR_MILESTONE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_INVESTOR_MILESTONES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_INVESTOR_MILESTONE_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_INVESTOR_MILESTONE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_INVESTOR_MILESTONE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_INVESTOR_MILESTONE_STATUS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_INVESTOR_MILESTONE_STATUSES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_INVESTOR_MILESTONE_STATUS_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_INVESTOR_MILESTONE_STATUS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_INVESTOR_MILESTONE_STATUS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "MARK_INVESTOR_MILESTONE_STATUS_AS_COMPLETED",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "MARK_INVESTOR_MILESTONE_STATUS_AS_PENDING",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_INVESTOR_MILESTONE_STATUSES_BY_USER_AND_DEAL",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_INVESTOR_MILESTONE_STATUSES_BY_USER",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_INVESTMENT",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_INVESTMENTS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_INVESTMENT_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_INVESTMENT",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_INVESTMENT",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "TRACK_INVESTOR_BEHAVIOR",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_MILESTONE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_MILESTONES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_MILESTONE_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_MILESTONE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_MILESTONE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "FILTER_MILESTONES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "GET_MILESTONES_BY_DEAL_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "GET_MILESTONES_FOR_USER",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_NOTIFICATION",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_USER_NOTIFICATIONS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "MARK_NOTIFICATION_AS_READ",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "SEND_PREDICTIVE_NOTIFICATIONS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_PERMISSION",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_PERMISSIONS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_PERMISSION_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_PERMISSION",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_PERMISSION",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_PIPELINE_STAGE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_PIPELINE_STAGES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_PIPELINE_STAGE_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_PIPELINE_STAGE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_PIPELINE_STAGE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "GET_PIPELINE_STAGES_BY_PIPELINE_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_PRIMARY_LOCATION_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_PRIMARY_LOCATION_PREFERENCES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_PRIMARY_LOCATION_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_PRIMARY_LOCATION_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_REGION",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_REGIONS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_REGION_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_REGION",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_REGION",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_REGION_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_REGION_PREFERENCES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_REGION_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_REGION_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "BULK_CREATE_REGION_PREFERENCES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_ROLE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_ROLES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ROLE_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_ROLE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_ROLE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "ASSIGN_PERMISSIONS_TO_ROLE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_SECTOR",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_SECTORS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_SECTOR_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_SECTOR",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_SECTOR",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+    const permissionsToSeed = [
+      {
+        name: 'CREATE_DEAL',
+      },
+      {
+        name: 'UPDATE_DEAL',
+      },
+      {
+        name: 'DELETE_DEAL',
+      },
+      {
+        name: 'VIEW_DEAL',
+      },
+      {
+        name: 'CREATE_AUDIT_LOG',
+      },
+      {
+        name: 'VIEW_ALL_AUDIT_LOGS',
+      },
+      {
+        name: 'VIEW_AUDIT_LOG_BY_ID',
+      },
+      {
+        name: 'CREATE_CONTACT_PERSON',
+      },
+      {
+        name: 'VIEW_CONTACT_PERSONS',
+      },
+      {
+        name: 'VIEW_CONTACT_PERSON_BY_ID',
+      },
+      {
+        name: 'UPDATE_CONTACT_PERSON',
+      },
+      {
+        name: 'DELETE_CONTACT_PERSON',
+      },
+      {
+        name: 'VIEW_CONTACT_PERSONS_BY_USER',
+      },
+      {
+        name: 'CREATE_CONTINENT',
+      },
+      {
+        name: 'VIEW_ALL_CONTINENTS',
+      },
+      {
+        name: 'VIEW_CONTINENT_BY_ID',
+      },
+      {
+        name: 'UPDATE_CONTINENT',
+      },
+      {
+        name: 'DELETE_CONTINENT',
+      },
+      {
+        name: 'CREATE_CONTINENT_PREFERENCE',
+      },
+      {
+        name: 'VIEW_CONTINENT_PREFERENCES',
+      },
+      {
+        name: 'VIEW_USER_CONTINENT_PREFERENCES',
+      },
+      {
+        name: 'UPDATE_CONTINENT_PREFERENCE',
+      },
+      {
+        name: 'DELETE_CONTINENT_PREFERENCE',
+      },
+      {
+        name: 'BULK_CREATE_CONTINENT_PREFERENCES',
+      },
+      {
+        name: 'CREATE_COUNTRY',
+      },
+      {
+        name: 'VIEW_ALL_COUNTRIES',
+      },
+      {
+        name: 'VIEW_COUNTRY_BY_ID',
+      },
+      {
+        name: 'UPDATE_COUNTRY',
+      },
+      {
+        name: 'DELETE_COUNTRY',
+      },
+      {
+        name: 'FILTER_COUNTRIES',
+      },
+      {
+        name: 'CREATE_COUNTRY_PREFERENCE',
+      },
+      {
+        name: 'VIEW_COUNTRY_PREFERENCES',
+      },
+      {
+        name: 'UPDATE_COUNTRY_PREFERENCE',
+      },
+      {
+        name: 'DELETE_COUNTRY_PREFERENCE',
+      },
+      {
+        name: 'BULK_CREATE_COUNTRY_PREFERENCES',
+      },
+      {
+        name: 'ADD_CONTINENT_TO_DEAL',
+      },
+      {
+        name: 'REMOVE_CONTINENT_FROM_DEAL',
+      },
+      {
+        name: 'VIEW_DEAL_CONTINENTS',
+      },
+      {
+        name: 'FILTER_DEALS',
+      },
+      {
+        name: 'MARK_DEAL_AS_ACTIVE',
+      },
+      {
+        name: 'MARK_DEAL_AS_CLOSED',
+      },
+      {
+        name: 'MARK_DEAL_AS_ARCHIVED',
+      },
+      {
+        name: 'GET_DEALS_BY_USER_PREFERENCES',
+      },
+      {
+        name: 'GET_TARGET_COMPANY_DEALS',
+      },
+      {
+        name: 'GET_DEAL_MILESTONES_AND_TASKS',
+      },
+      {
+        name: 'MARK_DEAL_AS_ON_HOLD',
+      },
+      {
+        name: 'MARK_DEAL_AS_PENDING',
+      },
+      {
+        name: 'MARK_DEAL_AS_CLOSED_AND_REOPENED',
+      },
+      {
+        name: 'FILTER_DEALS_BY_LOCATION',
+      },
+      {
+        name: 'UPDATE_DEAL_STAGE',
+      },
+      {
+        name: 'ADD_COUNTRY_TO_DEAL',
+      },
+      {
+        name: 'REMOVE_COUNTRY_FROM_DEAL',
+      },
+      {
+        name: 'VIEW_COUNTRIES_FOR_DEAL',
+      },
+      {
+        name: 'CREATE_DEAL_MILESTONE',
+      },
+      {
+        name: 'VIEW_ALL_DEAL_MILESTONES',
+      },
+      {
+        name: 'VIEW_DEAL_MILESTONE_BY_ID',
+      },
+      {
+        name: 'UPDATE_DEAL_MILESTONE',
+      },
+      {
+        name: 'DELETE_DEAL_MILESTONE',
+      },
+      {
+        name: 'CREATE_DEAL_MILESTONE_STATUS',
+      },
+      {
+        name: 'VIEW_ALL_DEAL_MILESTONE_STATUSES',
+      },
+      {
+        name: 'VIEW_DEAL_MILESTONE_STATUS_BY_ID',
+      },
+      {
+        name: 'UPDATE_DEAL_MILESTONE_STATUS',
+      },
+      {
+        name: 'DELETE_DEAL_MILESTONE_STATUS',
+      },
+      {
+        name: 'ADD_REGION_TO_DEAL',
+      },
+      {
+        name: 'REMOVE_REGION_FROM_DEAL',
+      },
+      {
+        name: 'VIEW_REGIONS_FOR_DEAL',
+      },
+      {
+        name: 'CREATE_DEAL_STAGE',
+      },
+      {
+        name: 'VIEW_ALL_DEAL_STAGES',
+      },
+      {
+        name: 'VIEW_DEAL_STAGE_BY_ID',
+      },
+      {
+        name: 'DELETE_DEAL_STAGE',
+      },
+      {
+        name: 'CREATE_DEAL_TYPE_PREFERENCE',
+      },
+      {
+        name: 'VIEW_DEAL_TYPE_PREFERENCES',
+      },
+      {
+        name: 'UPDATE_DEAL_TYPE_PREFERENCE',
+      },
+      {
+        name: 'DELETE_DEAL_TYPE_PREFERENCE',
+      },
+      {
+        name: 'CREATE_MULTIPLE_DEAL_TYPE_PREFERENCES',
+      },
+      {
+        name: 'VIEW_UNIQUE_DEAL_TYPE_PREFERENCES',
+      },
+      {
+        name: 'CREATE_DOCUMENT',
+      },
+      {
+        name: 'VIEW_ALL_DOCUMENTS',
+      },
+      {
+        name: 'VIEW_DOCUMENT_BY_ID',
+      },
+      {
+        name: 'UPDATE_DOCUMENT',
+      },
+      {
+        name: 'DELETE_DOCUMENT',
+      },
+      {
+        name: 'ARCHIVE_DOCUMENT',
+      },
+      {
+        name: 'FILTER_DOCUMENTS',
+      },
+      {
+        name: 'GET_DOCUMENTS_BY_USER_DEALS',
+      },
+      {
+        name: 'GET_DOCUMENTS_FOR_USER_WITH_SHARE_STATUS',
+      },
+      {
+        name: 'GET_DOCUMENT_SIGNING_URL',
+      },
+      {
+        name: 'SHARE_DOCUMENT',
+      },
+      {
+        name: 'ACCEPT_DOCUMENT_SHARE',
+      },
+      {
+        name: 'REJECT_DOCUMENT_SHARE',
+      },
+      {
+        name: 'VIEW_DOCUMENT_SHARES',
+      },
+      {
+        name: 'CREATE_DOCUMENT_TYPE',
+      },
+      {
+        name: 'VIEW_ALL_DOCUMENT_TYPES',
+      },
+      {
+        name: 'VIEW_DOCUMENT_TYPE_BY_ID',
+      },
+      {
+        name: 'UPDATE_DOCUMENT_TYPE',
+      },
+      {
+        name: 'DELETE_DOCUMENT_TYPE',
+      },
+      {
+        name: 'CREATE_FOLDER',
+      },
+      {
+        name: 'VIEW_ALL_FOLDERS',
+      },
+      {
+        name: 'VIEW_FOLDER_BY_ID',
+      },
+      {
+        name: 'UPDATE_FOLDER',
+      },
+      {
+        name: 'DELETE_FOLDER',
+      },
+      {
+        name: 'ARCHIVE_FOLDER',
+      },
+      {
+        name: 'FILTER_FOLDERS',
+      },
+      {
+        name: 'GET_FOLDERS_BY_USER',
+      },
+      {
+        name: 'GET_ACCEPTED_AND_PENDING_FOLDER_INVITES',
+      },
+      {
+        name: 'ADD_INVESTOR_TO_DEAL_STAGE',
+      },
+      {
+        name: 'UPDATE_INVESTOR_DEAL_STAGE',
+      },
+      {
+        name: 'VIEW_INVESTOR_DEAL_STAGES',
+      },
+      {
+        name: 'REMOVE_INVESTOR_FROM_DEAL_STAGE',
+      },
+      {
+        name: 'CREATE_INVESTOR_MILESTONE',
+      },
+      {
+        name: 'VIEW_ALL_INVESTOR_MILESTONES',
+      },
+      {
+        name: 'VIEW_INVESTOR_MILESTONE_BY_ID',
+      },
+      {
+        name: 'UPDATE_INVESTOR_MILESTONE',
+      },
+      {
+        name: 'DELETE_INVESTOR_MILESTONE',
+      },
+      {
+        name: 'CREATE_INVESTOR_MILESTONE_STATUS',
+      },
+      {
+        name: 'VIEW_ALL_INVESTOR_MILESTONE_STATUSES',
+      },
+      {
+        name: 'VIEW_INVESTOR_MILESTONE_STATUS_BY_ID',
+      },
+      {
+        name: 'UPDATE_INVESTOR_MILESTONE_STATUS',
+      },
+      {
+        name: 'DELETE_INVESTOR_MILESTONE_STATUS',
+      },
+      {
+        name: 'MARK_INVESTOR_MILESTONE_STATUS_AS_COMPLETED',
+      },
+      {
+        name: 'MARK_INVESTOR_MILESTONE_STATUS_AS_PENDING',
+      },
+      {
+        name: 'VIEW_INVESTOR_MILESTONE_STATUSES_BY_USER_AND_DEAL',
+      },
+      {
+        name: 'VIEW_INVESTOR_MILESTONE_STATUSES_BY_USER',
+      },
+      {
+        name: 'CREATE_INVESTMENT',
+      },
+      {
+        name: 'VIEW_ALL_INVESTMENTS',
+      },
+      {
+        name: 'VIEW_INVESTMENT_BY_ID',
+      },
+      {
+        name: 'UPDATE_INVESTMENT',
+      },
+      {
+        name: 'DELETE_INVESTMENT',
+      },
+      {
+        name: 'TRACK_INVESTOR_BEHAVIOR',
+      },
+      {
+        name: 'CREATE_MILESTONE',
+      },
+      {
+        name: 'VIEW_ALL_MILESTONES',
+      },
+      {
+        name: 'VIEW_MILESTONE_BY_ID',
+      },
+      {
+        name: 'UPDATE_MILESTONE',
+      },
+      {
+        name: 'DELETE_MILESTONE',
+      },
+      {
+        name: 'FILTER_MILESTONES',
+      },
+      {
+        name: 'GET_MILESTONES_BY_DEAL_ID',
+      },
+      {
+        name: 'GET_MILESTONES_FOR_USER',
+      },
+      {
+        name: 'CREATE_NOTIFICATION',
+      },
+      {
+        name: 'VIEW_USER_NOTIFICATIONS',
+      },
+      {
+        name: 'MARK_NOTIFICATION_AS_READ',
+      },
+      {
+        name: 'SEND_PREDICTIVE_NOTIFICATIONS',
+      },
+      {
+        name: 'CREATE_PERMISSION',
+      },
+      {
+        name: 'VIEW_ALL_PERMISSIONS',
+      },
+      {
+        name: 'VIEW_PERMISSION_BY_ID',
+      },
+      {
+        name: 'UPDATE_PERMISSION',
+      },
+      {
+        name: 'DELETE_PERMISSION',
+      },
+      {
+        name: 'CREATE_PIPELINE_STAGE',
+      },
+      {
+        name: 'VIEW_ALL_PIPELINE_STAGES',
+      },
+      {
+        name: 'VIEW_PIPELINE_STAGE_BY_ID',
+      },
+      {
+        name: 'UPDATE_PIPELINE_STAGE',
+      },
+      {
+        name: 'DELETE_PIPELINE_STAGE',
+      },
+      {
+        name: 'GET_PIPELINE_STAGES_BY_PIPELINE_ID',
+      },
+      {
+        name: 'CREATE_PRIMARY_LOCATION_PREFERENCE',
+      },
+      {
+        name: 'VIEW_PRIMARY_LOCATION_PREFERENCES',
+      },
+      {
+        name: 'UPDATE_PRIMARY_LOCATION_PREFERENCE',
+      },
+      {
+        name: 'DELETE_PRIMARY_LOCATION_PREFERENCE',
+      },
+      {
+        name: 'CREATE_REGION',
+      },
+      {
+        name: 'VIEW_ALL_REGIONS',
+      },
+      {
+        name: 'VIEW_REGION_BY_ID',
+      },
+      {
+        name: 'UPDATE_REGION',
+      },
+      {
+        name: 'DELETE_REGION',
+      },
+      {
+        name: 'CREATE_REGION_PREFERENCE',
+      },
+      {
+        name: 'VIEW_REGION_PREFERENCES',
+      },
+      {
+        name: 'UPDATE_REGION_PREFERENCE',
+      },
+      {
+        name: 'DELETE_REGION_PREFERENCE',
+      },
+      {
+        name: 'BULK_CREATE_REGION_PREFERENCES',
+      },
+      {
+        name: 'CREATE_ROLE',
+      },
+      {
+        name: 'VIEW_ALL_ROLES',
+      },
+      {
+        name: 'VIEW_ROLE_BY_ID',
+      },
+      {
+        name: 'UPDATE_ROLE',
+      },
+      {
+        name: 'DELETE_ROLE',
+      },
+      {
+        name: 'ASSIGN_PERMISSIONS_TO_ROLE',
+      },
+      {
+        name: 'CREATE_SECTOR',
+      },
+      {
+        name: 'VIEW_ALL_SECTORS',
+      },
+      {
+        name: 'VIEW_SECTOR_BY_ID',
+      },
+      {
+        name: 'UPDATE_SECTOR',
+      },
+      {
+        name: 'DELETE_SECTOR',
+      },
+      {
+        name: 'BULK_UPLOAD_SECTORS_AND_SUBSECTORS',
+      },
+      {
+        name: 'CREATE_SECTOR_PREFERENCE',
+      },
+      {
+        name: 'VIEW_SECTOR_PREFERENCES',
+      },
+      {
+        name: 'UPDATE_SECTOR_PREFERENCE',
+      },
+      {
+        name: 'DELETE_SECTOR_PREFERENCE',
+      },
+      {
+        name: 'BULK_CREATE_SECTOR_PREFERENCES',
+      },
+      {
+        name: 'CREATE_SOCIAL_ACCOUNT_TYPE',
+      },
+      {
+        name: 'VIEW_ALL_SOCIAL_ACCOUNT_TYPES',
+      },
+      {
+        name: 'VIEW_SOCIAL_ACCOUNT_TYPE_BY_ID',
+      },
+      {
+        name: 'UPDATE_SOCIAL_ACCOUNT_TYPE',
+      },
+      {
+        name: 'DELETE_SOCIAL_ACCOUNT_TYPE',
+      },
+      {
+        name: 'BULK_UPLOAD_SOCIAL_ACCOUNT_TYPES',
+      },
+      {
+        name: 'CREATE_SOCIAL_MEDIA_ACCOUNT',
+      },
+      {
+        name: 'VIEW_SOCIAL_MEDIA_ACCOUNTS_BY_USER',
+      },
+      {
+        name: 'UPDATE_SOCIAL_MEDIA_ACCOUNT',
+      },
+      {
+        name: 'DELETE_SOCIAL_MEDIA_ACCOUNT',
+      },
+      {
+        name: 'CREATE_STAGE_CARD',
+      },
+      {
+        name: 'VIEW_ALL_STAGE_CARDS',
+      },
+      {
+        name: 'VIEW_STAGE_CARD_BY_ID',
+      },
+      {
+        name: 'UPDATE_STAGE_CARD',
+      },
+        {
+          name: 'DELETE_STAGE_CARD',
+        },
+        {
+          name: 'SEND_SUBFOLDER_ACCESS_INVITE',
+        },
+        {
+          name: 'ACCEPT_SUBFOLDER_ACCESS_INVITE',
+        },
+        {
+          name: 'REJECT_SUBFOLDER_ACCESS_INVITE',
+        },
+        {
+          name: 'GET_SUBFOLDER_INVITES',
+        },
+        {
+          name: 'CREATE_SUBFOLDER',
+        },
+        {
+          name: 'VIEW_SUBFOLDER_BY_ID',
+        },
+        {
+          name: 'VIEW_ALL_SUBFOLDERS_FOR_PARENT_FOLDER',
+        },
+        {
+          name: 'UPDATE_SUBFOLDER',
+        },
+        {
+          name: 'DELETE_SUBFOLDER',
+        },
+        {
+          name: 'CREATE_SUBSECTOR',
+        },
+        {
+          name: 'VIEW_ALL_SUBSECTORS',
+        },
+        {
+          name: 'VIEW_SUBSECTOR_BY_ID',
+        },
+        {
+          name: 'UPDATE_SUBSECTOR',
+        },
+        {
+          name: 'DELETE_SUBSECTOR',
+        },
+        {
+          name: 'CREATE_SUBSECTOR_PREFERENCE',
+        },
+        {
+          name: 'VIEW_SUBSECTOR_PREFERENCES',
+        },
+        {
+          name: 'UPDATE_SUBSECTOR_PREFERENCE',
+        },
+        {
+          name: 'DELETE_SUBSECTOR_PREFERENCE',
+        },
+        {
+          name: 'BULK_CREATE_SUBSECTOR_PREFERENCES',
+        },
+        {
+          name: 'CREATE_TASK',
+        },
+        {
+          name: 'VIEW_ALL_TASKS',
+        },
+        {
+          name: 'VIEW_TASK_BY_ID',
+        },
+        {
+          name: 'UPDATE_TASK',
+        },
+        {
+          name: 'DELETE_TASK',
+        },
+        {
+          name: 'ASSIGN_TASK_TO_USER',
+        },
+        {
+          name: 'MARK_TASK_AS_COMPLETED',
+        },
+        {
+          name: 'FILTER_TASKS',
+        },
+        {
+          name: 'SCHEDULE_DEAL_MEETING',
+        },
+        {
+          name: 'VIEW_DEAL_MEETINGS',
+        },
+        {
+          name: 'UPDATE_DEAL_MEETING',
+        },
+        {
+          name: 'DELETE_DEAL_MEETING',
+        },
+        {
+          name: 'UPDATE_MILESTONE_STATUS',
+        },
+        {
+          name: 'GET_INVOICES_BY_DEAL_ID',
+        },
+        {
+          name: 'SEND_DEAL_ACCESS_INVITE',
+        },
+        {
+          name: 'GET_INVESTOR_INVITES',
+        },
+        {
+          name: 'GET_DEAL_INVITES',
+        },
+        {
+          name: 'REJECT_DEAL_INVITE',
+        },
+        {
+          name: 'ACCEPT_DEAL_INVITE',
+        },
+        {
+          name: 'EXPRESS_DEAL_INTEREST',
+        },
+        {
+          name: 'CHECK_ACCEPTED_DEAL_ACCESS_INVITE',
+        },
+        {
+          name: 'WITHDRAW_DEAL_INTEREST',
+        },
+        {
+          name: 'GET_DASHBOARD_DEAL_STATUS_DATA',
+        },
+        {
+          name: 'GET_DASHBOARD_DEAL_TYPE_DATA',
+        },
+        {
+          name: 'GET_DASHBOARD_DEAL_SECTOR_DATA',
+        },
+        {
+          name: 'GET_DASHBOARD_DEAL_SIZE_DATA',
+        },
+        {
+          name: 'GET_DASHBOARD_DEAL_CONSULTANT_STATUS_DATA',
+        },
+        {
+          name: 'SEND_FOLDER_ACCESS_INVITE',
+        },
+        {
+          name: 'ACCEPT_FOLDER_ACCESS_INVITE',
+        },
+        {
+          name: 'REJECT_FOLDER_ACCESS_INVITE',
+        },
+        {
+          name: 'GET_FOLDER_INVITES',
+        },
+        {
+          name: 'GET_PIPELINE_STAGES_BY_PIPELINE_ID',
+        },
+        {
+          name: 'GET_REGION_WITH_COUNTRIES',
+        },
+        {
+          name: 'GET_CONTINENT_WITH_REGIONS',
+        },
+        {
+          name: 'GET_CONTINENT_WITH_COUNTRIES',
+        },
+        {
+          name: 'GET_SUBSECTOR_BY_SECTOR_ID',
+        },
+        {
+          name: 'GET_TASKS_BY_DUE_DATE_RANGE',
+        },
+        {
+          name: 'GET_TASKS_FOR_USER_DEALS',
+        },
+        {
+          name: 'GET_USER_TASKS_BY_DEAL_ID',
+        },
+        {
+          name: 'GET_MEETINGS_BY_DEAL_ID',
+        },
+        {
+          name: 'FILTER_DEAL_MEETINGS',
+        },
+        {
+          name: 'CREATE_TRANSACTION',
+        },
+        {
+          name: 'GET_ALL_TRANSACTIONS',
+        },
+        {
+          name: 'GET_TRANSACTION_BY_ID',
+        },
+        {
+          name: 'UPDATE_TRANSACTION',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "BULK_UPLOAD_SECTORS_AND_SUBSECTORS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'DELETE_TRANSACTION',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_SECTOR_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'CREATE_USER_PREFERENCE',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_SECTOR_PREFERENCES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'GET_USER_PREFERENCES',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_SECTOR_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_USER_PREFERENCE',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_SECTOR_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'DELETE_USER_PREFERENCE',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "BULK_CREATE_SECTOR_PREFERENCES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'CREATE_USER_REVIEW',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_SOCIAL_ACCOUNT_TYPE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'GET_USER_REVIEWS',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_SOCIAL_ACCOUNT_TYPES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'GET_USER_REVIEW_BY_ID',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_SOCIAL_ACCOUNT_TYPE_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_USER_REVIEW',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_SOCIAL_ACCOUNT_TYPE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'DELETE_USER_REVIEW',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_SOCIAL_ACCOUNT_TYPE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'GET_USERS_BY_TYPE',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "BULK_UPLOAD_SOCIAL_ACCOUNT_TYPES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'BULK_UPLOAD_USERS',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_SOCIAL_MEDIA_ACCOUNT",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'GET_USER_BY_ID',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_SOCIAL_MEDIA_ACCOUNTS_BY_USER",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'DELETE_USER',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_SOCIAL_MEDIA_ACCOUNT",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'GET_PROFILE',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_SOCIAL_MEDIA_ACCOUNT",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'GET_EMPLOYEES',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_STAGE_CARD",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_USER_STATUS',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_STAGE_CARDS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'MARK_USER_AS_ARCHIVED',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_STAGE_CARD_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'MARK_USER_AS_OPEN',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_STAGE_CARD",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'MARK_USER_AS_ON_HOLD',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_STAGE_CARD",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_TOTAL_INVESTMENTS',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "SEND_SUBFOLDER_ACCESS_INVITE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_AVERAGE_CHECK_SIZE',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "ACCEPT_SUBFOLDER_ACCESS_INVITE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_SUCCESSFUL_EXITS',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "REJECT_SUBFOLDER_ACCESS_INVITE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_PORTFOLIO_IPR',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "GET_SUBFOLDER_INVITES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_DESCRIPTION',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_SUBFOLDER",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_ADDRESSABLE_MARKET',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_SUBFOLDER_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_CURRENT_MARKET',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_SUBFOLDERS_FOR_PARENT_FOLDER",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_TAM',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_SUBFOLDER",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_SAM',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_SUBFOLDER",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_LOCATION',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_SUBSECTOR",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_YEAR_FOUNDED',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_SUBSECTORS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_SOM',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_SUBSECTOR_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_CAC',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_SUBSECTOR",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_EBITDA',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_SUBSECTOR",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_TOTAL_ASSETS',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_SUBSECTOR_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_GROSS_MARGIN',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_SUBSECTOR_PREFERENCES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_USER_PROFILE',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_SUBSECTOR_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'ADMIN_UPDATE_USER_PROFILE',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_SUBSECTOR_PREFERENCE",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'ONBOARD_INVESTOR',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "BULK_CREATE_SUBSECTOR_PREFERENCES",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPLOAD_PROFILE_IMAGE',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "CREATE_TASK",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'ONBOARD_TARGET_COMPANY',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_ALL_TASKS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'ADD_EMPLOYEE',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_TASK_BY_ID",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_EMPLOYEE',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_TASK",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'DELETE_EMPLOYEE',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_TASK",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'CREATE_EMPLOYEE_FOR_INVESTMENT_FIRM',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "ASSIGN_TASK_TO_USER",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'GET_EMPLOYEES_FOR_INVESTMENT_FIRM',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "MARK_TASK_AS_COMPLETED",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'CREATE_USER_TICKET_PREFERENCE',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "FILTER_TASKS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'GET_USER_TICKET_PREFERENCES',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "SCHEDULE_DEAL_MEETING",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_USER_TICKET_PREFERENCE',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "VIEW_DEAL_MEETINGS",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'DELETE_USER_TICKET_PREFERENCE',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "UPDATE_DEAL_MEETING",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'GET_SETTINGS',
         },
         {
-          permission_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "DELETE_DEAL_MEETING",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          name: 'UPDATE_SETTINGS',
         },
-      ],
-      {}
+      ].map(permission => ({
+        ...permission,
+        permission_id: Sequelize.literal('uuid_generate_v4()'),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }));
+
+    const existingPermissions = await queryInterface.sequelize.query(
+      'SELECT name FROM permissions',
+      { type: Sequelize.QueryTypes.SELECT }
     );
+    const existingPermissionNames = new Set(existingPermissions.map(p => p.name));
+
+    const newPermissions = permissionsToSeed.filter(
+      permission => !existingPermissionNames.has(permission.name)
+    );
+
+    if (newPermissions.length > 0) {
+      await queryInterface.bulkInsert('permissions', newPermissions, {});
+    }
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete("permissions", null, {});
+    await queryInterface.bulkDelete('permissions', null, {});
   },
 };

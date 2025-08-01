@@ -82,4 +82,39 @@ The following environment variables are used in the project:
 
 - `secretKey`: The secret key used for JWT authentication.
 
+## Database Seeding
+
+To seed the database with initial data, you can use the following commands:
+
+### Run All Seeders
+
+```sh
+npx sequelize-cli db:seed:all
+```
+
+### Run a Specific Seeder
+
+```sh
+npx sequelize-cli db:seed --seed <seeder-file-name>
+```
+
+**Example:**
+
+```sh
+npx sequelize-cli db:seed --seed 20250109080956-seed-permissions.js
+```
+
+### Undo Seeding
+
+To undo the last seeder or all seeders:
+
+- **Undo the most recent seeder:**
+    ```sh
+    npx sequelize-cli db:seed:undo
+    ```
+- **Undo all seeders:**
+    ```sh
+    npx sequelize-cli db:seed:undo:all
+    ```
+
 ## Project Structure
