@@ -2,72 +2,57 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert(
-      "sectors",
-      [
-        {
-          sector_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "Tech",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          sector_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "Finance",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          sector_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "Healthcare",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          sector_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "Energy",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          sector_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "Consumer Goods",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          sector_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "Industrial",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          sector_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "Real Estate",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          sector_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "Telecommunications",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          sector_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "Utilities",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          sector_id: Sequelize.literal("uuid_generate_v4()"),
-          name: "Materials",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ],
-      {}
+    const sectorsToSeed = [
+      {
+        name: "Tech",
+      },
+      {
+        name: "Finance",
+      },
+      {
+        name: "Healthcare",
+      },
+      {
+        name: "Energy",
+      },
+      {
+        name: "Consumer Goods",
+      },
+      {
+        name: "Industrial",
+      },
+      {
+        name: "Real Estate",
+      },
+      {
+        name: "Telecommunications",
+      },
+      {
+        name: "Utilities",
+      },
+      {
+        name: "Materials",
+      },
+    ].map(sector => ({
+      ...sector,
+      sector_id: Sequelize.literal("uuid_generate_v4()"),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }));
+
+    const existingSectors = await queryInterface.sequelize.query(
+      "SELECT name FROM sectors",
+      { type: Sequelize.QueryTypes.SELECT }
     );
+    const existingSectorNames = new Set(existingSectors.map(sector => sector.name));
+
+    const newSectors = sectorsToSeed.filter(
+      sector => !existingSectorNames.has(sector.name)
+    );
+
+    if (newSectors.length > 0) {
+      await queryInterface.bulkInsert("sectors", newSectors, {});
+    }
   },
 
   down: async (queryInterface, Sequelize) => {
