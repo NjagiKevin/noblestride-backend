@@ -163,9 +163,14 @@ module.exports = {
       where: { name: "Target Company" },
     });
 
+    if (!targetCompanyRole) {
+      console.warn("Target Company role not found. Skipping user seeding.");
+      return;
+    }
+
     const roleId = targetCompanyRole.role_id;
 
-    const users = companies.map((company, index) => ({
+    const usersToSeed = companies.map((company) => ({
       name: company,
       email: `${company.toLowerCase().replace(/[^a-z0-9]/g, "")}@example.com`,
       profile_image: `https://example.com/images/${company
@@ -181,7 +186,19 @@ module.exports = {
       updatedAt: new Date(),
     }));
 
-    await queryInterface.bulkInsert("users", users, {});
+    const existingUsers = await queryInterface.sequelize.query(
+      "SELECT email FROM users",
+      { type: Sequelize.QueryTypes.SELECT }
+    );
+    const existingUserEmails = new Set(existingUsers.map(user => user.email));
+
+    const newUsers = usersToSeed.filter(
+      user => !existingUserEmails.has(user.email)
+    );
+
+    if (newUsers.length > 0) {
+      await queryInterface.bulkInsert("users", newUsers, {});
+    }
   },
 
   down: async (queryInterface, Sequelize) => {
