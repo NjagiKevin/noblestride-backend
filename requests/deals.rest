@@ -4,7 +4,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-"dealId":"5c185dca-b555-4d7c-a028-5db1012605ca",
+  "dealId":"5c185dca-b555-4d7c-a028-5db1012605ca",
   "subject": "Noble Stride Project Update Meeting",
   "startDateTime": "2025-10-01T11:00:00.000Z",
   "endDateTime": "2025-10-01T18:00:00.000Z",
