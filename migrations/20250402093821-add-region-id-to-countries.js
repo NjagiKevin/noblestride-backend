@@ -2,16 +2,19 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.addColumn("countries", "region_id", {
-      type: Sequelize.UUID,
-      allowNull: true,
-      references: {
-        model: "regions", // Name of the table in the database
-        key: "region_id", // Primary key in the Region model
-      },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
-    });
+    const tableInfo = await queryInterface.describeTable("countries");
+    if (!tableInfo.region_id) {
+      await queryInterface.addColumn("countries", "region_id", {
+        type: Sequelize.UUID,
+        allowNull: true,
+        references: {
+          model: "regions", // Name of the table in the database
+          key: "region_id", // Primary key in the Region model
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      });
+    }
   },
 
   down: async (queryInterface, Sequelize) => {

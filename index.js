@@ -108,9 +108,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-db.sequelize.sync({ force: false }).then(() => {
-  console.log("db has been re sync");
-});
+// db.sequelize.sync({ force: false }).then(() => {
+//   console.log("db has been re sync");
+// });
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/users", userRoutes);
 app.use("/api/deals", dealRoutes);

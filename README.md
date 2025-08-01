@@ -38,6 +38,8 @@ Noblestride is a Node.js application that provides APIs for user management and 
 
 The server will start on the port specified in the `.env` file or default to port 8080. You can access the APIs using a tool like Postman or via your frontend application.
 
+**Important:** Database migrations are now managed manually. Please run `npm run migrate` to apply any pending database schema changes.
+
 ## API Endpoints
 
 ### User Routes
@@ -89,13 +91,13 @@ To seed the database with initial data, you can use the following commands:
 ### Run All Seeders
 
 ```sh
-npx sequelize-cli db:seed:all
+npm run seed:all
 ```
 
 ### Run a Specific Seeder
 
 ```sh
-npx sequelize-cli db:seed --seed <seeder-file-name>
+npm run seed -- --seed <seeder-file-name>
 ```
 
 **Example:**
@@ -110,11 +112,19 @@ To undo the last seeder or all seeders:
 
 - **Undo the most recent seeder:**
     ```sh
-    npx sequelize-cli db:seed:undo
+    npm run seed:undo
     ```
 - **Undo all seeders:**
     ```sh
-    npx sequelize-cli db:seed:undo:all
+    npm run seed:undo:all
     ```
+
+## Database Migrations
+
+To run database migrations, use the following command:
+
+```sh
+npm run migrate
+```
 
 ## Project Structure

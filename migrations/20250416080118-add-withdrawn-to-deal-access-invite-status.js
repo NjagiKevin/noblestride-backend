@@ -3,10 +3,18 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    // Add "Withdrawn" to the ENUM type for the "status" column in "deal_access_invites"
-    await queryInterface.sequelize.query(`
-      ALTER TYPE "enum_deal_access_invites_status" ADD VALUE 'Withdrawn';
-    `);
+    const enumName = 'enum_deal_access_invites_status';
+    const enumValues = await queryInterface.sequelize.query(
+      `SELECT unnest(enum_range(NULL::"${enumName}"))::text;`,
+      { type: Sequelize.QueryTypes.SELECT }
+    );
+    const currentValues = enumValues.map(e => e.unnest);
+
+    if (!currentValues.includes('Withdrawn')) {
+      await queryInterface.sequelize.query(`
+        ALTER TYPE "${enumName}" ADD VALUE 'Withdrawn';
+      `);
+    }
   },
 
   down: async (queryInterface, Sequelize) => {
