@@ -49,7 +49,21 @@ const getAllRoles = async (req, res) => {
 // Get role by ID
 const getRoleById = async (req, res) => {
   try {
-    const role = await Role.findByPk(req.params.id);
+    const role = await Role.findByPk(req.params.id, {
+      include: [
+        {
+          model: RolePermission,
+          as: "permissions",
+          include: [
+            {
+              model: Permission,
+              as: "permission",
+              attributes: ["permission_id", "name"], // Include permission details
+            },
+          ],
+        },
+      ],
+    });
     if (!role) {
       return res
         .status(404)
