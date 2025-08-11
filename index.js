@@ -77,7 +77,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3030;
 
 const app = express();
 
@@ -86,6 +86,8 @@ const allowedOrigins = [
   "https://dealflow.noblestride.co.ke", // Frontend origin
   "https://another-allowed-origin.com", // Add other allowed origins if needed
   "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
 ];
 
 app.use(
@@ -207,6 +209,10 @@ app.get("/run-migrations", (req, res) => {
       res.send(`Migrations executed successfully: ${stdout}`);
     }
   );
+});
+
+app.get('/', (req, res) => {
+  res.send('Server is running');
 });
 
 app.listen(PORT, () => console.log(`Server is connected on ${PORT}`));

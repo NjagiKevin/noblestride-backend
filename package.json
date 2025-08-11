@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "start": "node index.js",
+    "start:dev": "nodemon index.js",
     "migrate": "npx sequelize-cli db:migrate",
     "seed:all": "npx sequelize-cli db:seed:all",
     "seed": "npx sequelize-cli db:seed",
