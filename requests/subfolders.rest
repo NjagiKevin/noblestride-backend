@@ -1,0 +1,25 @@
+### Get all subfolders
+GET {{BASE_URL}}/subfolders
+
+### Get a single subfolder by ID
+GET {{BASE_URL}}/subfolders/1
+
+### Create a new subfolder
+POST {{BASE_URL}}/subfolders
+Content-Type: application/json
+
+{
+  "name": "New Subfolder",
+  "folderId": 1
+}
+
+### Update a subfolder by ID
+PUT {{BASE_URL}}/subfolders/1
+Content-Type: application/json
+
+{
+  "name": "Updated Subfolder Name"
+}
+
+### Delete a subfolder by ID
+DELETE {{BASE_URL}}/subfolders/1

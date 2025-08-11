@@ -1,0 +1,26 @@
+### Get all pipeline stages
+GET {{BASE_URL}}/pipeline-stages
+
+### Get a single pipeline stage by ID
+GET {{BASE_URL}}/pipeline-stages/1
+
+### Create a new pipeline stage
+POST {{BASE_URL}}/pipeline-stages
+Content-Type: application/json
+
+{
+  "name": "Lead Qualification",
+  "pipelineId": 1,
+  "order": 1
+}
+
+### Update a pipeline stage by ID
+PUT {{BASE_URL}}/pipeline-stages/1
+Content-Type: application/json
+
+{
+  "name": "Contact Made"
+}
+
+### Delete a pipeline stage by ID
+DELETE {{BASE_URL}}/pipeline-stages/1

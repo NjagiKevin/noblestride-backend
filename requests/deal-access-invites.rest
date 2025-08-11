@@ -1,0 +1,26 @@
+### Get all deal access invites
+GET {{BASE_URL}}/deal-access-invites
+
+### Get a single deal access invite by ID
+GET {{BASE_URL}}/deal-access-invites/1
+
+### Create a new deal access invite
+POST {{BASE_URL}}/deal-access-invites
+Content-Type: application/json
+
+{
+  "dealId": 1,
+  "userId": 1,
+  "status": "pending"
+}
+
+### Update a deal access invite by ID
+PUT {{BASE_URL}}/deal-access-invites/1
+Content-Type: application/json
+
+{
+  "status": "accepted"
+}
+
+### Delete a deal access invite by ID
+DELETE {{BASE_URL}}/deal-access-invites/1

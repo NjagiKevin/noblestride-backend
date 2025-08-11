@@ -1,0 +1,2 @@
+### Get dashboard data
+GET {{BASE_URL}}/dashboard

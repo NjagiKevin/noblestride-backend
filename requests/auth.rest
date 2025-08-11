@@ -1,5 +1,5 @@
 ### Register a new user
-POST {{LOCAL}}/users/signup
+POST {{BASE_URL}}/users/signup
 Content-Type: application/json
 
 {
@@ -28,7 +28,7 @@ Content-Type: application/json
 }
 
 ### Onboard a new investor
-POST {{LIVE_URL}}/users/onboard-investor
+POST {{BASE_URL}}/users/onboard-investor
 Authorization: Bearer {{token}}
 Content-Type: multipart/form-data;
 
@@ -47,7 +47,7 @@ Content-Type: multipart/form-data;
 }
 
 ### Onboard a new target company
-POST {{LIVE_URL}}/users/onboard-target-company
+POST {{BASE_URL}}/users/onboard-target-company
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -71,7 +71,7 @@ Content-Type: application/json
 }
 
 ### Login a user
-POST {{LOCAL}}/users/login
+POST {{BASE_URL}}/users/login
 Content-Type: application/json
 
 {
@@ -80,7 +80,7 @@ Content-Type: application/json
 }
 
 ### Verify OTP
-POST {{LOCAL}}/users/verify-code
+POST {{BASE_URL}}/users/verify-code
 Content-Type: application/json
 
 {
@@ -90,7 +90,7 @@ Content-Type: application/json
 }
 
 ### Forgot password
-POST {{LIVE_URL}}/users/forgot-password
+POST {{BASE_URL}}/users/forgot-password
 Content-Type: application/json
 
 {
@@ -98,7 +98,7 @@ Content-Type: application/json
 }
 
 ### Reset password
-POST {{LOCAL}}/users/reset-password
+POST {{BASE_URL}}/users/reset-password
 Content-Type: application/json
 
 {

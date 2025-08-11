@@ -1,0 +1,25 @@
+### Get all deal regions
+GET {{BASE_URL}}/deal-regions
+
+### Get a single deal region by ID
+GET {{BASE_URL}}/deal-regions/1
+
+### Create a new deal region
+POST {{BASE_URL}}/deal-regions
+Content-Type: application/json
+
+{
+  "dealId": 1,
+  "regionId": 1
+}
+
+### Update a deal region by ID
+PUT {{BASE_URL}}/deal-regions/1
+Content-Type: application/json
+
+{
+  "regionId": 2
+}
+
+### Delete a deal region by ID
+DELETE {{BASE_URL}}/deal-regions/1

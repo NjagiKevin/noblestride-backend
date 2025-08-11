@@ -1,0 +1,26 @@
+### Get all social media accounts
+GET {{BASE_URL}}/social-media-accounts
+
+### Get a single social media account by ID
+GET {{BASE_URL}}/social-media-accounts/1
+
+### Create a new social media account
+POST {{BASE_URL}}/social-media-accounts
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "platform": "LinkedIn",
+  "url": "https://linkedin.com/in/user"
+}
+
+### Update a social media account by ID
+PUT {{BASE_URL}}/social-media-accounts/1
+Content-Type: application/json
+
+{
+  "url": "https://twitter.com/user"
+}
+
+### Delete a social media account by ID
+DELETE {{BASE_URL}}/social-media-accounts/1

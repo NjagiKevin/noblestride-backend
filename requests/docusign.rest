@@ -1,0 +1,11 @@
+### Docusign webhook endpoint (usually POST requests from Docusign)
+POST {{BASE_URL}}/docusign
+Content-Type: application/json
+
+{
+  "event": "envelope-completed",
+  "data": {
+    "envelopeId": "some-envelope-id",
+    "status": "completed"
+  }
+}

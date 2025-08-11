@@ -1,0 +1,26 @@
+### Get all milestones
+GET {{BASE_URL}}/milestones
+
+### Get a single milestone by ID
+GET {{BASE_URL}}/milestones/1
+
+### Create a new milestone
+POST {{BASE_URL}}/milestones
+Content-Type: application/json
+
+{
+  "name": "New Milestone",
+  "dealId": 1,
+  "status": "pending"
+}
+
+### Update a milestone by ID
+PUT {{BASE_URL}}/milestones/1
+Content-Type: application/json
+
+{
+  "status": "completed"
+}
+
+### Delete a milestone by ID
+DELETE {{BASE_URL}}/milestones/1

@@ -1,0 +1,25 @@
+### Get all deal continents
+GET {{BASE_URL}}/deal-continents
+
+### Get a single deal continent by ID
+GET {{BASE_URL}}/deal-continents/1
+
+### Create a new deal continent
+POST {{BASE_URL}}/deal-continents
+Content-Type: application/json
+
+{
+  "dealId": 1,
+  "continentId": 1
+}
+
+### Update a deal continent by ID
+PUT {{BASE_URL}}/deal-continents/1
+Content-Type: application/json
+
+{
+  "continentId": 2
+}
+
+### Delete a deal continent by ID
+DELETE {{BASE_URL}}/deal-continents/1

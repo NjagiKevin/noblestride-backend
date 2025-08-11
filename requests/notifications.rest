@@ -1,0 +1,26 @@
+### Get all notifications
+GET {{BASE_URL}}/notifications
+
+### Get a single notification by ID
+GET {{BASE_URL}}/notifications/1
+
+### Create a new notification
+POST {{BASE_URL}}/notifications
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "message": "New notification message",
+  "read": false
+}
+
+### Update a notification by ID
+PUT {{BASE_URL}}/notifications/1
+Content-Type: application/json
+
+{
+  "read": true
+}
+
+### Delete a notification by ID
+DELETE {{BASE_URL}}/notifications/1

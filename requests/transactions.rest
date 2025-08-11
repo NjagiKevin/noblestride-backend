@@ -1,0 +1,26 @@
+### Get all transactions
+GET {{BASE_URL}}/transactions
+
+### Get a single transaction by ID
+GET {{BASE_URL}}/transactions/1
+
+### Create a new transaction
+POST {{BASE_URL}}/transactions
+Content-Type: application/json
+
+{
+  "amount": 100.00,
+  "type": "deposit",
+  "description": "Initial deposit"
+}
+
+### Update a transaction by ID
+PUT {{BASE_URL}}/transactions/1
+Content-Type: application/json
+
+{
+  "amount": 150.00
+}
+
+### Delete a transaction by ID
+DELETE {{BASE_URL}}/transactions/1

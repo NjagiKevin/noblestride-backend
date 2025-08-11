@@ -1,1 +1,1 @@
-GET http://localhost:3030/run-seeder
+GET {{BASE_URL}}/run-seeder

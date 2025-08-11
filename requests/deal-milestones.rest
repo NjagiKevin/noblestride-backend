@@ -1,0 +1,26 @@
+### Get all deal milestones
+GET {{BASE_URL}}/deal-milestones
+
+### Get a single deal milestone by ID
+GET {{BASE_URL}}/deal-milestones/1
+
+### Create a new deal milestone
+POST {{BASE_URL}}/deal-milestones
+Content-Type: application/json
+
+{
+  "dealId": 1,
+  "name": "Term Sheet Signed",
+  "status": "pending"
+}
+
+### Update a deal milestone by ID
+PUT {{BASE_URL}}/deal-milestones/1
+Content-Type: application/json
+
+{
+  "status": "completed"
+}
+
+### Delete a deal milestone by ID
+DELETE {{BASE_URL}}/deal-milestones/1

@@ -1,5 +1,5 @@
 ### Create a social media account
-POST {{LOCAL}}/social-media-accounts
+POST {{BASE_URL}}/social-media-accounts
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### Update a social media account
-PUT {{LOCAL}}/social-media-accounts/a84cbef3-a92e-4974-9d9f-3271347a65fb
+PUT {{BASE_URL}}/social-media-accounts/a84cbef3-a92e-4974-9d9f-3271347a65fb
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -19,25 +19,25 @@ Content-Type: application/json
 }
 
 ### Delete a social media account
-DELETE {{LOCAL}}/social-media-accounts/a84cbef3-a92e-4974-9d9f-3271347a65fb
+DELETE {{BASE_URL}}/social-media-accounts/a84cbef3-a92e-4974-9d9f-3271347a65fb
 Authorization: Bearer {{token}}
 
 ### Get user profile
-GET {{LIVE_URL}}/users/profile
+GET {{BASE_URL}}/users/profile
 Authorization: Bearer {{token}}
 Accept: application/json
 
 ### Update user profile
-GET {{LOCAL}}/users/profile
+GET {{BASE_URL}}/users/profile
 Authorization: Bearer {{token}}
 Accept: application/json
 
 ### Logout user
-POST {{LOCAL}}/users/logout
+POST {{BASE_URL}}/users/logout
 Authorization: Bearer {{token}}
 
 ### Upload profile image
-POST {{LOCAL}}/users/upload-profile-image
+POST {{BASE_URL}}/users/upload-profile-image
 Authorization: Bearer {{token}}
 Content-Type: multipart/form-data;
 

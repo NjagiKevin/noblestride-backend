@@ -1,0 +1,24 @@
+### Get all pipelines
+GET {{BASE_URL}}/pipelines
+
+### Get a single pipeline by ID
+GET {{BASE_URL}}/pipelines/1
+
+### Create a new pipeline
+POST {{BASE_URL}}/pipelines
+Content-Type: application/json
+
+{
+  "name": "Sales Pipeline"
+}
+
+### Update a pipeline by ID
+PUT {{BASE_URL}}/pipelines/1
+Content-Type: application/json
+
+{
+  "name": "Marketing Pipeline"
+}
+
+### Delete a pipeline by ID
+DELETE {{BASE_URL}}/pipelines/1

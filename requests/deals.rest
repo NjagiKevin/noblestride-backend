@@ -1,159 +1,25 @@
-### Schedule a call
-POST {{LIVE_URL}}/noble-teams/schedule-call
-Authorization: Bearer {{token}}
+### Get all deals
+GET {{BASE_URL}}/deals
+
+### Get a single deal by ID
+GET {{BASE_URL}}/deals/1
+
+### Create a new deal
+POST {{BASE_URL}}/deals
 Content-Type: application/json
 
 {
-  "dealId":"5c185dca-b555-4d7c-a028-5db1012605ca",
-  "subject": "Noble Stride Project Update Meeting",
-  "startDateTime": "2025-10-01T11:00:00.000Z",
-  "endDateTime": "2025-10-01T18:00:00.000Z",
-  "timeZone":"MST",
-  "attendees": [
-    "alvinodiwuor@gmail.com"
-  ]
+  "name": "New Deal",
+  "description": "Description for new deal"
 }
 
-### Update a scheduled call
-PUT {{LOCAL}}/noble-teams/update-schedule-call/f41c27c0-91d7-4237-b715-9de3b7773cb9
-Authorization: Bearer {{token}}
+### Update a deal by ID
+PUT {{BASE_URL}}/deals/1
 Content-Type: application/json
 
 {
-  "subject": "Updated Meeting Subject",
-  "startDateTime": "2023-12-01T10:00:00Z",
-  "endDateTime": "2023-12-01T11:00:00Z",
-  "attendees": ["john.doe@example.com", "jane.smith@example.com"]
+  "name": "Updated Deal Name"
 }
 
-### Get meetings by deal ID
-GET {{LIVE_URL}}/noble-teams/deal/61e66581-3174-453d-806b-d045ccd81b34/meetings
-Authorization: Bearer {{token}}
-
-### Create a deal task
-POST {{LOCAL}}/tasks/
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-    "title":"Task title: remember to do the meeting in the evening",
-    "description":"Task title: remember to do the meeting in the evening",
-    "assigned_to":"1",
-    "due_date":"2023-10-01",
-    "deal_id":"04e741ea-7d87-4929-ad2b-0899fc9b2914",
-    "deal_stage_id": "734993e9-bee7-470e-a8ee-69b9a862e7c5"
-}
-
-### Update a task
-PUT {{LOCAL}}/tasks/abb6c307-0c1d-4583-a67e-bfb93ce2452f
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-    "title":"Task Update: remember to do the meeting in the evening",
-    "description":"Task title: remember to do the meeting in the evening",
-    "assigned_to":"1",
-    "due_date":"2023-10-01",
-    "deal_id":"2c796568-c977-45fc-b1af-c50f103de323",
-    "deal_stage_id": "734993e9-bee7-470e-a8ee-69b9a862e7c5"
-}
-
-### Get all tasks
-GET {{LIVE_URL}}/tasks?page=2&limit=5
-Authorization: Bearer {{token}}
-
-### Get task by ID
-GET {{LOCAL}}/tasks/abb6c307-0c1d-4583-a67e-bfb93ce2452f
-Authorization: Bearer {{token}}
-
-### Delete a task
-DELETE {{LOCAL}}/tasks/abb6c307-0c1d-4583-a67e-bfb93ce2452f
-Authorization: Bearer {{token}}
-
-### Get tasks by deal ID
-GET {{LIVE_URL}}/tasks/deal/2c796568-c977-45fc-b1af-c50f103de323?page=2&limit=5
-Authorization: Bearer {{token}}
-
-### Get user tasks by deal ID
-GET {{LIVE_URL}}/tasks/deal/2c796568-c977-45fc-b1af-c50f103de323/user-tasks
-Authorization: Bearer {{token}}
-
-### Get tasks by user ID
-GET {{LIVE_URL}}/tasks/user/1?page=2&limit=5
-Authorization: Bearer {{token}}
-
-### Get tasks by date range
-GET {{LIVE_URL}}/tasks/date/due-date-range?page=1&limit=5
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-    "startDate":"2023-09-01",
-    "endDate":"2023-12-01"
-}
-
-### Filter tasks
-GET {{LIVE_URL}}/tasks/filter/tasks?status=Pending&title=Task title&assigned_to=1&created_by=3&deal_id&startDate&endDate&page=1&limit=5
-Authorization: Bearer {{token}}
-
-### Assign task to user
-POST {{LOCAL}}/tasks/assign/user
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-    "taskId":"5d14896f-86c7-4eac-98e2-03e4b5386d52",
-    "userId":"2"
-}
-
-### Change task status
-PUT {{LOCAL}}/tasks/change/status
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-    "taskId":"5d14896f-86c7-4eac-98e2-03e4b5386d52",
-    "status":"Pending"
-}
-
-### Get tasks for user deals
-GET {{LIVE_URL}}/tasks/user-tasks/tasks?page=1&limit=5
-Authorization: Bearer {{token}}
-
-### Create a milestone
-POST {{LOCAL}}/milestones
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-    "title":"Task title: remember to do the meeting in the evening",
-    "description":"Task title: remember to do the meeting in the evening",
-    "due_date":"2023-10-01",
-    "deal_id":"933aacc2-ab20-4df9-aefb-ba9f0dd98da1",
-    "deal_stage_id": "734993e9-bee7-470e-a8ee-69b9a862e7c5"
-}
-
-### Update a milestone
-PUT {{LOCAL}}/milestones/9e9fae5e-ec4b-497f-bfec-198cfc189504
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-    "title":"Task Milestone",
-    "description":"Task title: remember to do the meeting in the evening",
-    "due_date":"2023-10-01",
-     "deal_id":"933aacc2-ab20-4df9-aefb-ba9f0dd98da1",
-     "deal_stage_id": "734993e9-bee7-470e-a8ee-69b9a862e7c5"
-}
-
-### Get milestones by deal ID
-GET {{LOCAL}}/milestones/deal/2c796568-c977-45fc-b1af-c50f103de323
-Authorization: Bearer {{token}}
-
-### Delete a milestone
-DELETE {{LOCAL}}/milestones/d8f20f4e-197c-463d-a79e-b4c4e69ba83c
-Authorization: Bearer {{token}}
-
-### Filter milestones
-GET {{LIVE_URL}}/milestones/filter/milestones?status=Pending&title=Task title&status=Pending&created_by=3&deal_id&startDate=2023-10-01&endDate=2023-10-01&page=2&limit=5&deal_stage_id
-Authorization: Bearer {{token}}
+### Delete a deal by ID
+DELETE {{BASE_URL}}/deals/1

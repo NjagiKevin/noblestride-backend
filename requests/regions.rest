@@ -1,0 +1,25 @@
+### Get all regions
+GET {{BASE_URL}}/regions
+
+### Get a single region by ID
+GET {{BASE_URL}}/regions/1
+
+### Create a new region
+POST {{BASE_URL}}/regions
+Content-Type: application/json
+
+{
+  "name": "North America",
+  "continentId": 1
+}
+
+### Update a region by ID
+PUT {{BASE_URL}}/regions/1
+Content-Type: application/json
+
+{
+  "name": "South America"
+}
+
+### Delete a region by ID
+DELETE {{BASE_URL}}/regions/1

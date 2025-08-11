@@ -1,0 +1,27 @@
+### Get all users
+GET {{BASE_URL}}/users
+
+### Get a single user by ID
+GET {{BASE_URL}}/users/1
+
+### Create a new user
+POST {{BASE_URL}}/users
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+### Update a user by ID
+PUT {{BASE_URL}}/users/1
+Content-Type: application/json
+
+{
+  "username": "updateduser",
+  "email": "updated@example.com"
+}
+
+### Delete a user by ID
+DELETE {{BASE_URL}}/users/1
