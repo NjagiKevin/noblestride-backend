@@ -1,0 +1,25 @@
+### Get all subsectors
+GET {{BASE_URL}}/subsectors
+
+### Get a single subsector by ID
+GET {{BASE_URL}}/subsectors/1
+
+### Create a new subsector
+POST {{BASE_URL}}/subsectors
+Content-Type: application/json
+
+{
+  "name": "Software",
+  "sectorId": 1
+}
+
+### Update a subsector by ID
+PUT {{BASE_URL}}/subsectors/1
+Content-Type: application/json
+
+{
+  "name": "AI/ML"
+}
+
+### Delete a subsector by ID
+DELETE {{BASE_URL}}/subsectors/1

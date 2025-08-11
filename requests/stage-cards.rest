@@ -1,0 +1,26 @@
+### Get all stage cards
+GET {{BASE_URL}}/stage-cards
+
+### Get a single stage card by ID
+GET {{BASE_URL}}/stage-cards/1
+
+### Create a new stage card
+POST {{BASE_URL}}/stage-cards
+Content-Type: application/json
+
+{
+  "title": "New Card",
+  "pipelineStageId": 1,
+  "dealId": 1
+}
+
+### Update a stage card by ID
+PUT {{BASE_URL}}/stage-cards/1
+Content-Type: application/json
+
+{
+  "title": "Updated Card Title"
+}
+
+### Delete a stage card by ID
+DELETE {{BASE_URL}}/stage-cards/1

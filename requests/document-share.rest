@@ -1,0 +1,26 @@
+### Get all document shares
+GET {{BASE_URL}}/document-share
+
+### Get a single document share by ID
+GET {{BASE_URL}}/document-share/1
+
+### Create a new document share
+POST {{BASE_URL}}/document-share
+Content-Type: application/json
+
+{
+  "documentId": 1,
+  "userId": 1,
+  "permission": "view"
+}
+
+### Update a document share by ID
+PUT {{BASE_URL}}/document-share/1
+Content-Type: application/json
+
+{
+  "permission": "edit"
+}
+
+### Delete a document share by ID
+DELETE {{BASE_URL}}/document-share/1

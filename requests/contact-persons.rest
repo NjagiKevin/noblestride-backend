@@ -1,0 +1,26 @@
+### Get all contact persons
+GET {{BASE_URL}}/contact-persons
+
+### Get a single contact person by ID
+GET {{BASE_URL}}/contact-persons/1
+
+### Create a new contact person
+POST {{BASE_URL}}/contact-persons
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "phone": "123-456-7890"
+}
+
+### Update a contact person by ID
+PUT {{BASE_URL}}/contact-persons/1
+Content-Type: application/json
+
+{
+  "phone": "987-654-3210"
+}
+
+### Delete a contact person by ID
+DELETE {{BASE_URL}}/contact-persons/1

@@ -1,0 +1,26 @@
+### Get all investor milestone statuses
+GET {{BASE_URL}}/investor-milestone-statuses
+
+### Get a single investor milestone status by ID
+GET {{BASE_URL}}/investor-milestone-statuses/1
+
+### Create a new investor milestone status
+POST {{BASE_URL}}/investor-milestone-statuses
+Content-Type: application/json
+
+{
+  "investorMilestoneId": 1,
+  "status": "completed",
+  "date": "2025-08-11"
+}
+
+### Update an investor milestone status by ID
+PUT {{BASE_URL}}/investor-milestone-statuses/1
+Content-Type: application/json
+
+{
+  "status": "pending"
+}
+
+### Delete an investor milestone status by ID
+DELETE {{BASE_URL}}/investor-milestone-statuses/1

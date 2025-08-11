@@ -1,0 +1,26 @@
+### Get all user preferences
+GET {{BASE_URL}}/user-preferences
+
+### Get a single user preference by ID
+GET {{BASE_URL}}/user-preferences/1
+
+### Create a new user preference
+POST {{BASE_URL}}/user-preferences
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "theme": "dark",
+  "notifications": true
+}
+
+### Update a user preference by ID
+PUT {{BASE_URL}}/user-preferences/1
+Content-Type: application/json
+
+{
+  "theme": "light"
+}
+
+### Delete a user preference by ID
+DELETE {{BASE_URL}}/user-preferences/1

@@ -1,0 +1,26 @@
+### Get all subsector preferences
+GET {{BASE_URL}}/subsector-preferences
+
+### Get a single subsector preference by ID
+GET {{BASE_URL}}/subsector-preferences/1
+
+### Create a new subsector preference
+POST {{BASE_URL}}/subsector-preferences
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "subsectorId": 1,
+  "preferred": true
+}
+
+### Update a subsector preference by ID
+PUT {{BASE_URL}}/subsector-preferences/1
+Content-Type: application/json
+
+{
+  "preferred": false
+}
+
+### Delete a subsector preference by ID
+DELETE {{BASE_URL}}/subsector-preferences/1

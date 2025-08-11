@@ -1,0 +1,26 @@
+### Get all investor deals
+GET {{BASE_URL}}/investors-deals
+
+### Get a single investor deal by ID
+GET {{BASE_URL}}/investors-deals/1
+
+### Create a new investor deal
+POST {{BASE_URL}}/investors-deals
+Content-Type: application/json
+
+{
+  "investorId": 1,
+  "dealId": 1,
+  "status": "interested"
+}
+
+### Update an investor deal by ID
+PUT {{BASE_URL}}/investors-deals/1
+Content-Type: application/json
+
+{
+  "status": "committed"
+}
+
+### Delete an investor deal by ID
+DELETE {{BASE_URL}}/investors-deals/1

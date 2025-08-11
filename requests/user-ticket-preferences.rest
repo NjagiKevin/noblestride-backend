@@ -1,0 +1,26 @@
+### Get all user ticket preferences
+GET {{BASE_URL}}/user-ticket-preferences
+
+### Get a single user ticket preference by ID
+GET {{BASE_URL}}/user-ticket-preferences/1
+
+### Create a new user ticket preference
+POST {{BASE_URL}}/user-ticket-preferences
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "ticketType": "support",
+  "receiveNotifications": true
+}
+
+### Update a user ticket preference by ID
+PUT {{BASE_URL}}/user-ticket-preferences/1
+Content-Type: application/json
+
+{
+  "receiveNotifications": false
+}
+
+### Delete a user ticket preference by ID
+DELETE {{BASE_URL}}/user-ticket-preferences/1

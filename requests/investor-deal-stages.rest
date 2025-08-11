@@ -1,0 +1,26 @@
+### Get all investor deal stages
+GET {{BASE_URL}}/investor-deal-stages
+
+### Get a single investor deal stage by ID
+GET {{BASE_URL}}/investor-deal-stages/1
+
+### Create a new investor deal stage
+POST {{BASE_URL}}/investor-deal-stages
+Content-Type: application/json
+
+{
+  "investorId": 1,
+  "dealStageId": 1,
+  "status": "active"
+}
+
+### Update an investor deal stage by ID
+PUT {{BASE_URL}}/investor-deal-stages/1
+Content-Type: application/json
+
+{
+  "status": "completed"
+}
+
+### Delete an investor deal stage by ID
+DELETE {{BASE_URL}}/investor-deal-stages/1

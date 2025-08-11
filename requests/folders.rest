@@ -1,0 +1,25 @@
+### Get all folders
+GET {{BASE_URL}}/folders
+
+### Get a single folder by ID
+GET {{BASE_URL}}/folders/1
+
+### Create a new folder
+POST {{BASE_URL}}/folders
+Content-Type: application/json
+
+{
+  "name": "New Folder",
+  "userId": 1
+}
+
+### Update a folder by ID
+PUT {{BASE_URL}}/folders/1
+Content-Type: application/json
+
+{
+  "name": "Updated Folder Name"
+}
+
+### Delete a folder by ID
+DELETE {{BASE_URL}}/folders/1

@@ -1,0 +1,26 @@
+### Get all commissions
+GET {{BASE_URL}}/commissions
+
+### Get a single commission by ID
+GET {{BASE_URL}}/commissions/1
+
+### Create a new commission
+POST {{BASE_URL}}/commissions
+Content-Type: application/json
+
+{
+  "dealId": 1,
+  "amount": 1000.00,
+  "status": "pending"
+}
+
+### Update a commission by ID
+PUT {{BASE_URL}}/commissions/1
+Content-Type: application/json
+
+{
+  "status": "paid"
+}
+
+### Delete a commission by ID
+DELETE {{BASE_URL}}/commissions/1

@@ -1,0 +1,28 @@
+### Get all user reviews
+GET {{BASE_URL}}/user-reviews
+
+### Get a single user review by ID
+GET {{BASE_URL}}/user-reviews/1
+
+### Create a new user review
+POST {{BASE_URL}}/user-reviews
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "reviewerId": 2,
+  "rating": 5,
+  "comment": "Great user!"
+}
+
+### Update a user review by ID
+PUT {{BASE_URL}}/user-reviews/1
+Content-Type: application/json
+
+{
+  "rating": 4,
+  "comment": "Good user."
+}
+
+### Delete a user review by ID
+DELETE {{BASE_URL}}/user-reviews/1

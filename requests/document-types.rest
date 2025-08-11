@@ -1,0 +1,24 @@
+### Get all document types
+GET {{BASE_URL}}/document-types
+
+### Get a single document type by ID
+GET {{BASE_URL}}/document-types/1
+
+### Create a new document type
+POST {{BASE_URL}}/document-types
+Content-Type: application/json
+
+{
+  "name": "NDA"
+}
+
+### Update a document type by ID
+PUT {{BASE_URL}}/document-types/1
+Content-Type: application/json
+
+{
+  "name": "Term Sheet"
+}
+
+### Delete a document type by ID
+DELETE {{BASE_URL}}/document-types/1

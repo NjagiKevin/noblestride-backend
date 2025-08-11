@@ -1,0 +1,26 @@
+### Get all region preferences
+GET {{BASE_URL}}/region-preferences
+
+### Get a single region preference by ID
+GET {{BASE_URL}}/region-preferences/1
+
+### Create a new region preference
+POST {{BASE_URL}}/region-preferences
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "regionId": 1,
+  "preferred": true
+}
+
+### Update a region preference by ID
+PUT {{BASE_URL}}/region-preferences/1
+Content-Type: application/json
+
+{
+  "preferred": false
+}
+
+### Delete a region preference by ID
+DELETE {{BASE_URL}}/region-preferences/1

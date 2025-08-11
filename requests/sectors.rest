@@ -1,0 +1,24 @@
+### Get all sectors
+GET {{BASE_URL}}/sectors
+
+### Get a single sector by ID
+GET {{BASE_URL}}/sectors/1
+
+### Create a new sector
+POST {{BASE_URL}}/sectors
+Content-Type: application/json
+
+{
+  "name": "Technology"
+}
+
+### Update a sector by ID
+PUT {{BASE_URL}}/sectors/1
+Content-Type: application/json
+
+{
+  "name": "Fintech"
+}
+
+### Delete a sector by ID
+DELETE {{BASE_URL}}/sectors/1

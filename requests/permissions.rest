@@ -1,0 +1,24 @@
+### Get all permissions
+GET {{BASE_URL}}/permissions
+
+### Get a single permission by ID
+GET {{BASE_URL}}/permissions/1
+
+### Create a new permission
+POST {{BASE_URL}}/permissions
+Content-Type: application/json
+
+{
+  "name": "New Permission"
+}
+
+### Update a permission by ID
+PUT {{BASE_URL}}/permissions/1
+Content-Type: application/json
+
+{
+  "name": "Updated Permission Name"
+}
+
+### Delete a permission by ID
+DELETE {{BASE_URL}}/permissions/1

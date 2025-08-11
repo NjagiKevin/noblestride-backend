@@ -1,0 +1,24 @@
+### Get all continents
+GET {{BASE_URL}}/continents
+
+### Get a single continent by ID
+GET {{BASE_URL}}/continents/1
+
+### Create a new continent
+POST {{BASE_URL}}/continents
+Content-Type: application/json
+
+{
+  "name": "Europe"
+}
+
+### Update a continent by ID
+PUT {{BASE_URL}}/continents/1
+Content-Type: application/json
+
+{
+  "name": "Asia"
+}
+
+### Delete a continent by ID
+DELETE {{BASE_URL}}/continents/1

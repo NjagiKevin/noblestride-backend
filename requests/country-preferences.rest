@@ -1,0 +1,26 @@
+### Get all country preferences
+GET {{BASE_URL}}/country-preferences
+
+### Get a single country preference by ID
+GET {{BASE_URL}}/country-preferences/1
+
+### Create a new country preference
+POST {{BASE_URL}}/country-preferences
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "countryId": 1,
+  "preferred": true
+}
+
+### Update a country preference by ID
+PUT {{BASE_URL}}/country-preferences/1
+Content-Type: application/json
+
+{
+  "preferred": false
+}
+
+### Delete a country preference by ID
+DELETE {{BASE_URL}}/country-preferences/1

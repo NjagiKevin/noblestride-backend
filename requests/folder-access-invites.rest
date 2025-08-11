@@ -1,0 +1,26 @@
+### Get all folder access invites
+GET {{BASE_URL}}/folder-access-invites
+
+### Get a single folder access invite by ID
+GET {{BASE_URL}}/folder-access-invites/1
+
+### Create a new folder access invite
+POST {{BASE_URL}}/folder-access-invites
+Content-Type: application/json
+
+{
+  "folderId": 1,
+  "userId": 1,
+  "status": "pending"
+}
+
+### Update a folder access invite by ID
+PUT {{BASE_URL}}/folder-access-invites/1
+Content-Type: application/json
+
+{
+  "status": "accepted"
+}
+
+### Delete a folder access invite by ID
+DELETE {{BASE_URL}}/folder-access-invites/1
