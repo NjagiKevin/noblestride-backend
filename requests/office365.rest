@@ -1,0 +1,41 @@
+### Initiate Office 365 Authentication
+GET {{BASE_URL}}/office365/auth/initiate
+
+### Handle Office 365 Authentication Callback
+# This endpoint is typically hit by a redirect from Microsoft after user authentication.
+# You would not usually test this directly with a REST client, but rather initiate the flow
+# via the /auth/initiate endpoint in a browser.
+GET {{BASE_URL}}/office365/auth/callback?code=YOUR_AUTH_CODE&state=YOUR_STATE
+
+### Send an email via Office 365
+POST {{BASE_URL}}/office365/send
+Content-Type: application/json
+Authorization: Bearer {{office365_access_token}}
+
+{
+  "to": "recipient@example.com",
+  "subject": "Test Email from Office 365",
+  "text": "This is a test email sent via Microsoft Graph API.",
+  "html": "<p>This is a <b>test email</b> sent via Microsoft Graph API.</p>",
+  "cc": "cc@example.com",
+  "bcc": "bcc@example.com"
+}
+
+### Get Office 365 Inbox Emails
+GET {{BASE_URL}}/office365/inbox
+Authorization: Bearer {{office365_access_token}}
+
+### Get Office 365 Inbox Emails with filter and top
+GET {{BASE_URL}}/office365/inbox?top=5&filter=isRead eq false
+Authorization: Bearer {{office365_access_token}}
+
+### Save an email draft in Office 365
+POST {{BASE_URL}}/office365/drafts
+Content-Type: application/json
+Authorization: Bearer {{office365_access_token}}
+
+{
+  "to": "draft_recipient@example.com",
+  "subject": "Draft Email Subject",
+  "text": "This is a draft email saved via Microsoft Graph API."
+}

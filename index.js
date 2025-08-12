@@ -1,11 +1,12 @@
 // server.js
+require("dotenv").config();
+
 const multer = require("multer");
 const express = require("express");
 const { exec } = require("child_process");
 const { Sequelize } = require("sequelize");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
-const dotenv = require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const db = require("./Models");
 const userRoutes = require("./Routes/userRoutes");
@@ -68,10 +69,9 @@ const emailRoutes = require("./Routes/emailRoutes");
 const swaggerSpec = require("./config/swagger");
 const swaggerUi = require("swagger-ui-express");
 const settingsRoutes = require("./Routes/settingsRoutes");
+const office365EmailRoutes = require("./Routes/office365EmailRoutes");
 
 const path = require("path");
-
-require("dotenv").config();
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
@@ -168,6 +168,7 @@ app.use("/api/country-preferences", countryPreferenceRoutes);
 app.use("/api/emails", emailRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/settings", settingsRoutes);
+app.use("/api/office365", office365EmailRoutes);
 
 // Route to run the seeder
 app.get("/run-seeder", (req, res) => {

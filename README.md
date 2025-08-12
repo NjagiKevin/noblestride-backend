@@ -84,6 +84,46 @@ The following environment variables are used in the project:
 
 - `secretKey`: The secret key used for JWT authentication.
 
+## Office 365 Email Integration
+
+This application includes a new module for integrating with Office 365 email capabilities (sending, viewing inbox, saving drafts) using the Microsoft Graph API.
+
+### Setup
+
+1.  **Azure AD App Registration:**
+    You *must* register an application in Azure Active Directory to use this functionality.
+    *   Go to the Azure portal: `portal.azure.com`
+    *   Navigate to "Azure Active Directory" -> "App registrations".
+    *   Click "New registration".
+    *   Give it a name (e.g., "Noblestride Office 365 Integration").
+    *   For "Supported account types", choose "Accounts in any organizational directory (Any Azure AD directory - Multitenant) and personal Microsoft accounts (e.g. Skype, Xbox)".
+    *   For "Redirect URI", select "Web" and enter `http://localhost:3030/api/office365/auth/callback`.
+    *   After registration, go to "Authentication" and ensure "Implicit grant and hybrid flows" -> "Access tokens" and "ID tokens" are checked (though for this specific flow, only access tokens are strictly needed, it's good practice).
+    *   Go to "Certificates & secrets" and create a new client secret. **Copy the value immediately** as it will not be shown again.
+    *   Go to "API permissions" and add the following Microsoft Graph permissions:
+        *   `Mail.ReadWrite` (Delegated)
+        *   `Mail.Send` (Delegated)
+        *   `User.Read` (Delegated - usually default, but confirm)
+        *   `offline_access` (Delegated - for refresh tokens)
+    *   Grant admin consent for these permissions.
+
+2.  **Environment Variables:**
+    Add the following to your `.env` file (or `.env.development.local`):
+    ```env
+    O365_CLIENT_ID=YOUR_AZURE_AD_APPLICATION_CLIENT_ID
+    O365_CLIENT_SECRET=YOUR_AZURE_AD_CLIENT_SECRET_VALUE
+    O365_TENANT_ID=YOUR_AZURE_AD_TENANT_ID
+    O365_REDIRECT_URI=http://localhost:3030/api/office365/auth/callback
+    ```
+    Replace the placeholder values with the actual ones from your Azure AD app registration.
+
+3.  **Restart the Application:**
+    After setting the environment variables, restart the Node.js application for changes to take effect.
+
+### Obtaining `YOUR_OFFICE365_ACCESS_TOKEN`
+
+The `YOUR_OFFICE365_ACCESS_TOKEN` is obtained via the OAuth 2.0 flow with Microsoft. You initiate this by navigating to `http://localhost:3030/api/office365/auth/initiate` in your browser, which redirects you to Microsoft's login page. After logging in and granting permissions, Microsoft redirects back to `http://localhost:3030/api/office365/auth/callback`. Your application's `handleAuthCallback` function processes the authorization code from this redirect, exchanging it for an access token. This `accessToken` is returned in the JSON response from the callback URL. Copy this `accessToken` value and paste it into your `http-client.env.json` file. Remember, access tokens are short-lived; in production, refresh tokens are used for programmatic renewal, requiring secure, persistent storage.
+
 ## Database Seeding
 
 To seed the database with initial data, you can use the following commands:
