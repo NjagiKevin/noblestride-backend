@@ -1,8 +1,11 @@
 const { getAuthUrl, getTokenFromCode, sendOffice365Email, getOffice365Inbox, saveOffice365Draft, isOffice365EmailEnabled, refreshToken } = require('../Middlewares/office365Email/office365EmailService');
+const db = require('../Models');
+const tokenRefreshQueue = require('../Middlewares/bullmq/tokenRefreshQueue');
+const { sendMessage } = require('../Middlewares/kafka/kafkaProducer');
+const { TOKEN_REFRESH_TOPIC } = require('../Middlewares/kafka/tokenRefreshConsumer');
 
-// In a real application, you would store tokens securely (e.g., in a database)
-// For this example, we'll use a simple in-memory store for demonstration purposes.
-const userTokens = {}; // userId -> { accessToken, refreshToken, expiresIn,  etc. }
+const enableBullMQTokenRefresh = process.env.ENABLE_BULLMQ_TOKEN_REFRESH === 'true';
+const enableKafka = process.env.ENABLE_KAFKA === 'true';
 
 /**
  * Initiates the Office 365 authentication flow.
@@ -30,9 +33,33 @@ const handleAuthCallback = async (req, res) => {
 
     try {
         const tokenResponse = await getTokenFromCode(code);
-        // In a real app, you'd associate this token with a user in your database
-        const userId = 'testUser'; // Placeholder user ID
-        userTokens[userId] = tokenResponse;
+        const userId = 'testUser'; // Placeholder user ID - replace with actual user ID from your authentication system
+
+        // Save or update token in database
+        await db.Office365Token.upsert({
+            userId: userId,
+            accessToken: tokenResponse.accessToken,
+            refreshToken: tokenResponse.refreshToken,
+            expiresIn: tokenResponse.expiresIn,
+            acquiredAt: Date.now(),
+        });
+
+        // Add job to BullMQ or Kafka for future refresh
+        if (enableBullMQTokenRefresh) {
+            await tokenRefreshQueue.add('refreshOffice365Token', {
+                userId: userId,
+                oldRefreshToken: tokenResponse.refreshToken,
+            }, {
+                // Schedule job to run before token expires (e.g., 55 minutes from now for a 1-hour token)
+                delay: (tokenResponse.expiresIn - (5 * 60)) * 1000 // Convert seconds to milliseconds
+            });
+            console.log(`BullMQ job added for user ${userId} to refresh token.`);
+        } else if (enableKafka) {
+            await sendMessage(TOKEN_REFRESH_TOPIC, [
+                { value: JSON.stringify({ userId: userId, oldRefreshToken: tokenResponse.refreshToken }) }
+            ]);
+            console.log(`Kafka message sent for user ${userId} to refresh token.`);
+        }
 
         res.status(200).json({
             message: 'Authentication successful!',
@@ -55,19 +82,29 @@ const ensureOffice365Auth = async (req, res, next) => {
     if (!isOffice365EmailEnabled) {
         return res.status(503).json({ message: 'Office 365 email functionality is currently disabled due to missing configuration.' });
     }
-    const userId = 'testUser'; // Placeholder user ID
-    const tokenInfo = userTokens[userId];
+    const userId = 'testUser'; // Placeholder user ID - replace with actual user ID from your authentication system
+
+    let tokenInfo = await db.Office365Token.findOne({ where: { userId: userId } });
 
     if (!tokenInfo || !tokenInfo.accessToken) {
         return res.status(401).json({ message: 'Office 365 authentication required. Please initiate auth flow.' });
     }
 
-    // Basic token expiry check (real app would use refresh token logic)
-    if (Date.now() >= (tokenInfo.ext_expires_in * 1000 + tokenInfo.acquiredAt)) {
-        console.log('Access token expired, attempting to refresh...');
+    // Check if token is expired (add a buffer for network latency, e.g., 5 minutes)
+    const expiryTime = tokenInfo.acquiredAt + (tokenInfo.expiresIn * 1000);
+    if (Date.now() >= expiryTime - (5 * 60 * 1000)) { // Refresh if less than 5 minutes to expiry
+        console.log('Access token expired or near expiry, attempting to refresh...');
         try {
             const newTokenResponse = await refreshToken(tokenInfo.refreshToken);
-            userTokens[userId] = { ...tokenInfo, ...newTokenResponse };
+            
+            // Update token in database
+            await db.Office365Token.update({
+                accessToken: newTokenResponse.accessToken,
+                refreshToken: newTokenResponse.refreshToken,
+                expiresIn: newTokenResponse.expiresIn,
+                acquiredAt: Date.now(),
+            }, { where: { userId: userId } });
+
             req.office365AccessToken = newTokenResponse.accessToken;
         } catch (error) {
             console.error('Error refreshing token:', error.message);
