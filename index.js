@@ -70,8 +70,19 @@ const swaggerSpec = require("./config/swagger");
 const swaggerUi = require("swagger-ui-express");
 const settingsRoutes = require("./Routes/settingsRoutes");
 const office365EmailRoutes = require("./Routes/office365EmailRoutes");
+const { connectProducer, disconnectProducer } = require("./Middlewares/kafka/kafkaProducer");
+const { connectConsumer, disconnectConsumer } = require("./Middlewares/kafka/tokenRefreshConsumer");
+const { scheduleTokenRefresh } = require("./Middlewares/office365Email/tokenRefreshScheduler");
+const { createBullBoard } = require('bull-board');
+const { BullMQAdapter } = require('@bull-board/api/bullMQAdapter');
+const tokenRefreshQueue = require('./Middlewares/bullmq/tokenRefreshQueue');
+const tokenRefreshWorker = require('./Middlewares/bullmq/tokenRefreshWorker');
 
 const path = require("path");
+
+const enableKafka = process.env.ENABLE_KAFKA === 'true';
+const enableBullMQTokenRefresh = process.env.ENABLE_BULLMQ_TOKEN_REFRESH === 'true';
+const enableBullDashboard = process.env.ENABLE_BULL_DASHBOARD === 'true';
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
@@ -110,7 +121,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// db.sequelize.sync({ force: false }).then(() => {
+// db.sequelize.sync({ alter: true }).then(() => {
 //   console.log("db has been re sync");
 // });
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -170,6 +181,13 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/settings", settingsRoutes);
 app.use("/api/office365", office365EmailRoutes);
 
+// Conditionally enable Bull Dashboard
+if (enableBullDashboard) {
+  const { router } = createBullBoard([new BullAdapter(tokenRefreshQueue)]);
+  app.use('/admin/queues', router);
+  console.log('Bull Dashboard enabled at /admin/queues');
+}
+
 // Route to run the seeder
 app.get("/run-seeder", (req, res) => {
   exec(
@@ -216,7 +234,48 @@ app.get('/', (req, res) => {
   res.send('Server is running');
 });
 
+// Connect Kafka Producer and Consumer
+if (enableKafka) {
+  connectProducer();
+  connectConsumer();
+}
+
+// Start BullMQ Worker
+if (enableBullMQTokenRefresh) {
+  // BullMQ worker starts processing jobs automatically upon instantiation
+  console.log('BullMQ Worker initialized.');
+}
+
+scheduleTokenRefresh();
+
 app.listen(PORT, () => console.log(`Server is connected on ${PORT}`));
+
+// Handle graceful shutdown
+process.on('SIGINT', async () => {
+  console.log('SIGINT signal received: closing connections.');
+  if (enableKafka) {
+    await disconnectProducer();
+    await disconnectConsumer();
+  }
+  if (enableBullMQTokenRefresh) {
+    await tokenRefreshWorker.close();
+    console.log('BullMQ Worker closed.');
+  }
+  process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
+  console.log('SIGTERM signal received: closing connections.');
+  if (enableKafka) {
+    await disconnectProducer();
+    await disconnectConsumer();
+  }
+  if (enableBullMQTokenRefresh) {
+    await tokenRefreshWorker.close();
+    console.log('BullMQ Worker closed.');
+  }
+  process.exit(0);
+});
 
 // Schedule task reminders to be sent every day at 8 AM
 cron.schedule("0 8 * * *", () => {
