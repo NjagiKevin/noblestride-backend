@@ -78,6 +78,7 @@ const { BullMQAdapter } = require('@bull-board/api/bullMQAdapter');
 const { ExpressAdapter } = require('@bull-board/express');
 const tokenRefreshQueue = require('./Middlewares/bullmq/tokenRefreshQueue');
 const tokenRefreshWorker = require('./Middlewares/bullmq/tokenRefreshWorker');
+const adminRoleMiddleware = require('./Middlewares/adminRoleMiddleware');
 
 const path = require("path");
 
@@ -192,7 +193,7 @@ if (enableBullDashboard) {
     serverAdapter,
   });
 
-  app.use('/admin/queues', serverAdapter.getRouter());
+  app.use('/admin/queues', adminRoleMiddleware, serverAdapter.getRouter());
   console.log('Bull Dashboard enabled at /admin/queues');
 }
 

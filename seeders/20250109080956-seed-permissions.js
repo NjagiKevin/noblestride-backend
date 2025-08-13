@@ -746,9 +746,6 @@ module.exports = {
           name: 'GET_FOLDER_INVITES',
         },
         {
-          name: 'GET_PIPELINE_STAGES_BY_PIPELINE_ID',
-        },
-        {
           name: 'GET_REGION_WITH_COUNTRIES',
         },
         {
