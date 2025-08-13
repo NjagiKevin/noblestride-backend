@@ -78,7 +78,7 @@ const { BullMQAdapter } = require('@bull-board/api/bullMQAdapter');
 const { ExpressAdapter } = require('@bull-board/express');
 const tokenRefreshQueue = require('./Middlewares/bullmq/tokenRefreshQueue');
 const tokenRefreshWorker = require('./Middlewares/bullmq/tokenRefreshWorker');
-const adminRoleMiddleware = require('./Middlewares/adminRoleMiddleware');
+const tokenAuthMiddleware = require('./Middlewares/tokenAuthMiddleware');
 
 const path = require("path");
 
@@ -93,6 +93,10 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
 const PORT = process.env.PORT || 3030;
 
 const app = express();
+
+// Logger middleware
+const loggerMiddleware = require('./Middlewares/loggerMiddleware');
+app.use(loggerMiddleware);
 
 // Allow specific origins
 const allowedOrigins = [
@@ -193,7 +197,26 @@ if (enableBullDashboard) {
     serverAdapter,
   });
 
-  app.use('/admin/queues', adminRoleMiddleware, serverAdapter.getRouter());
+  // Custom middleware that excludes static assets and API queues from authentication
+  app.use('/admin/queues', (req, res, next) => {
+    // Skip authentication for static assets and API queues
+    if (req.path.startsWith('/static/') || req.path.startsWith('/api/queues')) {
+      console.log('Bypassing auth for path:', req.path);
+      return next();
+    }
+    
+    // Apply authentication for dashboard routes
+    return tokenAuthMiddleware(req, res, next);
+  });
+
+  // Middleware to handle token from query parameter
+  app.use('/admin/queues', (req, res, next) => {
+    // If token was in query param, set it as a header for subsequent requests
+    if (req.query.token) {
+      req.headers.authorization = `Bearer ${req.query.token}`;
+    }
+    next();
+  }, serverAdapter.getRouter());
   console.log('Bull Dashboard enabled at /admin/queues');
 }
 
