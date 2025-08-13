@@ -73,8 +73,9 @@ const office365EmailRoutes = require("./Routes/office365EmailRoutes");
 const { connectProducer, disconnectProducer } = require("./Middlewares/kafka/kafkaProducer");
 const { connectConsumer, disconnectConsumer } = require("./Middlewares/kafka/tokenRefreshConsumer");
 const { scheduleTokenRefresh } = require("./Middlewares/office365Email/tokenRefreshScheduler");
-const { createBullBoard } = require('bull-board');
+const { createBullBoard } = require('@bull-board/api');
 const { BullMQAdapter } = require('@bull-board/api/bullMQAdapter');
+const { ExpressAdapter } = require('@bull-board/express');
 const tokenRefreshQueue = require('./Middlewares/bullmq/tokenRefreshQueue');
 const tokenRefreshWorker = require('./Middlewares/bullmq/tokenRefreshWorker');
 
@@ -183,8 +184,15 @@ app.use("/api/office365", office365EmailRoutes);
 
 // Conditionally enable Bull Dashboard
 if (enableBullDashboard) {
-  const { router } = createBullBoard([new BullAdapter(tokenRefreshQueue)]);
-  app.use('/admin/queues', router);
+  const serverAdapter = new ExpressAdapter();
+  serverAdapter.setBasePath('/admin/queues');
+
+  createBullBoard({
+    queues: [new BullMQAdapter(tokenRefreshQueue)],
+    serverAdapter,
+  });
+
+  app.use('/admin/queues', serverAdapter.getRouter());
   console.log('Bull Dashboard enabled at /admin/queues');
 }
 

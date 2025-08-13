@@ -46,14 +46,25 @@ const handleAuthCallback = async (req, res) => {
 
         // Add job to BullMQ or Kafka for future refresh
         if (enableBullMQTokenRefresh) {
+            // Calculate when the job should run (5 minutes before expiry)
+            const runAt = new Date(Date.now() + (tokenResponse.expiresIn - (5 * 60)) * 1000);
+            
+            // Add job with specific options
             await tokenRefreshQueue.add('refreshOffice365Token', {
                 userId: userId,
                 oldRefreshToken: tokenResponse.refreshToken,
+                expiryTime: Date.now() + (tokenResponse.expiresIn * 1000),
             }, {
-                // Schedule job to run before token expires (e.g., 55 minutes from now for a 1-hour token)
-                delay: (tokenResponse.expiresIn - (5 * 60)) * 1000 // Convert seconds to milliseconds
+                delay: Math.max(0, runAt.getTime() - Date.now()), // Ensure delay is not negative
+                priority: 1, // High priority for initial token refresh
+                jobId: `refresh-${userId}-${Date.now()}`, // Unique job ID
+                attempts: 5, // More retry attempts for token refresh
+                backoff: {
+                    type: 'exponential',
+                    delay: 2000, // Start with 2 second delay
+                },
             });
-            console.log(`BullMQ job added for user ${userId} to refresh token.`);
+            console.log(`BullMQ job added for user ${userId} to refresh token, scheduled for ${runAt}.`);
         } else if (enableKafka) {
             await sendMessage(TOKEN_REFRESH_TOPIC, [
                 { value: JSON.stringify({ userId: userId, oldRefreshToken: tokenResponse.refreshToken }) }

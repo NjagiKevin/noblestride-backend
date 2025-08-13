@@ -14,14 +14,41 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Office365Token.init({
-    userId: DataTypes.UUID,
-    accessToken: DataTypes.TEXT,
-    refreshToken: DataTypes.TEXT,
-    expiresIn: DataTypes.INTEGER,
-    acquiredAt: DataTypes.BIGINT
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      primaryKey: true
+    },
+    accessToken: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    refreshToken: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    expiresIn: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    acquiredAt: {
+      type: DataTypes.BIGINT,
+      allowNull: false
+    },
+    lastRefreshError: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    lastRefreshAttempt: {
+      type: DataTypes.DATE,
+      allowNull: true
+    }
   }, {
     sequelize,
     modelName: 'Office365Token',
+    tableName: 'Office365Tokens',
+    timestamps: true,
+    paranoid: true // Enable soft deletes
   });
   return Office365Token;
 };
