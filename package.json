@@ -28,6 +28,7 @@
     "bullmq": "^5.56.10",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "crypto-js": "^4.2.0",
     "csv-parser": "^3.2.0",
     "docusign-esign": "^8.0.1",
     "dotenv": "^16.4.5",
