@@ -940,6 +940,12 @@ module.exports = {
         {
           name: 'UPDATE_SETTINGS',
         },
+        {
+          name: 'VIEW_PROFILE',
+        },
+        {
+          name: 'VIEW_ALL_DEALS',
+        },
       ].map(permission => ({
         ...permission,
         permission_id: Sequelize.literal('uuid_generate_v4()'),
