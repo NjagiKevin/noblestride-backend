@@ -8,7 +8,14 @@ const fs = require("fs");
 // Get all sectors
 const getAllSectors = async (req, res) => {
   try {
-    const sectors = await Sector.findAll();
+    const sectors = await Sector.findAll({
+      include: [
+        {
+          model: Subsector,
+          as: "subsectors",
+        },
+      ],
+    });
     res.status(200).json({ status: true, sectors });
   } catch (error) {
     res.status(500).json({ status: false, message: error.message });
@@ -18,7 +25,14 @@ const getAllSectors = async (req, res) => {
 // Get sector by ID
 const getSectorById = async (req, res) => {
   try {
-    const sector = await Sector.findByPk(req.params.id);
+    const sector = await Sector.findByPk(req.params.id, {
+      include: [
+        {
+          model: Subsector,
+          as: "subsectors",
+        },
+      ],
+    });
     if (!sector) {
       return res
         .status(404)
