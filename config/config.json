@@ -1,23 +1,23 @@
 {
   "development": {
     "username": "postgres",
-    "password": "password",
+    "password": "@@7389",
     "database": "noblestride",
     "host": "localhost",
     "dialect": "postgres"
   },
   "test": {
     "username": "postgres",
-    "password": "password",
+    "password": "@@7389",
     "database": "noblestride",
-    "host": "localhost",
+    "host": "noblestride-service-db",
     "dialect": "postgres"
   },
   "production": {
     "username": "postgres",
-    "password": "password",
+    "password": "@@7389",
     "database": "noblestride",
-    "host": "localhost",
+    "host": "noblestride-service-db",
     "dialect": "postgres"
   }
 }

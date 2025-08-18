@@ -13,8 +13,7 @@ RUN mkdir -p /app/uploads && chmod -R 777 /app/uploads
 COPY package*.json ./
 
 # install dependencies
-RUN CFLAGS="-fPIC" LDFLAGS="-fPIC" npm install --production
-RUN CFLAGS="-fPIC" LDFLAGS="-fPIC" npm rebuild bcrypt --build-from-source
+RUN npm install --production
 
 # Install sequelize-cli globally
 RUN npm install -g sequelize-cli
