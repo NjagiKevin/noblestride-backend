@@ -81,10 +81,11 @@ const PORT = process.env.PORT || 8080;
 
 const app = express();
 
-/ Allow specific origins
+// Allow specific origins
 const allowedOrigins = [
   "https://dealflow.noblestride.co.ke", // Frontend origin
   "https://another-allowed-origin.com", // Add other allowed origins if needed
+  "http://localhost:5173",
 ];
 
 app.use(
