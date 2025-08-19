@@ -1,11 +1,12 @@
 // server.js
+require("dotenv").config();
+
 const multer = require("multer");
 const express = require("express");
 const { exec } = require("child_process");
 const { Sequelize } = require("sequelize");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
-const dotenv = require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const db = require("./Models");
 const userRoutes = require("./Routes/userRoutes");
@@ -68,23 +69,42 @@ const emailRoutes = require("./Routes/emailRoutes");
 const swaggerSpec = require("./config/swagger");
 const swaggerUi = require("swagger-ui-express");
 const settingsRoutes = require("./Routes/settingsRoutes");
+const office365EmailRoutes = require("./Routes/office365EmailRoutes");
+const { connectProducer, disconnectProducer } = require("./Middlewares/kafka/kafkaProducer");
+const { connectConsumer, disconnectConsumer } = require("./Middlewares/kafka/tokenRefreshConsumer");
+const { scheduleTokenRefresh } = require("./Middlewares/office365Email/tokenRefreshScheduler");
+const { createBullBoard } = require('@bull-board/api');
+const { BullMQAdapter } = require('@bull-board/api/bullMQAdapter');
+const { ExpressAdapter } = require('@bull-board/express');
+const tokenRefreshQueue = require('./Middlewares/bullmq/tokenRefreshQueue');
+const tokenRefreshWorker = require('./Middlewares/bullmq/tokenRefreshWorker');
+const tokenAuthMiddleware = require('./Middlewares/tokenAuthMiddleware');
 
 const path = require("path");
 
-require("dotenv").config();
+const enableKafka = process.env.ENABLE_KAFKA === 'true';
+const enableBullMQTokenRefresh = process.env.ENABLE_BULLMQ_TOKEN_REFRESH === 'true';
+const enableBullDashboard = process.env.ENABLE_BULL_DASHBOARD === 'true';
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3030;
 
 const app = express();
 
-/ Allow specific origins
+// Logger middleware
+const loggerMiddleware = require('./Middlewares/loggerMiddleware');
+app.use(loggerMiddleware);
+
+// Allow specific origins
 const allowedOrigins = [
   "https://dealflow.noblestride.co.ke", // Frontend origin
   "https://another-allowed-origin.com", // Add other allowed origins if needed
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
 ];
 
 app.use(
@@ -107,7 +127,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-db.sequelize.sync({ force: false }).then(() => {
+db.sequelize.sync({ alter: true }).then(() => {
   console.log("db has been re sync");
 });
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -165,6 +185,40 @@ app.use("/api/country-preferences", countryPreferenceRoutes);
 app.use("/api/emails", emailRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/settings", settingsRoutes);
+app.use("/api/office365", office365EmailRoutes);
+
+// Conditionally enable Bull Dashboard
+if (enableBullDashboard) {
+  const serverAdapter = new ExpressAdapter();
+  serverAdapter.setBasePath('/admin/queues');
+
+  createBullBoard({
+    queues: [new BullMQAdapter(tokenRefreshQueue)],
+    serverAdapter,
+  });
+
+  // Custom middleware that excludes static assets and API queues from authentication
+  app.use('/admin/queues', (req, res, next) => {
+    // Skip authentication for static assets and API queues
+    if (req.path.startsWith('/static/') || req.path.startsWith('/api/queues')) {
+      console.log('Bypassing auth for path:', req.path);
+      return next();
+    }
+    
+    // Apply authentication for dashboard routes
+    return tokenAuthMiddleware(req, res, next);
+  });
+
+  // Middleware to handle token from query parameter
+  app.use('/admin/queues', (req, res, next) => {
+    // If token was in query param, set it as a header for subsequent requests
+    if (req.query.token) {
+      req.headers.authorization = `Bearer ${req.query.token}`;
+    }
+    next();
+  }, serverAdapter.getRouter());
+  console.log('Bull Dashboard enabled at /admin/queues');
+}
 
 // Route to run the seeder
 app.get("/run-seeder", (req, res) => {
@@ -208,7 +262,52 @@ app.get("/run-migrations", (req, res) => {
   );
 });
 
+app.get('/', (req, res) => {
+  res.send('Server is running');
+});
+
+// Connect Kafka Producer and Consumer
+if (enableKafka) {
+  connectProducer();
+  connectConsumer();
+}
+
+// Start BullMQ Worker
+if (enableBullMQTokenRefresh) {
+  // BullMQ worker starts processing jobs automatically upon instantiation
+  console.log('BullMQ Worker initialized.');
+}
+
+scheduleTokenRefresh();
+
 app.listen(PORT, () => console.log(`Server is connected on ${PORT}`));
+
+// Handle graceful shutdown
+process.on('SIGINT', async () => {
+  console.log('SIGINT signal received: closing connections.');
+  if (enableKafka) {
+    await disconnectProducer();
+    await disconnectConsumer();
+  }
+  if (enableBullMQTokenRefresh) {
+    await tokenRefreshWorker.close();
+    console.log('BullMQ Worker closed.');
+  }
+  process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
+  console.log('SIGTERM signal received: closing connections.');
+  if (enableKafka) {
+    await disconnectProducer();
+    await disconnectConsumer();
+  }
+  if (enableBullMQTokenRefresh) {
+    await tokenRefreshWorker.close();
+    console.log('BullMQ Worker closed.');
+  }
+  process.exit(0);
+});
 
 // Schedule task reminders to be sent every day at 8 AM
 cron.schedule("0 8 * * *", () => {

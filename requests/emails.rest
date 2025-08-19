@@ -1,0 +1,9 @@
+### Send an email
+POST {{BASE_URL}}/emails/send
+Content-Type: application/json
+
+{
+  "to": "recipient@example.com",
+  "subject": "Test Email",
+  "text": "This is a test email from the API."
+}

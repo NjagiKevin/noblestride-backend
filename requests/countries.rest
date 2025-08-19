@@ -1,0 +1,25 @@
+### Get all countries
+GET {{BASE_URL}}/countries
+
+### Get a single country by ID
+GET {{BASE_URL}}/countries/1
+
+### Create a new country
+POST {{BASE_URL}}/countries
+Content-Type: application/json
+
+{
+  "name": "New Country",
+  "code": "NC"
+}
+
+### Update a country by ID
+PUT {{BASE_URL}}/countries/1
+Content-Type: application/json
+
+{
+  "name": "Updated Country Name"
+}
+
+### Delete a country by ID
+DELETE {{BASE_URL}}/countries/1

@@ -1,0 +1,26 @@
+### Get all documents
+GET {{BASE_URL}}/documents
+
+### Get a single document by ID
+GET {{BASE_URL}}/documents/1
+
+### Create a new document
+POST {{BASE_URL}}/documents
+Content-Type: application/json
+
+{
+  "name": "New Document",
+  "type": "pdf",
+  "url": "http://example.com/new_doc.pdf"
+}
+
+### Update a document by ID
+PUT {{BASE_URL}}/documents/1
+Content-Type: application/json
+
+{
+  "name": "Updated Document Name"
+}
+
+### Delete a document by ID
+DELETE {{BASE_URL}}/documents/1

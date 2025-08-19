@@ -30,6 +30,7 @@ Thumbs.db
 # IDE-specific files
 .vscode/
 .idea/
+http-client.private.env.json
 
 # Build output
 /dist

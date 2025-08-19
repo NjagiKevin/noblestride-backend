@@ -1,0 +1,26 @@
+### Get all deal type preferences
+GET {{BASE_URL}}/deal-type-preferences
+
+### Get a single deal type preference by ID
+GET {{BASE_URL}}/deal-type-preferences/1
+
+### Create a new deal type preference
+POST {{BASE_URL}}/deal-type-preferences
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "dealType": "equity",
+  "preferred": true
+}
+
+### Update a deal type preference by ID
+PUT {{BASE_URL}}/deal-type-preferences/1
+Content-Type: application/json
+
+{
+  "preferred": false
+}
+
+### Delete a deal type preference by ID
+DELETE {{BASE_URL}}/deal-type-preferences/1

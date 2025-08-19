@@ -291,14 +291,6 @@ const getAcceptedAndPendingFolderInvites = async (req, res) => {
         limit: parseInt(limit),
       });
 
-    if (!invites || invites.length === 0) {
-      return res.status(404).json({
-        status: false,
-        message:
-          "No accepted or pending folder invites found for the logged-in user.",
-      });
-    }
-
     await createAuditLog({
       userId: req.user.id,
       action: "GET_ACCEPTED_AND_PENDING_FOLDER_INVITES",

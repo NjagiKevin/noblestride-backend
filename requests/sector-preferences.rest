@@ -1,0 +1,26 @@
+### Get all sector preferences
+GET {{BASE_URL}}/sector-preferences
+
+### Get a single sector preference by ID
+GET {{BASE_URL}}/sector-preferences/1
+
+### Create a new sector preference
+POST {{BASE_URL}}/sector-preferences
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "sectorId": 1,
+  "preferred": true
+}
+
+### Update a sector preference by ID
+PUT {{BASE_URL}}/sector-preferences/1
+Content-Type: application/json
+
+{
+  "preferred": false
+}
+
+### Delete a sector preference by ID
+DELETE {{BASE_URL}}/sector-preferences/1

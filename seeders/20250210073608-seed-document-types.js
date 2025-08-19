@@ -4,26 +4,36 @@ const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    // await queryInterface.bulkInsert("document_types", [
-    //   {
-    //     type_id: Sequelize.literal("uuid_generate_v4()"),
-    //     name: "Information Memorandum",
-    //     createdAt: new Date(),
-    //     updatedAt: new Date(),
-    //   },
-    //   {
-    //     type_id: Sequelize.literal("uuid_generate_v4()"),
-    //     name: "NDA",
-    //     createdAt: new Date(),
-    //     updatedAt: new Date(),
-    //   },
-    //   {
-    //     type_id: Sequelize.literal("uuid_generate_v4()"),
-    //     name: "Financial Model",
-    //     createdAt: new Date(),
-    //     updatedAt: new Date(),
-    //   },
-    // ]);
+    const documentTypesToSeed = [
+      {
+        name: "Information Memorandum",
+      },
+      {
+        name: "NDA",
+      },
+      {
+        name: "Financial Model",
+      },
+    ].map(type => ({
+      ...type,
+      type_id: Sequelize.literal("uuid_generate_v4()"),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }));
+
+    const existingDocumentTypes = await queryInterface.sequelize.query(
+      "SELECT name FROM document_types",
+      { type: Sequelize.QueryTypes.SELECT }
+    );
+    const existingDocumentTypeNames = new Set(existingDocumentTypes.map(type => type.name));
+
+    const newDocumentTypes = documentTypesToSeed.filter(
+      type => !existingDocumentTypeNames.has(type.name)
+    );
+
+    if (newDocumentTypes.length > 0) {
+      await queryInterface.bulkInsert("document_types", newDocumentTypes, {});
+    }
   },
 
   down: async (queryInterface, Sequelize) => {

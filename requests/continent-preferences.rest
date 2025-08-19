@@ -1,0 +1,26 @@
+### Get all continent preferences
+GET {{BASE_URL}}/continent-preferences
+
+### Get a single continent preference by ID
+GET {{BASE_URL}}/continent-preferences/1
+
+### Create a new continent preference
+POST {{BASE_URL}}/continent-preferences
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "continentId": 1,
+  "preferred": true
+}
+
+### Update a continent preference by ID
+PUT {{BASE_URL}}/continent-preferences/1
+Content-Type: application/json
+
+{
+  "preferred": false
+}
+
+### Delete a continent preference by ID
+DELETE {{BASE_URL}}/continent-preferences/1

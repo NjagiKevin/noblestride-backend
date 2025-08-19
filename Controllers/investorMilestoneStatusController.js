@@ -63,13 +63,6 @@ const getAllInvestorMilestoneStatusesByUserAndDeal = async (req, res) => {
       ],
     });
 
-    if (!milestoneStatuses || milestoneStatuses.length === 0) {
-      return res.status(404).json({
-        status: false,
-        message: "No milestone statuses found for the specified criteria.",
-      });
-    }
-
     await createAuditLog({
       userId: req.user.id,
       action: `Fetched Investor Milestone Statuses`,
@@ -118,12 +111,6 @@ const getAllInvestorMilestoneStatusesByUser = async (req, res) => {
       ],
     });
 
-    if (!milestoneStatuses || milestoneStatuses.length === 0) {
-      return res.status(404).json({
-        status: false,
-        message: "No milestone statuses found for the specified criteria.",
-      });
-    }
     await createAuditLog({
       userId: req.user.id,
       action: `Fetched Investor Milestone Statuses`,

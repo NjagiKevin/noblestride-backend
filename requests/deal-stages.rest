@@ -1,0 +1,25 @@
+### Get all deal stages
+GET {{BASE_URL}}/deal-stages
+
+### Get a single deal stage by ID
+GET {{BASE_URL}}/deal-stages/1
+
+### Create a new deal stage
+POST {{BASE_URL}}/deal-stages
+Content-Type: application/json
+
+{
+  "name": "Initial Contact",
+  "order": 1
+}
+
+### Update a deal stage by ID
+PUT {{BASE_URL}}/deal-stages/1
+Content-Type: application/json
+
+{
+  "name": "First Meeting"
+}
+
+### Delete a deal stage by ID
+DELETE {{BASE_URL}}/deal-stages/1

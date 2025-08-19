@@ -1,0 +1,26 @@
+### Get all investor milestones
+GET {{BASE_URL}}/investor-milestones
+
+### Get a single investor milestone by ID
+GET {{BASE_URL}}/investor-milestones/1
+
+### Create a new investor milestone
+POST {{BASE_URL}}/investor-milestones
+Content-Type: application/json
+
+{
+  "investorId": 1,
+  "milestoneId": 1,
+  "status": "completed"
+}
+
+### Update an investor milestone by ID
+PUT {{BASE_URL}}/investor-milestones/1
+Content-Type: application/json
+
+{
+  "status": "pending"
+}
+
+### Delete an investor milestone by ID
+DELETE {{BASE_URL}}/investor-milestones/1

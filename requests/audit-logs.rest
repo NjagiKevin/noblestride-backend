@@ -1,0 +1,26 @@
+### Get all audit logs
+GET {{BASE_URL}}/audit-logs
+
+### Get a single audit log by ID
+GET {{BASE_URL}}/audit-logs/1
+
+### Create a new audit log (usually created by system, not manually)
+POST {{BASE_URL}}/audit-logs
+Content-Type: application/json
+
+{
+  "action": "USER_LOGIN",
+  "userId": 1,
+  "details": "User logged in successfully"
+}
+
+### Update an audit log by ID (not typical for audit logs)
+PUT {{BASE_URL}}/audit-logs/1
+Content-Type: application/json
+
+{
+  "action": "USER_LOGOUT"
+}
+
+### Delete an audit log by ID (not typical for audit logs)
+DELETE {{BASE_URL}}/audit-logs/1

@@ -1,0 +1,26 @@
+### Get all primary location preferences
+GET {{BASE_URL}}/primary-location-preferences
+
+### Get a single primary location preference by ID
+GET {{BASE_URL}}/primary-location-preferences/1
+
+### Create a new primary location preference
+POST {{BASE_URL}}/primary-location-preferences
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "location": "New York",
+  "preferred": true
+}
+
+### Update a primary location preference by ID
+PUT {{BASE_URL}}/primary-location-preferences/1
+Content-Type: application/json
+
+{
+  "preferred": false
+}
+
+### Delete a primary location preference by ID
+DELETE {{BASE_URL}}/primary-location-preferences/1

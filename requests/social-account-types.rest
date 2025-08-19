@@ -1,0 +1,24 @@
+### Get all social account types
+GET {{BASE_URL}}/social-account-types
+
+### Get a single social account type by ID
+GET {{BASE_URL}}/social-account-types/1
+
+### Create a new social account type
+POST {{BASE_URL}}/social-account-types
+Content-Type: application/json
+
+{
+  "name": "Facebook"
+}
+
+### Update a social account type by ID
+PUT {{BASE_URL}}/social-account-types/1
+Content-Type: application/json
+
+{
+  "name": "Twitter"
+}
+
+### Delete a social account type by ID
+DELETE {{BASE_URL}}/social-account-types/1

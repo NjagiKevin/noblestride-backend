@@ -1,0 +1,11 @@
+### Get application settings
+GET {{BASE_URL}}/settings
+
+### Update application settings
+PUT {{BASE_URL}}/settings
+Content-Type: application/json
+
+{
+  "appName": "Noblestride App",
+  "adminEmail": "admin@noblestride.com"
+}

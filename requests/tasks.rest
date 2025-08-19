@@ -1,0 +1,26 @@
+### Get all tasks
+GET {{BASE_URL}}/tasks
+
+### Get a single task by ID
+GET {{BASE_URL}}/tasks/1
+
+### Create a new task
+POST {{BASE_URL}}/tasks
+Content-Type: application/json
+
+{
+  "title": "New Task",
+  "description": "Description for new task",
+  "dueDate": "2025-12-31"
+}
+
+### Update a task by ID
+PUT {{BASE_URL}}/tasks/1
+Content-Type: application/json
+
+{
+  "title": "Updated Task Title"
+}
+
+### Delete a task by ID
+DELETE {{BASE_URL}}/tasks/1

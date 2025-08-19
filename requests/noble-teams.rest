@@ -1,0 +1,25 @@
+### Get all noble teams
+GET {{BASE_URL}}/noble-teams
+
+### Get a single noble team by ID
+GET {{BASE_URL}}/noble-teams/1
+
+### Create a new noble team
+POST {{BASE_URL}}/noble-teams
+Content-Type: application/json
+
+{
+  "name": "Team Alpha",
+  "description": "Description for Team Alpha"
+}
+
+### Update a noble team by ID
+PUT {{BASE_URL}}/noble-teams/1
+Content-Type: application/json
+
+{
+  "name": "Team Beta"
+}
+
+### Delete a noble team by ID
+DELETE {{BASE_URL}}/noble-teams/1

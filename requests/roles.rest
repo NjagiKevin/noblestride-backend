@@ -1,0 +1,25 @@
+### Get all roles
+GET {{BASE_URL}}/roles
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+### Get a single role by ID
+GET {{BASE_URL}}/roles/1
+
+### Create a new role
+POST {{BASE_URL}}/roles
+Content-Type: application/json
+
+{
+  "name": "New Role"
+}
+
+### Update a role by ID
+PUT {{BASE_URL}}/roles/1
+Content-Type: application/json
+
+{
+  "name": "Updated Role Name"
+}
+
+### Delete a role by ID
+DELETE {{BASE_URL}}/roles/1

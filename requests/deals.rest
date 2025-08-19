@@ -1,0 +1,25 @@
+### Get all deals
+GET {{BASE_URL}}/deals
+
+### Get a single deal by ID
+GET {{BASE_URL}}/deals/1
+
+### Create a new deal
+POST {{BASE_URL}}/deals
+Content-Type: application/json
+
+{
+  "name": "New Deal",
+  "description": "Description for new deal"
+}
+
+### Update a deal by ID
+PUT {{BASE_URL}}/deals/1
+Content-Type: application/json
+
+{
+  "name": "Updated Deal Name"
+}
+
+### Delete a deal by ID
+DELETE {{BASE_URL}}/deals/1

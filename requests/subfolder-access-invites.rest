@@ -1,0 +1,26 @@
+### Get all subfolder access invites
+GET {{BASE_URL}}/subfolder-access-invites
+
+### Get a single subfolder access invite by ID
+GET {{BASE_URL}}/subfolder-access-invites/1
+
+### Create a new subfolder access invite
+POST {{BASE_URL}}/subfolder-access-invites
+Content-Type: application/json
+
+{
+  "subfolderId": 1,
+  "userId": 1,
+  "status": "pending"
+}
+
+### Update a subfolder access invite by ID
+PUT {{BASE_URL}}/subfolder-access-invites/1
+Content-Type: application/json
+
+{
+  "status": "accepted"
+}
+
+### Delete a subfolder access invite by ID
+DELETE {{BASE_URL}}/subfolder-access-invites/1

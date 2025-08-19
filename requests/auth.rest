@@ -1,0 +1,107 @@
+### Register a new user
+POST {{BASE_URL}}/users/signup
+Content-Type: application/json
+
+{
+    "name": "Kelly",
+    "email": "kelly@noblestride.co.ke",
+    "password": "password",
+    "phone":"254799581989",
+    "role": "Administrator",
+    "role_id": "d040cbd1-97a5-49f6-b1ef-5668db40f5bf",
+    "ticket_size_min":0,
+    "ticket_size_max":10000,
+    "deal_types":[
+"Equity"
+    ],
+    "continent_ids":[
+    
+    ],
+    "sub_sector_ids":[
+
+    ],
+    "sector_ids":[],
+    "country_ids":[],
+    "region_ids":[
+
+    ]
+}
+
+### Onboard a new investor
+POST {{BASE_URL}}/users/onboard-investor
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data;
+
+{
+    "name": "Jhn Doe",
+    "email": "johndoe@company.com",
+    "password": "securepassword",
+    "profile_image": "https://example.com/images/john_doe.jpg",
+    "total_investments": "5",
+    "average_check_size": "1000000",
+    "successful_exits": "2",
+    "portfolio_ipr": "15.5",
+    "description": "Experienced investor in tech startups.",
+    "location": "Nairobi",
+    "phone": ""
+}
+
+### Onboard a new target company
+POST {{BASE_URL}}/users/onboard-target-company
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "TechCorp Ltd",
+  "email": "info@techcorp.com",
+  "password": "securepassword",
+  "location": "San Francisco, CA",
+  "total_assets": 5000000,
+  "ebitda": 1000000,
+  "description": "A leading tech company specializing in AI solutions.",
+  "addressable_market": 20000000,
+  "current_market": 5000000,
+  "gross_margin": 40,
+  "cac_payback_period": 12,
+  "tam": 100000000,
+  "sam": 50000000,
+  "som": 10000000,
+  "year_founded": 2010,
+  "phone":""
+}
+
+### Login a user
+POST {{BASE_URL}}/users/login
+Content-Type: application/json
+
+{
+    "email":"aliciabakersconfectionersltd@example.com",
+    "password":"password123"
+}
+
+### Verify OTP
+POST {{BASE_URL}}/users/verify-code
+Content-Type: application/json
+
+{
+    "email":"aliciabakersconfectionersltd@example.com",
+    "code":"727226",
+    "type":"login"
+}
+
+### Forgot password
+POST {{BASE_URL}}/users/forgot-password
+Content-Type: application/json
+
+{
+    "email":"otienoalvin44@gmail.com"
+}
+
+### Reset password
+POST {{BASE_URL}}/users/reset-password
+Content-Type: application/json
+
+{
+    "email":"alvinodiwuor@gmail.com",
+    "password":"password"
+}
