@@ -22,6 +22,10 @@ RUN npm install -g sequelize-cli
 # Copy the application code to the working directory
 COPY . .
 
+# Copy scripts and make them executable
+COPY scripts /app/scripts/
+RUN chmod +x /app/scripts/run-setup-scripts.sh
+
 # Create logs directory and set ownership
 RUN mkdir -p /app/logs && chown -R 1000:1000 /app/logs
 
