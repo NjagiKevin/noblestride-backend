@@ -71,9 +71,7 @@ services:
       - noblestride-network
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: noblestride_service:1.0
     container_name: noblestride-service
     restart: on-failure
     depends_on:
