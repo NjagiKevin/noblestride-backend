@@ -14,25 +14,16 @@ done
 
 echo "Database is up and running!"
 
-# Start the application in production mode
-echo "Starting the application..."
-npm  start  # Run in the background to ensure the process continues
-
-# Wait for the application to sync the database
-echo "Waiting for database sync to complete..."
-# while ! curl -s http://localhost:3001/healthcheck > /dev/null; do
-#   echo "Waiting for application health check..."
-#   sleep 2
-# done
-
-echo "Database sync is complete!"
+# Run migrations
+echo "Running migrations..."
+npx sequelize-cli db:migrate
 
 # Run the seeds
 echo "Running seeds..."
-# npm run seed:production
+npx sequelize-cli db:seed:all
 
 echo "Seeds completed successfully!"
 
-# Keep the container running
-echo "Application is up and running!"
-wait
+# Start the application
+echo "Starting the application..."
+npm start

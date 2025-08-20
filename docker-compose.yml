@@ -71,7 +71,9 @@ services:
       - noblestride-network
 
   app:
-    image: noblestride_service:1.0
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: noblestride-service
     restart: on-failure
     depends_on:
@@ -84,12 +86,7 @@ services:
 
     networks:
       - noblestride-network
-    command: >
-      sh -c "
-        npx sequelize-cli db:migrate &&
-        npx sequelize-cli db:seed:all &&
-        npm start
-      "
+    
     ports:
       - "3030:3030"
     env_file:
