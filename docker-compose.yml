@@ -99,6 +99,11 @@ services:
           memory: "3G"
 
     user: "1000:1000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3030/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   noblestrideservice-db-data:

@@ -9,36 +9,83 @@ Noblestride is a Node.js application that provides APIs for user management and 
 - [API Endpoints](#api-endpoints)
 - [Environment Variables](#environment-variables)
 - [Project Structure](#project-structure)
+- [Running Setup Scripts](#running-setup-scripts)
 - [License](#license)
 
 ## Installation
 
-1. Clone the repository:
+To set up and run the Noblestride project, follow these steps:
+
+### Prerequisites
+
+Make sure you have the following installed on your system:
+
+*   **Docker** and **Docker Compose**: For containerizing the application and its services.
+*   **Node.js** and **npm**: For running local development commands (though most application logic will run inside Docker).
+
+### Setup Steps
+
+1.  **Clone the repository:**
     ```sh
     git clone https://github.com/yourusername/noblestride.git
     cd noblestride
     ```
 
-2. Install dependencies:
-    ```sh
-    npm install
-    ```
+2.  **Configure Environment Variables:**
+    Create a `.env` file in the root of the project. This file will hold sensitive information and configuration for your application and services. Use the following as a template:
 
-3. Set up the environment variables in a `.env` file:
     ```env
-    secretKey=ydwygyegyegcveyvcyegc
-    ```
+    # ENVIRONMENT
+    APPLICATION_URL=http://localhost:3000/api
+    ENVIRONMENT=production
+    API_VERSION=v1
+    API_KEY=e18d5c7000ca249fad54b480baef48d13480411cc9d83fbcbf7f1bcb4ca534d7
+    USERS_PORT=3030
+    NODE_ENV=production
 
-4. Start the server:
-    ```sh
-    npm start
+    # Database Configuration
+    DB_USERNAME=postgres
+    DB_PASSWORD=password # Use a strong password in production
+    DB_NAME=noblestride
+    DB_HOST=noblestride-service-db
+    DB_PORT=5432
+    PORT=3030
+
+    # Redis Configuration
+    REDIS_HOST=redis
+    REDIS_PORT=6379
+
+    # Kafka Configuration
+    KAFKA_BROKERS=kafka:29092 # Internal Docker network address
+
+    # JWT SECRET
+    ACCESS_TOKEN_SECRET=uefa2866f73787053b32e40b540b9a61b0d870c2o4j8l
+    REFRESH_TOKEN_SECRET=uefa2866f73787053b32ertTyRaw40b540b9a61b0d8c
+    JWT_EXPIRY=12h #hours
+
+    # Other configurations (e.g., SendGrid, Azure AD, DocuSign, Google, Facebook, SMTP)
+    # ... (copy other variables from your .env.development.local or .env.live if needed)
     ```
+    **Note on DB_PASSWORD:** For local development, `password` is used. For production, ensure you use a strong, unique password.
+
+3.  **Build and Run Docker Containers:**
+    Navigate to the project root directory in your terminal and run:
+    ```sh
+    docker-compose up --build -d
+    ```
+    *   `--build`: Rebuilds images (useful after code changes or initial setup).
+    *   `-d`: Runs containers in detached mode (in the background).
+
+    **Troubleshooting Database Connection Issues:**
+    If you encounter `password authentication failed` errors or persistent database connection issues, it might be due to a stale Docker volume. To resolve this:
+    1.  Stop containers: `docker-compose down`
+    2.  Identify the database volume: `docker volume ls` (look for `noblestride_node_backend-main_noblestrideservice-db-data` or similar).
+    3.  Remove the volume: `docker volume rm <volume_name>`
+    4.  Then, run `docker-compose up --build -d` again.
 
 ## Usage
 
-The server will start on the port specified in the `.env` file or default to port 8080. You can access the APIs using a tool like Postman or via your frontend application.
-
-**Important:** Database migrations are now managed manually. Please run `npm run migrate` to apply any pending database schema changes.
+The server will be accessible on `http://localhost:3030`. You can access the APIs using a tool like Postman or via your frontend application.
 
 ## API Endpoints
 
@@ -83,6 +130,11 @@ The server will start on the port specified in the `.env` file or default to por
 The following environment variables are used in the project:
 
 - `secretKey`: The secret key used for JWT authentication.
+- `DB_USERNAME`, `DB_PASSWORD`, `DB_NAME`, `DB_HOST`, `DB_PORT`: Database connection details.
+- `REDIS_HOST`, `REDIS_PORT`: Redis connection details.
+- `KAFKA_BROKERS`: Kafka broker addresses.
+- `ACCESS_TOKEN_SECRET`, `REFRESH_TOKEN_SECRET`, `JWT_EXPIRY`: JWT authentication secrets and expiry.
+- Other variables for SendGrid, Azure AD, DocuSign, Google, Facebook, SMTP, etc.
 
 ## Office 365 Email Integration
 
@@ -140,12 +192,6 @@ npm run seed:all
 npm run seed -- --seed <seeder-file-name>
 ```
 
-**Example:**
-
-```sh
-npx sequelize-cli db:seed --seed 20250109080956-seed-permissions.js
-```
-
 ### Undo Seeding
 
 To undo the last seeder or all seeders:
@@ -166,5 +212,22 @@ To run database migrations, use the following command:
 ```sh
 npm run migrate
 ```
+
+## Running Setup Scripts
+
+After the Docker containers are up and running, you can execute a set of setup scripts to initialize the application with essential data (e.g., creating a superuser, investor user, and assigning permissions).
+
+To run the setup scripts, execute the following command from your project root:
+
+```sh
+docker-compose exec app npm run setup
+```
+
+This command will:
+*   Create a superuser (`admin@noblestride.co.ke` with password `password123`).
+*   Create an investor user (`vickyjr88@yahoo.co.uk` with password `password123`).
+*   Add and assign `VIEW_ALL_DEALS` and `VIEW_PROFILE` permissions to the Administrator role.
+*   Assign all existing permissions to the Administrator role.
+*   Assign specific investor-appropriate permissions to the Investor role.
 
 ## Project Structure
