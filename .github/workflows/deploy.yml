@@ -34,9 +34,9 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script:
-            - cd /opt/docker/Noblestride/backend/noble_backend
-            - docker-compose build app
-            - docker-compose run --rm app npx sequelize-cli db:migrate
-            - docker-compose run --rm app npx sequelize-cli db:seed:all
-            - docker-compose up -d app
+          script: |
+            cd /opt/docker/Noblestride/backend/noble_backend
+            docker-compose build app
+            docker-compose run --rm app npx sequelize-cli db:migrate
+            docker-compose run --rm app npx sequelize-cli db:seed:all
+            docker-compose up -d app
