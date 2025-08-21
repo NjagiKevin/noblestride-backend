@@ -1,6 +1,6 @@
 const loggerMiddleware = (req, res, next) => {
     // Log the incoming request
-    console.log('\n-------------------');
+    console.log('\n------------------');
     console.log('📥 Incoming Request:', new Date().toISOString());
     console.log('Method:', req.method);
     console.log('URL:', req.url);
