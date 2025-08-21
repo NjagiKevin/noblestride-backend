@@ -36,7 +36,11 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           timeout: 30m
           script: |
+            echo 'Connecting to server...'
             cd ../opt/docker/Noblestride/backend/noble_backend
+            echo 'Pulling latest changes...'
+            git pull origin main
+            echo 'Building and starting containers...'
             docker-compose build app
             docker-compose run --rm app npx sequelize-cli db:migrate
             docker-compose run --rm app npx sequelize-cli db:seed:all
