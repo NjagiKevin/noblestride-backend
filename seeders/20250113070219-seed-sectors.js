@@ -4,8 +4,9 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     // 1. Seed Sectors (idempotently)
     const sectorsData = [
-      { name: "Tech" },
-      { name: "Finance" },
+
+      { name: "Technology" },
+      { name: "Financial Services" },
       { name: "Healthcare" },
       { name: "Energy" },
       { name: "Consumer Goods" },
@@ -14,6 +15,19 @@ module.exports = {
       { name: "Telecommunications" },
       { name: "Utilities" },
       { name: "Materials" },
+      { name: "Agriculture" },
+      { name: "Aviation" },
+      { name: "Services" },
+      { name: "Education" },
+      { name: "Hospitality" },
+      { name: "Housing" },
+      { name: "Media and Entertainment" },
+      { name: "Leasing" },
+      { name: "Water & Sanitation" },
+      { name: "Manufacturing" },
+      { name: "Construction" },
+      { name: "FMCG" },
+      { name: "Retail" },
     ];
 
     const sectorsToSeed = sectorsData.map(sector => ({
@@ -39,16 +53,29 @@ module.exports = {
 
     // 2. Seed Subsectors (idempotently)
     const sectorsWithSubsectors = [
-        { name: "Tech", subsectors: ["SaaS", "FinTech", "HealthTech", "EdTech", "AgriTech"] },
-        { name: "Finance", subsectors: ["Banking", "Insurance", "Wealth Management", "Asset Management"] },
+        { name: "Technology", subsectors: ["SaaS", "FinTech", "HealthTech", "EdTech", "AgriTech"] },
+        { name: "Financial Services", subsectors: ["Banking", "Insurance", "Wealth Management", "Asset Management"] },
         { name: "Healthcare", subsectors: ["Pharmaceuticals", "Biotechnology", "Medical Devices", "Hospitals"] },
         { name: "Energy", subsectors: ["Oil & Gas", "Renewable Energy", "Utilities"] },
-        { name: "Consumer Goods", subsectors: ["Retail", "E-commerce", "FMCG"] },
-        { name: "Industrial", subsectors: ["Manufacturing", "Construction", "Logistics"] },
+        { name: "Consumer Goods", subsectors: ["E-commerce"] },
+        { name: "Industrial", subsectors: ["Logistics"] },
         { name: "Real Estate", subsectors: ["Residential", "Commercial", "Industrial"] },
         { name: "Telecommunications", subsectors: ["Wireless", "Wireline", "Media"] },
         { name: "Utilities", subsectors: ["Electric", "Gas", "Water"] },
         { name: "Materials", subsectors: ["Mining", "Chemicals", "Forestry"] },
+        { name: "Agriculture", subsectors: ["Farming", "Agro-processing", "Agri-tech"] },
+        { name: "Aviation", subsectors: ["Airlines", "Airports", "Aerospace"] },
+        { name: "Services", subsectors: ["Consulting", "Outsourcing", "Professional Services"] },
+        { name: "Education", subsectors: ["K-12", "Higher Education", "EdTech"] },
+        { name: "Hospitality", subsectors: ["Hotels", "Restaurants", "Tourism"] },
+        { name: "Housing", subsectors: ["Residential", "Commercial"] },
+        { name: "Media and Entertainment", subsectors: ["Film", "Music", "Gaming"] },
+        { name: "Leasing", subsectors: ["Equipment Leasing", "Vehicle Leasing"] },
+        { name: "Water & Sanitation", subsectors: ["Water Treatment", "Waste Management"] },
+        { name: "Manufacturing", subsectors: [] },
+        { name: "Construction", subsectors: [] },
+        { name: "FMCG", subsectors: [] },
+        { name: "Retail", subsectors: [] },
     ];
 
     // Get all sectors with their IDs
@@ -60,17 +87,17 @@ module.exports = {
 
     // Get all existing subsectors
     const existingSubsectors = await queryInterface.sequelize.query(
-      "SELECT name, sector_id FROM subsectors",
+      "SELECT name FROM subsectors",
       { type: Sequelize.QueryTypes.SELECT }
     );
-    const existingSubsectorSet = new Set(existingSubsectors.map(s => `${s.name}|${s.sector_id}`));
+    const existingSubsectorNames = new Set(existingSubsectors.map(s => s.name));
 
     const subsectorsToSeed = [];
     for (const sectorData of sectorsWithSubsectors) {
       const sectorId = sectorMap.get(sectorData.name);
       if (sectorId) {
         for (const subsectorName of sectorData.subsectors) {
-          if (!existingSubsectorSet.has(`${subsectorName}|${sectorId}`)) {
+          if (!existingSubsectorNames.has(subsectorName)) {
             subsectorsToSeed.push({
               subsector_id: Sequelize.literal("uuid_generate_v4()"),
               name: subsectorName,

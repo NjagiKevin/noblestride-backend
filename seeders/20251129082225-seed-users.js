@@ -163,28 +163,50 @@ module.exports = {
       where: { name: "Target Company" },
     });
 
-    if (!targetCompanyRole) {
-      console.warn("Target Company role not found. Skipping user seeding.");
+    const administratorRole = await Role.findOne({
+      where: { name: "Administrator" },
+    });
+
+    if (!targetCompanyRole || !administratorRole) {
+      console.warn("Required roles (Target Company or Administrator) not found. Skipping user seeding.");
       return;
     }
 
-    const roleId = targetCompanyRole.role_id;
+    const usersToSeed = [];
 
-    const usersToSeed = companies.map((company) => ({
-      name: company,
-      email: `${company.toLowerCase().replace(/[^a-z0-9]/g, "")}@example.com`,
-      profile_image: `https://example.com/images/${company
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, "")}.jpg`,
+    // Seed Target Company users
+    for (const company of companies) {
+      usersToSeed.push({
+        name: company,
+        email: `${company.toLowerCase().replace(/[^a-z0-9]/g, "")}@example.com`,
+        profile_image: `https://example.com/images/${company
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "")}.jpg`,
+        kyc_status: "Verified",
+        preference_sector: JSON.stringify(["Tech", "Finance"]),
+        preference_region: JSON.stringify(["North America", "Europe"]),
+        role_id: targetCompanyRole.role_id,
+        password: hashedPassword,
+        role: "Target Company",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+    }
+
+    // Seed Administrator users
+    usersToSeed.push({
+      name: "Evans W",
+      email: "evans.w@example.com",
+      profile_image: "https://example.com/images/evans_w.jpg",
       kyc_status: "Verified",
       preference_sector: JSON.stringify(["Tech", "Finance"]),
       preference_region: JSON.stringify(["North America", "Europe"]),
-      role_id: roleId,
+      role_id: administratorRole.role_id,
       password: hashedPassword,
-      role: "Target Company",
+      role: "Administrator",
       createdAt: new Date(),
       updatedAt: new Date(),
-    }));
+    });
 
     const existingUsers = await queryInterface.sequelize.query(
       "SELECT email FROM users",
