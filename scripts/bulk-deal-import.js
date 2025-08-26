@@ -131,33 +131,35 @@ const importDeals = async () => {
             continue;
           }
 
-          // 3. Find Sector
+          // 3. Find or create Sector
           let sector;
           try {
-            sector = await Sector.findOne({ where: { name: sectorName } });
-            if (!sector) {
-              console.error(`Sector not found for: ${sectorName}. Skipping deal ${project}.`);
-              continue;
-            }
+            [sector] = await Sector.findOrCreate({
+              where: { name: sectorName },
+              defaults: { name: sectorName },
+            });
           } catch (error) {
-            console.error(`Error finding sector ${sectorName}:`, error.message);
+            console.error(`Error finding/creating sector ${sectorName}:`, error.message);
             continue;
           }
 
           // 4. Create Deal
           try {
             const ticketSize = parseFloat(ticketSizeStr);
-            const dealStatus = status === 'Closed & Reopened' ? 'Closed & Reopened' : status;
+          let dealStatus = status;
+          if (status === 'On hold') {
+            dealStatus = 'Under Review';
+          }
 
-            await Deal.findOrCreate({
+          await Deal.findOrCreate({
               where: { title: project, target_company_id: targetCompanyUser.id },
               defaults: {
                 title: project,
                 project: project,
                 description: targetProfile,
                 status: dealStatus,
-                ticket_size: isNaN(ticketSize) ? null : ticketSize,
-                deal_size: isNaN(ticketSize) ? null : ticketSize,
+                ticket_size: isNaN(ticketSize) ? 0 : ticketSize,
+                deal_size: isNaN(ticketSize) ? 0 : ticketSize,
                 sector_id: sector.sector_id,
                 target_company_id: targetCompanyUser.id,
                 created_by: dealLeadUser.id,
