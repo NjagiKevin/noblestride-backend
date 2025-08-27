@@ -334,9 +334,7 @@ const getUsersByType = async (req, res) => {
 
     // Find users by their type with pagination
     const { count: totalUsersCount, rows: users } = await User.findAndCountAll({
-      where: {
-        role: type,
-      },
+      where: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.cast(db.Sequelize.col('role'), 'VARCHAR')), db.Sequelize.fn('LOWER', type)),
       offset,
       limit: parseInt(limit),
     });
