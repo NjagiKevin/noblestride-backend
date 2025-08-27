@@ -13,6 +13,18 @@ module.exports = {
       {
         name: "Target Company",
       },
+      {
+        name: "Employee",
+      },
+      {
+        name: "Contact Person",
+      },
+      {
+        name: "Super Administrator",
+      },
+      {
+        name: "Advisor",
+      },
     ].map(role => ({
       ...role,
       role_id: Sequelize.literal("uuid_generate_v4()"),

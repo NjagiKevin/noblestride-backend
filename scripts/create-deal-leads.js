@@ -40,9 +40,9 @@ const createDealLeads = async () => {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
 
-    const administratorRole = await Role.findOne({ where: { name: 'Administrator' } });
-    if (!administratorRole) {
-      console.error('Administrator role not found. Please seed the roles table first.');
+    const EmployeeRole = await Role.findOne({ where: { name: 'Employee' } });
+    if (!EmployeeRole) {
+      console.error('Employee role not found. Please seed the roles table first.');
       await sequelize.close();
       return;
     }
@@ -57,20 +57,20 @@ const createDealLeads = async () => {
             name: lead.name,
             email: lead.email,
             password: hashedPassword,
-            role: 'Administrator',
-            role_id: administratorRole.role_id,
-            kyc_status: 'Verified', // Assuming administrators are verified
+            role: 'Employee',
+            role_id: EmployeeRole.role_id,
+            kyc_status: 'Verified', // Assuming Employees are verified
             status: 'Open',
           },
         });
 
         if (created) {
-          console.log(`Created Administrator: ${lead.name} (${lead.email})`);
+          console.log(`Created Employee: ${lead.name} (${lead.email})`);
         } else {
-          console.log(`Administrator already exists: ${lead.name} (${lead.email})`);
+          console.log(`Employee already exists: ${lead.name} (${lead.email})`);
         }
       } catch (error) {
-        console.error(`Error creating Administrator ${lead.name} (${lead.email}):`, error.message);
+        console.error(`Error creating Employee ${lead.name} (${lead.email}):`, error.message);
       }
     }
     console.log('Finished creating deal leads.');
