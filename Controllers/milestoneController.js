@@ -141,9 +141,12 @@ const filterMilestones = async (req, res) => {
     const totalPages = Math.ceil(totalMilestones / limit);
 
     if (!milestones || milestones.length === 0) {
-      return res.status(404).json({
-        status: false,
-        message: "No milestones found for the specified criteria.",
+      return res.status(200).json({
+        status: true,
+        totalMilestones: 0,
+        totalPages: 0,
+        currentPage: parseInt(page),
+        milestones: [],
       });
     }
 
@@ -186,8 +189,11 @@ const getMilestonesForUser = async (req, res) => {
 
     if (!milestones || milestones.length === 0) {
       return res.status(200).json({
-        status: false,
-        message: "No milestones found for your deals.",
+        status: true,
+        totalMilestones: 0,
+        totalPages: 0,
+        currentPage: parseInt(page),
+        milestones: [],
       });
     }
 
