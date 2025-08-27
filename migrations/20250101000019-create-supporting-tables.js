@@ -94,8 +94,8 @@ module.exports = {
     // Create verification codes table
     await queryInterface.createTable('verification_codes', {
       id: {
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
         allowNull: false
       },
