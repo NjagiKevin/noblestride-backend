@@ -44,7 +44,7 @@ jobs:
             docker-compose build app
             docker-compose run --rm app npx sequelize-cli db:migrate
             docker-compose run --rm app npx sequelize-cli db:seed:all
-            docker-compose up -d app
+            docker-compose up -d app > /dev/null 2>&1
             echo 'Deployment completed successfully!'
 
       - name: Health Check
