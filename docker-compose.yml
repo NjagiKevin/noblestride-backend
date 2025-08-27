@@ -72,8 +72,6 @@ services:
     container_name: noblestride-service
     restart: on-failure
     depends_on:
-      noblestride-service-db:
-        condition: service_healthy
       kafka:
         condition: service_started
       redis:
