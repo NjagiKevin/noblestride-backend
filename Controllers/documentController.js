@@ -12,6 +12,10 @@ const {
 const logger = require("../Middlewares/logger");
 const DocumentType = db.document_types;
 const DocumentShare = db.document_shares;
+const { uploadFileToS3 } = require("../Middlewares/awsS3Service");
+const { uploadFileToAzureBlob } = require("../Middlewares/azureBlobService");
+const fs = require('fs');
+const { uploadFileToGCS } = require("../Middlewares/googleCloudStorageService");
 
 const { createAuditLog } = require("./auditLogService");
 const { createNotification } = require("./notificationController");
@@ -21,7 +25,22 @@ const createDocument = async (req, res) => {
     const { folder_id, subfolder_id, document_type_id } = req.body;
     const uploaded_by = req.user.id;
     req.body.uploaded_by = uploaded_by;
-    const { originalname, path } = req.file;
+
+    let file_path;
+    let file_name = req.file.originalname;
+
+    if (process.env.CLOUD_STORAGE_PROVIDER === 'AWS_S3') {
+      file_path = await uploadFileToS3(req.file);
+      fs.unlinkSync(req.file.path); // Delete local temp file
+    } else if (process.env.CLOUD_STORAGE_PROVIDER === 'AZURE_BLOB') {
+      file_path = await uploadFileToAzureBlob(req.file);
+      fs.unlinkSync(req.file.path); // Delete local temp file
+    } else if (process.env.CLOUD_STORAGE_PROVIDER === 'GOOGLE_CLOUD_STORAGE') {
+      file_path = await uploadFileToGCS(req.file);
+      fs.unlinkSync(req.file.path); // Delete local temp file
+    } else {
+      file_path = req.file.path; // Local storage
+    }
 
     const deal = await Deal.findByPk(req.body.deal_id);
     if (!deal) {
@@ -61,8 +80,8 @@ const createDocument = async (req, res) => {
     const document = await Document.create({
       deal_id: req.body.deal_id,
       uploaded_by: uploaded_by,
-      file_name: originalname,
-      file_path: path,
+      file_name: file_name,
+      file_path: file_path,
       folder_id: folder_id,
       document_type_id: document_type_id,
       subfolder_id: subfolder_id,
@@ -332,9 +351,24 @@ const updateDocument = async (req, res) => {
 
     // Handle file upload
     if (req.file) {
-      const { originalname, path } = req.file;
-      req.body.file_name = originalname;
-      req.body.file_path = path;
+      let uploaded_file_path;
+      let uploaded_file_name = req.file.originalname;
+
+      if (process.env.CLOUD_STORAGE_PROVIDER === 'AWS_S3') {
+        uploaded_file_path = await uploadFileToS3(req.file);
+        fs.unlinkSync(req.file.path); // Delete local temp file
+      } else if (process.env.CLOUD_STORAGE_PROVIDER === 'AZURE_BLOB') {
+        uploaded_file_path = await uploadFileToAzureBlob(req.file);
+        fs.unlinkSync(req.file.path); // Delete local temp file
+      } else if (process.env.CLOUD_STORAGE_PROVIDER === 'GOOGLE_CLOUD_STORAGE') {
+        uploaded_file_path = await uploadFileToGCS(req.file);
+        fs.unlinkSync(req.file.path); // Delete local temp file
+      } else {
+        uploaded_file_path = req.file.path; // Local storage
+      }
+
+      req.body.file_name = uploaded_file_name;
+      req.body.file_path = uploaded_file_path;
       const envelopeId = await createEnvelope(document);
       req.body.docusign_envelope_id = envelopeId;
     }
