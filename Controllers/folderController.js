@@ -249,64 +249,72 @@ const filterFolders = async (req, res) => {
 const getAcceptedAndPendingFolderInvites = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { page = 1, limit = 10 } = req.query; // Default to page 1 and limit 10 if not provided
-
+    const { page = 1, limit = 10 } = req.query;
     const offset = (page - 1) * limit;
 
     const user = await User.findByPk(userId);
     if (!user) {
-      return res
-        .status(404)
-        .json({ status: false, message: "User not found." });
+      return res.status(404).json({ status: false, message: "User not found." });
     }
     const user_email = user.email;
 
-    const { count: totalInvites, rows: invites } =
-      await FolderAccessInvite.findAndCountAll({
-        where: {
-          user_email,
-          status: {
-            [db.Sequelize.Op.in]: ["Accepted", "Pending"],
-          },
-        },
-        include: [
-          {
-            model: Folder,
-            as: "folder",
-            include: [
-              {
-                model: db.users,
-                as: "creator",
-                attributes: ["id", "name", "email"],
-              },
-              {
-                model: db.users,
-                as: "createdFor",
-                attributes: ["id", "name", "email"],
-              },
-            ],
-          },
-        ],
-        offset,
-        limit: parseInt(limit),
-      });
+    // 1. Get folders created by the user
+    const myCreatedFolders = await Folder.findAll({
+      where: { created_by: userId },
+      include: [
+        { model: User, as: "creator", attributes: ["id", "name", "email"] },
+        { model: User, as: "createdFor", attributes: ["id", "name", "email"] },
+      ]
+    });
 
+    // 2. Get folders the user is invited to
+    const invites = await FolderAccessInvite.findAll({
+      where: {
+        user_email,
+        status: { [Op.in]: ["Accepted", "Pending"] },
+      },
+      include: [
+        {
+          model: Folder,
+          as: "folder",
+          include: [
+            { model: User, as: "creator", attributes: ["id", "name", "email"] },
+            { model: User, as: "createdFor", attributes: ["id", "name", "email"] },
+          ],
+        },
+      ],
+    });
+    const invitedFolders = invites.map((invite) => invite.folder).filter(folder => folder);
+
+    // 3. Merge and de-duplicate
+    const allFoldersMap = new Map();
+    myCreatedFolders.forEach(folder => {
+      if (folder) allFoldersMap.set(folder.id, folder);
+    });
+    invitedFolders.forEach(folder => {
+      if (folder) allFoldersMap.set(folder.id, folder);
+    });
+    const allFolders = Array.from(allFoldersMap.values());
+
+    // 4. Paginate the result
+    const totalFolders = allFolders.length;
+    const paginatedFolders = allFolders.slice(offset, offset + parseInt(limit));
+    const totalPages = Math.ceil(totalFolders / limit);
+
+    // Audit log
     await createAuditLog({
       userId: req.user.id,
-      action: "GET_ACCEPTED_AND_PENDING_FOLDER_INVITES",
-      details: `Fetched accepted and pending folder invites for user ${user_email}`,
+      action: "GET_MY_FOLDERS",
+      details: `Fetched own and invited folders for user ${user_email}`,
       ip_address: req.ip,
     });
 
-    const folders = invites.map((invite) => invite.folder);
-    const totalPages = Math.ceil(totalInvites / limit);
-
     res.status(200).json({
       status: true,
-      totalInvites,
+      totalFolders,
       totalPages,
       currentPage: parseInt(page),
-      folders,
+      folders: paginatedFolders,
     });
   } catch (error) {
     res.status(500).json({ status: false, message: error.message });
