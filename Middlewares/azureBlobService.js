@@ -4,9 +4,23 @@ const fs = require('fs');
 const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
 const AZURE_CONTAINER_NAME = process.env.AZURE_CONTAINER_NAME || 'documents';
 
-const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING);
+let blobServiceClient;
+let isAzureBlobServiceReady = false;
+
+try {
+    if(!AZURE_STORAGE_CONNECTION_STRING) {
+        throw new Error("AZURE_STORAGE_CONNECTION_STRING is not set.");
+    }
+    blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING);
+    isAzureBlobServiceReady = true;
+} catch (e) {
+    console.error("Failed to initialize Azure Blob Service. Please check your AZURE_STORAGE_CONNECTION_STRING environment variable.", e.message);
+}
 
 const uploadFileToAzureBlob = async (file) => {
+  if (!isAzureBlobServiceReady) {
+    throw new Error("Azure Blob Service is not available due to configuration errors.");
+  }
   const containerClient = blobServiceClient.getContainerClient(AZURE_CONTAINER_NAME);
   await containerClient.createIfNotExists();
 
