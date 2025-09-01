@@ -22,3 +22,6 @@ Content-Type: application/json
 
 ### Delete a continent by ID
 DELETE {{BASE_URL}}/continents/1
+
+### Get all continents with regions and countries
+GET {{BASE_URL}}/continents/all-with-details

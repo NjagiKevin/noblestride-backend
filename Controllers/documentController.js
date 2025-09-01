@@ -498,10 +498,12 @@ const getDocumentsForUserWithShareStatus = async (req, res) => {
       });
 
     if (!shares || shares.length === 0) {
-      return res.status(404).json({
-        status: false,
-        message:
-          "No documents found for the logged-in user with the specified share status.",
+      return res.status(200).json({
+        status: true,
+        totalShares: 0,
+        totalPages: 0,
+        currentPage: parseInt(page),
+        documents: [],
       });
     }
 
