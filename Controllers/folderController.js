@@ -258,9 +258,14 @@ const getAcceptedAndPendingFolderInvites = async (req, res) => {
     }
     const user_email = user.email;
 
-    // 1. Get folders created by the user
-    const myCreatedFolders = await Folder.findAll({
-      where: { created_by: userId },
+    // 1. Get folders created by the user or for the user
+    const myOwnedFolders = await Folder.unscoped().findAll({ // Using unscoped to ignore default scopes
+      where: {
+        [Op.or]: [
+          { created_by: userId },
+          { created_for: userId }
+        ]
+      },
       include: [
         { model: User, as: "creator", attributes: ["id", "name", "email"] },
         { model: User, as: "createdFor", attributes: ["id", "name", "email"] },
@@ -268,14 +273,14 @@ const getAcceptedAndPendingFolderInvites = async (req, res) => {
     });
 
     // 2. Get folders the user is invited to
-    const invites = await FolderAccessInvite.findAll({
+    const invites = await FolderAccessInvite.unscoped().findAll({ // Using unscoped
       where: {
         user_email,
         status: { [Op.in]: ["Accepted", "Pending"] },
       },
       include: [
         {
-          model: Folder,
+          model: Folder.unscoped(), // Also apply unscoped to the included model
           as: "folder",
           include: [
             { model: User, as: "creator", attributes: ["id", "name", "email"] },
@@ -288,7 +293,7 @@ const getAcceptedAndPendingFolderInvites = async (req, res) => {
 
     // 3. Merge and de-duplicate
     const allFoldersMap = new Map();
-    myCreatedFolders.forEach(folder => {
+    myOwnedFolders.forEach(folder => {
       if (folder) allFoldersMap.set(folder.id, folder);
     });
     invitedFolders.forEach(folder => {
@@ -305,7 +310,7 @@ const getAcceptedAndPendingFolderInvites = async (req, res) => {
     await createAuditLog({
       userId: req.user.id,
       action: "GET_MY_FOLDERS",
-      details: `Fetched own and invited folders for user ${user_email}`,
+      details: `Fetched own, created for, and invited folders for user ${user_email}`,
       ip_address: req.ip,
     });
 

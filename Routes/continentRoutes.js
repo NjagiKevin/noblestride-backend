@@ -8,6 +8,7 @@ const {
   deleteContinent,
   getContinentWithRegions,
   getContinentWithCountries,
+  getAllContinentsWithDetails,
 } = continentController;
 const authMiddleware = require("../Middlewares/authMiddleware");
 
@@ -19,5 +20,6 @@ router.get("/:id/regions", getContinentWithRegions);
 router.get("/", getAllContinents);
 router.put("/:id", updateContinent);
 router.delete("/:id", deleteContinent);
+router.get("/all-with-details", getAllContinentsWithDetails);
 
 module.exports = router;
