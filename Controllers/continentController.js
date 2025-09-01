@@ -105,6 +105,28 @@ const getContinentWithRegions = async (req, res) => {
   res.status(200).json({ status: true, continent });
 };
 
+const getAllContinentsWithDetails = async (req, res) => {
+  try {
+    const continents = await Continent.findAll({
+      include: [
+        {
+          model: Region,
+          as: "regions",
+          include: [
+            {
+              model: Country,
+              as: "countries",
+            },
+          ],
+        },
+      ],
+    });
+    res.status(200).json({ status: true, continents });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
 module.exports = {
   createContinent,
   getAllContinents,
@@ -112,4 +134,5 @@ module.exports = {
   deleteContinent,
   getContinentWithCountries,
   getContinentWithRegions,
+  getAllContinentsWithDetails,
 };

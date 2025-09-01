@@ -19,11 +19,6 @@ services:
       - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh # Initialization script
     ports:
       - "5436:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}"]
-      interval: 5s
-      timeout: 10s
-      retries: 5
     # volumes:
     #   - noblestrideservice-db-data:/var/lib/postgresql/data
     networks:
@@ -77,8 +72,6 @@ services:
     container_name: noblestride-service
     restart: on-failure
     depends_on:
-      noblestride-service-db:
-        condition: service_healthy
       kafka:
         condition: service_started
       redis:
@@ -99,11 +92,6 @@ services:
           memory: "3G"
 
     user: "1000:1000"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3030/"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
 volumes:
   noblestrideservice-db-data:
