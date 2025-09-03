@@ -12,3 +12,4 @@ node scripts/assignInvestorPermissions.js
 node scripts/getUsersWithInvestorRole.js
 node scripts/create-deal-leads.js
 node scripts/bulk-deal-import.js
+node scripts/bulk-investor-import.js

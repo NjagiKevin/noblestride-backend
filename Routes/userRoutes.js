@@ -44,6 +44,9 @@ const {
   deleteEmployee,
   createEmployeeForInvestmentFirm,
   getEmployeesForInvestmentFirm,
+  getInvestorDetails,
+  getSimilarInvestors,
+  getMatchedDeals,
 } = userController;
 const userAuth = require("../Middlewares/userAuth");
 const authMiddleware = require("../Middlewares/authMiddleware");
@@ -127,6 +130,9 @@ router.post("/reset-password", resetPassword);
 
 router.post("/bulk-upload", authMiddleware, checkPermissions(["bulk-upload"]), bulkUploadUsers);
 router.get("/user/:id", authMiddleware, getUserById); // Add this line
+router.get("/investor/:id", authMiddleware, getInvestorDetails); // Add this line
+router.get("/investor/:id/similar", authMiddleware, getSimilarInvestors); // Add this line
+router.get("/investor/:id/matched-deals", authMiddleware, getMatchedDeals); // Add this line
 router.get("/profile", authMiddleware, getProfile); // Add this line
 router.put("/:id/status", authMiddleware, checkRole("Administrator"), updateUserStatus); // Add this line
 router.get("/employees", authMiddleware, getEmployees); // Add this line

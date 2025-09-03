@@ -69,6 +69,7 @@ const emailRoutes = require("./Routes/emailRoutes");
 const swaggerSpec = require("./config/swagger");
 const swaggerUi = require("swagger-ui-express");
 const settingsRoutes = require("./Routes/settingsRoutes");
+const statisticsRoutes = require("./Routes/statisticsRoutes");
 const office365EmailRoutes = require("./Routes/office365EmailRoutes");
 const { connectProducer, disconnectProducer } = require("./Middlewares/kafka/kafkaProducer");
 const { connectConsumer, disconnectConsumer } = require("./Middlewares/kafka/tokenRefreshConsumer");
@@ -189,6 +190,7 @@ app.use("/api/country-preferences", countryPreferenceRoutes);
 app.use("/api/emails", emailRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/settings", settingsRoutes);
+app.use("/api/statistics", statisticsRoutes);
 app.use("/api/office365", office365EmailRoutes);
 
 // Conditionally enable Bull Dashboard

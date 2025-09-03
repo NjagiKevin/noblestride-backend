@@ -15,6 +15,7 @@
 
 # Environment variables
 .env
+.env.live
 
 # Logs
 logs
