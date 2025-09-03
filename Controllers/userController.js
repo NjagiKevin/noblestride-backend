@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const db = require("../Models");
 const jwt = require("jsonwebtoken");
 const { VerificationCode } = require("../Models");
-const { sendVerificationCode } = require("../Middlewares/emailService");
+const { sendEmail } = require("../Middlewares/email/emailService");
 const UserPreferences = db.user_preferences;
 const UserTicketPreferences = db.user_ticket_preferences;
 const DealTypePreferences = db.deal_type_preferences;
@@ -463,11 +463,11 @@ const forgotPassword = async (req, res) => {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     await VerificationCode.create({ user_id: user.id, code });
 
-    await sendVerificationCode(email, code);
+    await sendEmail(email, "Password Reset", `Your verification code is: ${code}`);
 
     res.status(200).json({
       status: true,
-      message: "Verification code sent to email." + code,
+      message: "Verification code sent to email.",
     });
   } catch (error) {
     res.status(200).json({ status: false, message: error.message });
@@ -885,7 +885,7 @@ const login = async (req, res) => {
           code: verificationCode,
         });
 
-        // await sendVerificationCode(user.email, verificationCode);
+        await sendEmail(user.email, "Your OTP Code", `Your OTP code is: ${verificationCode}`);
 
         //if password matches wit the one in the database
         //go ahead and generate a cookie for the user
@@ -898,7 +898,7 @@ const login = async (req, res) => {
         return res.status(200).json({
           status: true,
           message:
-            "Veritication code sent to " + maskedEmail + " " + verificationCode,
+            "Verification code sent to " + maskedEmail + " " + verificationCode,
         });
       } else {
         return res
