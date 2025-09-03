@@ -898,7 +898,7 @@ const login = async (req, res) => {
         return res.status(200).json({
           status: true,
           message:
-            "Verification code sent to " + maskedEmail,
+            "Veritication code sent to " + maskedEmail + " " + verificationCode,
         });
       } else {
         return res
