@@ -1,0 +1,49 @@
+### Get Dashboard Statistics
+GET {{BASE_URL}}/statistics/dashboard
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+# Returns comprehensive dashboard statistics including:
+# - Deal status distribution (Open, Closed, On Hold, Closed & Reopened)
+# - Deal type distribution (Equity, Debt, Equity and Debt)
+# - Sector distribution analysis
+# - Deal size metrics (total value, average, largest deal)
+# - Top performing deal leads
+# - Aggregated data by deal lead and status/type
+
+# Example Response:
+# {
+#   "status": true,
+#   "statistics": {
+#     "overview": {
+#       "totalDeals": 3090,
+#       "totalDealValue": "$2,570,000",
+#       "averageDealSize": "$321,250",
+#       "largestDeal": {
+#         "amount": "$470,000",
+#         "dealLead": "Amos G"
+#       }
+#     },
+#     "dealStatusDistribution": {
+#       "Open": { "count": 290, "percentage": 39 },
+#       "Closed": { "count": 235, "percentage": 32 },
+#       "On Hold": { "count": 87, "percentage": 12 },
+#       "Closed & Reopened": { "count": 123, "percentage": 17 }
+#     },
+#     "dealTypeDistribution": {
+#       "Equity": 120,
+#       "Debt": 100,
+#       "Equity and Debt": 200
+#     },
+#     "sectorDistribution": [
+#       { "sector": "Aviation", "count": 305 },
+#       { "sector": "Agribusiness", "count": 315 },
+#       { "sector": "Fintech", "count": 310 },
+#       { "sector": "Energy", "count": 320 }
+#     ],
+#     "topMetrics": {
+#       "topStatus": { "status": "Open", "percentage": 39 },
+#       "topPerformer": { "name": "Dancan M", "dealCount": 490, "percentage": 16 }
+#     }
+#   }
+# }
