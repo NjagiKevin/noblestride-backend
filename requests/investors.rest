@@ -1,0 +1,22 @@
+### Get Investor Details
+GET {{BASE_URL}}/users/investor/178
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+###
+
+### Get Similar Investors
+GET {{BASE_URL}}/users/investor/178/similar
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+###
+
+### Get Matched Deals for Investor
+GET {{BASE_URL}}/users/investor/178/matched-deals?page=1&itemsPerPage=12
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+# Returns deals that match the investor's sector and geography preferences
+# Similar to /api/deals/filter/deals but filtered by investor preferences
+# Response format matches the existing deals endpoint structure

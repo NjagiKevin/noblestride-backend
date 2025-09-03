@@ -1876,6 +1876,346 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const getInvestorDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findByPk(id, {
+      attributes: { exclude: ["password"] },
+      include: [
+        {
+          model: SectorPreference,
+          as: "sectorPreferences",
+          include: [
+            {
+              model: Sector,
+              as: "sector",
+              attributes: ["sector_id", "name"],
+            },
+          ],
+        },
+        {
+          model: RegionPreference,
+          as: "regionPreferences",
+          include: [
+            {
+              model: Region,
+              as: "region",
+              attributes: ["region_id", "name"],
+            },
+          ],
+        },
+        {
+          model: ContactPerson,
+          as: "contactPersons",
+          attributes: ["contact_id", "name", "email", "phone", "position"],
+        },
+      ],
+    });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Investor not found." });
+    }
+
+    if (user.role !== "Investor") {
+      return res
+        .status(400)
+        .json({ status: false, message: "User is not an investor." });
+    }
+
+    const formatter = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    });
+
+    const sectorFocus = user.sectorPreferences?.map(pref => pref.sector?.name).filter(Boolean) || [];
+    const geographyFocus = user.regionPreferences?.map(pref => pref.region?.name).filter(Boolean) || [];
+
+    const team = user.contactPersons?.map(contact => ({
+      name: contact.name,
+      role: contact.position || "Team Member",
+      image: "https://placehold.co/100"
+    })) || [];
+
+    const response = {
+      id: user.id,
+      name: user.name,
+      profileImage: user.profile_image || "https://via.placeholder.com/200",
+      description: user.description || "",
+      sectorFocus,
+      geographyFocus,
+      totalInvestments: user.total_investments ? formatter.format(user.total_investments) : "$0",
+      averageCheckSize: user.average_check_size ? formatter.format(user.average_check_size) : "$0",
+      successfulExits: user.successful_exits || 0,
+      portfolioIRR: user.portfolio_ipr ? `${user.portfolio_ipr}%` : "0%",
+      team,
+      history: [
+        { year: 2023, event: "Joined NobleStride platform" },
+        { year: 2022, event: "Updated investment preferences" }
+      ]
+    };
+
+    res.status(200).json({ status: true, investor: response });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
+const getSimilarInvestors = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const targetInvestor = await User.findByPk(id, {
+      include: [
+        {
+          model: SectorPreference,
+          as: "sectorPreferences",
+          attributes: ["sector_id"],
+        },
+        {
+          model: RegionPreference,
+          as: "regionPreferences",
+          attributes: ["region_id"],
+        },
+      ],
+    });
+
+    if (!targetInvestor) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Investor not found." });
+    }
+
+    if (targetInvestor.role !== "Investor") {
+      return res
+        .status(400)
+        .json({ status: false, message: "User is not an investor." });
+    }
+
+    const targetSectorIds = targetInvestor.sectorPreferences?.map(pref => pref.sector_id) || [];
+    const targetRegionIds = targetInvestor.regionPreferences?.map(pref => pref.region_id) || [];
+
+    const otherInvestors = await User.findAll({
+      where: {
+        role: "Investor",
+        id: { [db.Sequelize.Op.ne]: id }
+      },
+      attributes: { exclude: ["password"] },
+      include: [
+        {
+          model: SectorPreference,
+          as: "sectorPreferences",
+          include: [
+            {
+              model: Sector,
+              as: "sector",
+              attributes: ["sector_id", "name"],
+            },
+          ],
+        },
+        {
+          model: RegionPreference,
+          as: "regionPreferences",
+          include: [
+            {
+              model: Region,
+              as: "region",
+              attributes: ["region_id", "name"],
+            },
+          ],
+        },
+      ],
+    });
+
+    const investorsWithSimilarity = otherInvestors.map(investor => {
+      const investorSectorIds = investor.sectorPreferences?.map(pref => pref.sector_id) || [];
+      const investorRegionIds = investor.regionPreferences?.map(pref => pref.region_id) || [];
+
+      const sectorMatches = targetSectorIds.filter(id => investorSectorIds.includes(id)).length;
+      const regionMatches = targetRegionIds.filter(id => investorRegionIds.includes(id)).length;
+
+      const sectorSimilarity = targetSectorIds.length > 0 ? sectorMatches / targetSectorIds.length : 0;
+      const regionSimilarity = targetRegionIds.length > 0 ? regionMatches / targetRegionIds.length : 0;
+
+      const overallSimilarity = (sectorSimilarity + regionSimilarity) / 2;
+
+      const formatter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      });
+
+      return {
+        id: investor.id,
+        name: investor.name,
+        profileImage: investor.profile_image || "https://via.placeholder.com/200",
+        description: investor.description || "",
+        sectorFocus: investor.sectorPreferences?.map(pref => pref.sector?.name).filter(Boolean) || [],
+        geographyFocus: investor.regionPreferences?.map(pref => pref.region?.name).filter(Boolean) || [],
+        totalInvestments: investor.total_investments ? formatter.format(investor.total_investments) : "$0",
+        averageCheckSize: investor.average_check_size ? formatter.format(investor.average_check_size) : "$0",
+        successfulExits: investor.successful_exits || 0,
+        portfolioIRR: investor.portfolio_ipr ? `${investor.portfolio_ipr}%` : "0%",
+        similarity: overallSimilarity
+      };
+    });
+
+    const similarInvestors = investorsWithSimilarity
+      .filter(investor => investor.similarity > 0)
+      .sort((a, b) => b.similarity - a.similarity)
+      .slice(0, 5)
+      .map(({ similarity, ...investor }) => investor);
+
+    res.status(200).json({ 
+      status: true, 
+      similarInvestors,
+      count: similarInvestors.length
+    });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
+const getMatchedDeals = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { page = 1, itemsPerPage = 12 } = req.query;
+
+    const investor = await User.findByPk(id, {
+      include: [
+        {
+          model: SectorPreference,
+          as: "sectorPreferences",
+          attributes: ["sector_id"],
+        },
+        {
+          model: RegionPreference,
+          as: "regionPreferences",
+          attributes: ["region_id"],
+        },
+        {
+          model: CountryPreference,
+          as: "countryPreferences",
+          attributes: ["country_id"],
+        },
+      ],
+    });
+
+    if (!investor) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Investor not found." });
+    }
+
+    if (investor.role !== "Investor") {
+      return res
+        .status(400)
+        .json({ status: false, message: "User is not an investor." });
+    }
+
+    const investorSectorIds = investor.sectorPreferences?.map(pref => pref.sector_id) || [];
+    const investorRegionIds = investor.regionPreferences?.map(pref => pref.region_id) || [];
+    const investorCountryIds = investor.countryPreferences?.map(pref => pref.country_id) || [];
+
+    const offset = (page - 1) * itemsPerPage;
+
+    const Deal = db.deals;
+    const DealCountry = db.deal_countries;
+    const DealRegion = db.deal_regions;
+    const DealContinent = db.deal_continents;
+
+    let whereClause = {};
+    let includeClause = [
+      { model: User, as: "createdBy" },
+      { model: User, as: "targetCompany" },
+      {
+        model: db.deal_stages,
+        as: "dealStage",
+      },
+      {
+        model: DealCountry,
+        as: "dealCountries",
+        include: [{ model: db.country, as: "country" }],
+      },
+      {
+        model: DealRegion,
+        as: "dealRegions",
+        include: [{ model: db.regions, as: "region" }],
+      },
+      {
+        model: DealContinent,
+        as: "dealContinents",
+        include: [{ model: db.continents, as: "continent" }],
+      },
+    ];
+
+    if (investorSectorIds.length > 0) {
+      whereClause.sector_id = { [db.Sequelize.Op.in]: investorSectorIds };
+    }
+
+    const dealRegionWhere = {};
+    const dealCountryWhere = {};
+
+    if (investorRegionIds.length > 0) {
+      dealRegionWhere.region_id = { [db.Sequelize.Op.in]: investorRegionIds };
+    }
+
+    if (investorCountryIds.length > 0) {
+      dealCountryWhere.country_id = { [db.Sequelize.Op.in]: investorCountryIds };
+    }
+
+    if (Object.keys(dealRegionWhere).length > 0) {
+      const regionInclude = includeClause.find(inc => inc.as === "dealRegions");
+      if (regionInclude) {
+        regionInclude.where = dealRegionWhere;
+        regionInclude.required = true;
+      }
+    }
+
+    if (Object.keys(dealCountryWhere).length > 0) {
+      const countryInclude = includeClause.find(inc => inc.as === "dealCountries");
+      if (countryInclude) {
+        countryInclude.where = dealCountryWhere;
+        countryInclude.required = true;
+      }
+    }
+
+    const { count: totalDeals, rows: deals } = await Deal.findAndCountAll({
+      where: whereClause,
+      include: includeClause,
+      offset,
+      limit: parseInt(itemsPerPage),
+      distinct: true,
+    });
+
+    const totalPages = Math.ceil(totalDeals / itemsPerPage);
+
+    const formatter = new Intl.NumberFormat("en-US", {
+      style: "decimal",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    });
+
+    const formattedDeals = deals.map((deal) => ({
+      ...deal.toJSON(),
+      ticket_size: deal.ticket_size ? formatter.format(deal.ticket_size) : null,
+      deal_size: deal.deal_size ? formatter.format(deal.deal_size) : null,
+      retainer_amount: deal.retainer_amount ? formatter.format(deal.retainer_amount) : null,
+    }));
+
+    res.status(200).json({
+      status: true,
+      totalDeals,
+      totalPages,
+      currentPage: parseInt(page),
+      deals: formattedDeals,
+    });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
 module.exports = {
   updateAddressableMarket,
   updateCurrentMarket,
@@ -1919,4 +2259,7 @@ module.exports = {
   createEmployeeForInvestmentFirm,
   getEmployeesForInvestmentFirm,
   deleteUser,
+  getInvestorDetails,
+  getSimilarInvestors,
+  getMatchedDeals,
 };
