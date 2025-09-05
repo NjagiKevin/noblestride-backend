@@ -206,6 +206,55 @@ const getDashboardStatistics = async (req, res) => {
   }
 };
 
+const getDealValuesByLead = async (req, res) => {
+  try {
+    const deals = await Deal.findAll({
+      include: [
+        {
+          model: DealLead,
+          as: "dealLeads",
+          include: [
+            {
+              model: User,
+              as: "user",
+              attributes: ["id", "name"],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: "createdBy",
+          attributes: ["id", "name"],
+        },
+      ],
+    });
+
+    const leadStats = deals.reduce((acc, deal) => {
+      const lead = deal.dealLeads[0]?.user?.name || deal.createdBy.name;
+      const size = parseFloat(deal.deal_size);
+
+      if (!acc[lead]) {
+        acc[lead] = { lead, size: 0 };
+      }
+
+      acc[lead].size += size;
+
+      return acc;
+    }, {});
+
+    const formattedStats = Object.values(leadStats);
+
+    res.status(200).json({
+      status: true,
+      statistics: formattedStats,
+    });
+  } catch (error) {
+    console.log('error', error);
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
 module.exports = {
   getDashboardStatistics,
+  getDealValuesByLead,
 };

@@ -47,3 +47,26 @@ Authorization: Bearer {{ACCESS_TOKEN}}
 #     }
 #   }
 # }
+
+### Get Deal Values by Lead
+GET {{BASE_URL}}/statistics/deal-values-by-lead
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+# Returns the total deal value for each deal lead.
+# If a deal does not have a deal lead, the deal creator is used as the lead.
+
+# Example Response:
+# {
+#   "status": true,
+#   "statistics": [
+#     { "lead": "Amos G", "size": 470000 },
+#     { "lead": "Brenda C", "size": 200000 },
+#     { "lead": "Cliff N", "size": 150000 },
+#     { "lead": "Evans M", "size": 300000 },
+#     { "lead": "Evans W", "size": 250000 },
+#     { "lead": "James O", "size": 400000 },
+#     { "lead": "Sheilla W", "size": 350000 },
+#     { "lead": "Dancan M", "size": 450000 }
+#   ]
+# }
