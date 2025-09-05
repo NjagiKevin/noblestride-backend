@@ -71,17 +71,74 @@ Authorization: Bearer {{ACCESS_TOKEN}}
 #   ]
 # }
 
-    ### Get Deal Status Counts
-    GET {{BASE_URL}}/statistics/deal-status-counts
-    Content-Type: application/json
-    Authorization: Bearer {{ACCESS_TOKEN}}
+### Get Deal Status Counts
+GET {{BASE_URL}}/statistics/deal-status-counts
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
 
-    # Returns the count of deals for each status.
+# Returns the count of deals for each status.
 
-    # Example Response:
-    # {
-    #   "open": 45,
-    #   "closed": 25,
-    #   "closed & reopened": 15,
-    #   "onHold": 10
-    # }
+# Example Response:
+# {
+#   "open": 45,
+#   "closed": 25,
+#   "closed & reopened": 15,
+#   "onHold": 10
+# }
+
+###
+
+### Get Sector Distribution by Deal Lead
+GET {{BASE_URL}}/statistics/sector-distribution
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+# Returns the distribution of deals by sector and deal lead.
+# Shows how many deals each lead has worked on within each sector.
+
+# Example Response:
+# {
+#   "status": true,
+#   "sectorData": {
+#     "Aviation": {
+#       "Amos G": 15,
+#       "Brenda C": 30,
+#       "Cliff N": 20,
+#       "Evans M": 50,
+#       "Evans W": 40,
+#       "James O": 35,
+#       "Sheilla W": 60,
+#       "Dancan M": 55
+#     },
+#     "Agribusiness": {
+#       "Amos G": 25,
+#       "Brenda C": 20,
+#       "Cliff N": 45,
+#       "Evans M": 35,
+#       "Evans W": 50,
+#       "James O": 30,
+#       "Sheilla W": 40,
+#       "Dancan M": 70
+#     },
+#     "Fintech": {
+#       "Amos G": 10,
+#       "Brenda C": 15,
+#       "Cliff N": 30,
+#       "Evans M": 40,
+#       "Evans W": 45,
+#       "James O": 50,
+#       "Sheilla W": 55,
+#       "Dancan M": 65
+#     },
+#     "Energy": {
+#       "Amos G": 20,
+#       "Brenda C": 35,
+#       "Cliff N": 25,
+#       "Evans M": 45,
+#       "Evans W": 30,
+#       "James O": 55,
+#       "Sheilla W": 50,
+#       "Dancan M": 60
+#     }
+#   }
+# }

@@ -288,8 +288,69 @@ const getDealStatusCounts = async (req, res) => {
   }
 };
 
+const getSectorDistribution = async (req, res) => {
+  try {
+    const deals = await Deal.findAll({
+      include: [
+        {
+          model: Sector,
+          as: "dealSector",
+          attributes: ["name"],
+        },
+        {
+          model: DealLead,
+          as: "dealLeads",
+          include: [
+            {
+              model: User,
+              as: "user",
+              attributes: ["id", "name"],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: "createdBy",
+          attributes: ["id", "name"],
+        },
+      ],
+      where: {
+        sector_id: { [db.Sequelize.Op.ne]: null }
+      }
+    });
+
+    const sectorData = {};
+
+    deals.forEach(deal => {
+      const sectorName = deal.dealSector?.name;
+      const leadName = deal.dealLeads?.[0]?.user?.name || deal.createdBy?.name;
+
+      if (sectorName && leadName) {
+        if (!sectorData[sectorName]) {
+          sectorData[sectorName] = {};
+        }
+
+        if (!sectorData[sectorName][leadName]) {
+          sectorData[sectorName][leadName] = 0;
+        }
+
+        sectorData[sectorName][leadName] += 1;
+      }
+    });
+
+    res.status(200).json({
+      status: true,
+      sectorData
+    });
+  } catch (error) {
+    console.log('error', error);
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
 module.exports = {
   getDashboardStatistics,
   getDealValuesByLead,
   getDealStatusCounts,
+  getSectorDistribution,
 };
