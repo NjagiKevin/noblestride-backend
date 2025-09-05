@@ -254,7 +254,42 @@ const getDealValuesByLead = async (req, res) => {
   }
 };
 
+const getDealStatusCounts = async (req, res) => {
+  try {
+    const dealStatusCounts = await Deal.findAll({
+      attributes: [
+        "status",
+        [db.Sequelize.fn("COUNT", db.Sequelize.col("status")), "count"],
+      ],
+      group: ["status"],
+    });
+
+    const formattedCounts = dealStatusCounts.reduce((acc, item) => {
+      const status = item.status;
+      const count = parseInt(item.dataValues.count, 10);
+
+      if (status === "Open") {
+        acc.open = count;
+      } else if (status === "Closed") {
+        acc.closed = count;
+      } else if (status === "Closed & Reopened") {
+        acc["closed & reopened"] = count;
+      } else if (status === "On Hold") {
+        acc.onHold = count;
+      }
+
+      return acc;
+    }, {});
+
+    res.status(200).json(formattedCounts);
+  } catch (error) {
+    console.log('error', error);
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
 module.exports = {
   getDashboardStatistics,
   getDealValuesByLead,
+  getDealStatusCounts,
 };

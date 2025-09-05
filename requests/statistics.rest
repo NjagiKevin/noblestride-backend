@@ -70,3 +70,18 @@ Authorization: Bearer {{ACCESS_TOKEN}}
 #     { "lead": "Dancan M", "size": 450000 }
 #   ]
 # }
+
+    ### Get Deal Status Counts
+    GET {{BASE_URL}}/statistics/deal-status-counts
+    Content-Type: application/json
+    Authorization: Bearer {{ACCESS_TOKEN}}
+
+    # Returns the count of deals for each status.
+
+    # Example Response:
+    # {
+    #   "open": 45,
+    #   "closed": 25,
+    #   "closed & reopened": 15,
+    #   "onHold": 10
+    # }
