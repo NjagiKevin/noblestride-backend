@@ -348,9 +348,59 @@ const getSectorDistribution = async (req, res) => {
   }
 };
 
+const getDealTypeDistribution = async (req, res) => {
+  try {
+    const deals = await Deal.findAll({
+      include: [
+        {
+          model: DealLead,
+          as: "dealLeads",
+          include: [
+            {
+              model: User,
+              as: "user",
+              attributes: ["id", "name"],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: "createdBy",
+          attributes: ["id", "name"],
+        },
+      ],
+    });
+
+    const dealTypeDistribution = deals.reduce((acc, deal) => {
+      const lead = deal.dealLeads[0]?.user?.name || deal.createdBy.name;
+      const dealType = deal.deal_type;
+
+      if (!acc[dealType]) {
+        acc[dealType] = { category: dealType };
+      }
+
+      if (!acc[dealType][lead]) {
+        acc[dealType][lead] = 0;
+      }
+
+      acc[dealType][lead] += 1;
+
+      return acc;
+    }, {});
+
+    const formattedDistribution = Object.values(dealTypeDistribution);
+
+    res.status(200).json(formattedDistribution);
+  } catch (error) {
+    console.log('error', error);
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
 module.exports = {
   getDashboardStatistics,
   getDealValuesByLead,
   getDealStatusCounts,
+  getDealTypeDistribution,
   getSectorDistribution,
 };
