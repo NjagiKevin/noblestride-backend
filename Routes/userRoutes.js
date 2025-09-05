@@ -47,6 +47,7 @@ const {
   getInvestorDetails,
   getSimilarInvestors,
   getMatchedDeals,
+  getUsers,
 } = userController;
 const userAuth = require("../Middlewares/userAuth");
 const authMiddleware = require("../Middlewares/authMiddleware");
@@ -59,6 +60,7 @@ const checkRole = require("../Middlewares/roleMiddleware");
 const User = db.users;
 
 const router = express.Router();
+router.get("/", authMiddleware, getUsers);
 router.delete("/:id", authMiddleware, checkRole("Administrator"), deleteUser);
 //signup endpoint
 //passing the middleware function to the signup

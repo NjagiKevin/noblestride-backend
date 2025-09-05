@@ -1,27 +1,66 @@
-### Get all users
-GET {{BASE_URL}}/users
-
-### Get a single user by ID
-GET {{BASE_URL}}/users/1
-
-### Create a new user
-POST {{BASE_URL}}/users
+### Get All Users
+GET {{BASE_URL}}/users?page=1&limit=10
 Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
 
-{
-  "username": "testuser",
-  "email": "test@example.com",
-  "password": "password123"
-}
+# Returns a paginated list of all users with their roles and formatted financial data.
+# Query Parameters:
+# - page: Page number (default: 1)
+# - limit: Number of users per page (default: 10)
 
-### Update a user by ID
-PUT {{BASE_URL}}/users/1
+# Example Response:
+# {
+#   "status": true,
+#   "users": [
+#     {
+#       "id": 1,
+#       "name": "John Doe",
+#       "email": "john@example.com",
+#       "role": "Investor",
+#       "kyc_status": "Verified",
+#       "total_investments": "$1,000,000",
+#       "average_check_size": "$50,000",
+#       "portfolio_ipr": "$200,000",
+#       "userRole": {
+#         "name": "Investor"
+#       },
+#       "created_at": "2024-01-01T00:00:00.000Z"
+#     }
+#   ],
+#   "pagination": {
+#     "currentPage": 1,
+#     "totalPages": 10,
+#     "totalUsers": 95,
+#     "hasNextPage": true,
+#     "hasPrevPage": false
+#   }
+# }
+
+### Get Users by Type
+GET {{BASE_URL}}/users/users-by-type/investor?page=1&limit=10
 Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
 
-{
-  "username": "updateduser",
-  "email": "updated@example.com"
-}
+# Returns users filtered by their role type with pagination.
+# Available types: investor, target_company, administrator, etc.
 
-### Delete a user by ID
-DELETE {{BASE_URL}}/users/1
+### Get User by ID
+GET {{BASE_URL}}/users/user/{{USER_ID}}
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+# Returns detailed information for a specific user by their ID.
+
+### Get User Profile
+GET {{BASE_URL}}/users/profile
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+# Returns the authenticated user's profile information.
+
+### Delete User by ID
+DELETE {{BASE_URL}}/users/{{USER_ID}}
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+# Deletes a user by ID. Requires Administrator role.
