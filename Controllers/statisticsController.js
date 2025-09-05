@@ -397,10 +397,74 @@ const getDealTypeDistribution = async (req, res) => {
   }
 };
 
+const getDealStatusDistribution = async (req, res) => {
+  try {
+    const deals = await Deal.findAll({
+      include: [
+        {
+          model: DealLead,
+          as: "dealLeads",
+          include: [
+            {
+              model: User,
+              as: "user",
+              attributes: ["id", "name"],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: "createdBy",
+          attributes: ["id", "name"],
+        },
+      ],
+    });
+
+    const statusData = {};
+    const allPeopleSet = new Set();
+
+    // Collect all data and unique people
+    deals.forEach(deal => {
+      const lead = deal.dealLeads[0]?.user?.name || deal.createdBy.name;
+      const status = deal.status;
+
+      allPeopleSet.add(lead);
+
+      if (!statusData[status]) {
+        statusData[status] = {};
+      }
+
+      if (!statusData[status][lead]) {
+        statusData[status][lead] = 0;
+      }
+
+      statusData[status][lead] += 1;
+    });
+
+    const allPeople = Array.from(allPeopleSet).sort();
+
+    // Create rawData with arrays for each status
+    const rawData = {};
+    Object.keys(statusData).forEach(status => {
+      rawData[status] = allPeople.map(person => statusData[status][person] || 0);
+    });
+
+    res.status(200).json({
+      status: true,
+      allPeople,
+      rawData
+    });
+  } catch (error) {
+    console.log('error', error);
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
 module.exports = {
   getDashboardStatistics,
   getDealValuesByLead,
   getDealStatusCounts,
   getDealTypeDistribution,
   getSectorDistribution,
+  getDealStatusDistribution,
 };

@@ -154,3 +154,23 @@ Authorization: Bearer {{ACCESS_TOKEN}}
 #   { "category": "Debt", "Amos G": 100, "Brenda C": 60, "Cliff N": 120, "Evans M": 80, "Evans W": 90, "James O": 110, "Sheilla W": 60, "Dancan M": 130 },
 #   { "category": "Equity and Debt", "Amos G": 200, "Brenda C": 150, "Cliff N": 180, "Evans M": 170, "Evans W": 200, "James O": 190, "Sheilla W": 140, "Dancan M": 220 }
 # ]
+
+### Get Deal Status Distribution
+GET {{BASE_URL}}/statistics/deal-status-distribution
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+# Returns the deal status distribution with all people and raw data arrays for charting.
+# This endpoint provides data suitable for creating charts showing deal counts by status and person.
+
+# Example Response:
+# {
+#   "status": true,
+#   "allPeople": ["Amos G", "Brenda C", "Cliff N", "Dancan M", "Evans M", "Evans W", "James O", "Sheilla W"],
+#   "rawData": {
+#     "Open": [45, 30, 25, 70, 40, 50, 35, 60],
+#     "Closed": [25, 20, 15, 45, 30, 35, 25, 40],
+#     "On Hold": [10, 5, 8, 15, 12, 18, 10, 20],
+#     "Closed & Reopened": [15, 10, 12, 25, 18, 22, 15, 30]
+#   }
+# }
