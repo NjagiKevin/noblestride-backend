@@ -36,6 +36,51 @@ Authorization: Bearer {{ACCESS_TOKEN}}
 #   }
 # }
 
+### Search Users
+GET {{BASE_URL}}/users/search?q=john&page=1&limit=10
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+# Searches users across multiple fields including name, email, location, description, role, and phone.
+# Query Parameters:
+# - q: Search query (required) - searches across name, email, location, description, role, phone
+# - page: Page number (default: 1)
+# - limit: Number of users per page (default: 10)
+
+# Search results are prioritized by relevance:
+# 1. Name starts with search term
+# 2. Email starts with search term
+# 3. Name contains search term
+# 4. Email contains search term
+# 5. Other fields contain search term
+
+# Example Response:
+# {
+#   "status": true,
+#   "searchQuery": "john",
+#   "users": [
+#     {
+#       "id": 1,
+#       "name": "John Doe",
+#       "email": "john@example.com",
+#       "phone": "+1234567890",
+#       "role": "Investor",
+#       "location": "New York",
+#       "description": "Experienced investor",
+#       "userRole": {
+#         "name": "Investor"
+#       }
+#     }
+#   ],
+#   "pagination": {
+#     "currentPage": 1,
+#     "totalPages": 3,
+#     "totalUsers": 25,
+#     "hasNextPage": true,
+#     "hasPrevPage": false
+#   }
+# }
+
 ### Get Users by Type
 GET {{BASE_URL}}/users/users-by-type/investor?page=1&limit=10
 Content-Type: application/json
