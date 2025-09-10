@@ -230,7 +230,7 @@ const getDealValuesByLead = async (req, res) => {
     });
 
     const leadStats = deals.reduce((acc, deal) => {
-      const lead = deal.dealLeads[0]?.user?.name || deal.createdBy.name;
+      const lead = deal.dealLeads[0]?.user?.name || deal.createdBy?.name;
       const size = parseFloat(deal.deal_size);
 
       if (!acc[lead]) {
