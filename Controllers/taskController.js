@@ -40,7 +40,7 @@ const createTask = async (req, res) => {
 
     res.status(200).json({ status: true, task });
   } catch (error) {
-    res.status(200).json({ status: false, message: error.message });
+    res.status(400).json({ status: false, message: error.message });
   }
 };
 
@@ -115,7 +115,7 @@ const updateTask = async (req, res) => {
     const task = await Task.findByPk(req.params.id);
     if (!task) {
       return res
-        .status(200)
+        .status(404)
         .json({ status: false, message: "Task not found." });
     }
     await task.update(req.body);
@@ -500,7 +500,7 @@ const deleteTask = async (req, res) => {
     const task = await Task.findByPk(req.params.id);
     if (!task) {
       return res
-        .status(200)
+        .status(404)
         .json({ status: false, message: "Task not found." });
     }
     await task.destroy();
@@ -508,7 +508,7 @@ const deleteTask = async (req, res) => {
       .status(200)
       .json({ status: true, message: "Task deleted successfully." });
   } catch (error) {
-    res.status(200).json({ status: false, message: error.message });
+    res.status(400).json({ status: false, message: error.message });
   }
 };
 
