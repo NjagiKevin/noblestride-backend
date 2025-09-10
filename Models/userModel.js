@@ -141,19 +141,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  // Define associations
-  // User.associate = (models) => {
-  //   // An Investment Firm (Investor) can have many employees
-  //   User.hasMany(models.user, {
-  //     foreignKey: "parent_user_id",
-  //     as: "employees",
-  //   });
-
-  //   // An employee belongs to an Investment Firm (Investor)
-  //   User.belongsTo(models.user, {
-  //     foreignKey: "parent_user_id",
-  //     as: "investmentFirm",
-  //   });
-  // };
   return User;
 };

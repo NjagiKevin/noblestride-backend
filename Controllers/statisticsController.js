@@ -206,6 +206,265 @@ const getDashboardStatistics = async (req, res) => {
   }
 };
 
+const getDealValuesByLead = async (req, res) => {
+  try {
+    const deals = await Deal.findAll({
+      include: [
+        {
+          model: DealLead,
+          as: "dealLeads",
+          include: [
+            {
+              model: User,
+              as: "user",
+              attributes: ["id", "name"],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: "createdBy",
+          attributes: ["id", "name"],
+        },
+      ],
+    });
+
+    const leadStats = deals.reduce((acc, deal) => {
+      const lead = deal.dealLeads[0]?.user?.name || deal.createdBy?.name;
+      const size = parseFloat(deal.deal_size);
+
+      if (!acc[lead]) {
+        acc[lead] = { lead, size: 0 };
+      }
+
+      acc[lead].size += size;
+
+      return acc;
+    }, {});
+
+    const formattedStats = Object.values(leadStats);
+
+    res.status(200).json({
+      status: true,
+      statistics: formattedStats,
+    });
+  } catch (error) {
+    console.log('error', error);
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
+const getDealStatusCounts = async (req, res) => {
+  try {
+    const dealStatusCounts = await Deal.findAll({
+      attributes: [
+        "status",
+        [db.Sequelize.fn("COUNT", db.Sequelize.col("status")), "count"],
+      ],
+      group: ["status"],
+    });
+
+    const formattedCounts = dealStatusCounts.reduce((acc, item) => {
+      const status = item.status;
+      const count = parseInt(item.dataValues.count, 10);
+
+      if (status === "Open") {
+        acc.open = count;
+      } else if (status === "Closed") {
+        acc.closed = count;
+      } else if (status === "Closed & Reopened") {
+        acc["closed & reopened"] = count;
+      } else if (status === "On Hold") {
+        acc.onHold = count;
+      }
+
+      return acc;
+    }, {});
+
+    res.status(200).json(formattedCounts);
+  } catch (error) {
+    console.log('error', error);
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
+const getSectorDistribution = async (req, res) => {
+  try {
+    const deals = await Deal.findAll({
+      include: [
+        {
+          model: Sector,
+          as: "dealSector",
+          attributes: ["name"],
+        },
+        {
+          model: DealLead,
+          as: "dealLeads",
+          include: [
+            {
+              model: User,
+              as: "user",
+              attributes: ["id", "name"],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: "createdBy",
+          attributes: ["id", "name"],
+        },
+      ],
+      where: {
+        sector_id: { [db.Sequelize.Op.ne]: null }
+      }
+    });
+
+    const sectorData = {};
+
+    deals.forEach(deal => {
+      const sectorName = deal.dealSector?.name;
+      const leadName = deal.dealLeads?.[0]?.user?.name || deal.createdBy.name;
+
+      if (sectorName && leadName) {
+        if (!sectorData[sectorName]) {
+          sectorData[sectorName] = {};
+        }
+
+        if (!sectorData[sectorName][leadName]) {
+          sectorData[sectorName][leadName] = 0;
+        }
+
+        sectorData[sectorName][leadName] += 1;
+      }
+    });
+
+    res.status(200).json({
+      status: true,
+      sectorData
+    });
+  } catch (error) {
+    console.log('error', error);
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
+const getDealTypeDistribution = async (req, res) => {
+  try {
+    const deals = await Deal.findAll({
+      include: [
+        {
+          model: DealLead,
+          as: "dealLeads",
+          include: [
+            {
+              model: User,
+              as: "user",
+              attributes: ["id", "name"],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: "createdBy",
+          attributes: ["id", "name"],
+        },
+      ],
+    });
+
+    const dealTypeDistribution = deals.reduce((acc, deal) => {
+      const lead = deal.dealLeads[0]?.user?.name || deal.createdBy.name;
+      const dealType = deal.deal_type;
+
+      if (!acc[dealType]) {
+        acc[dealType] = { category: dealType };
+      }
+
+      if (!acc[dealType][lead]) {
+        acc[dealType][lead] = 0;
+      }
+
+      acc[dealType][lead] += 1;
+
+      return acc;
+    }, {});
+
+    const formattedDistribution = Object.values(dealTypeDistribution);
+
+    res.status(200).json(formattedDistribution);
+  } catch (error) {
+    console.log('error', error);
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
+const getDealStatusDistribution = async (req, res) => {
+  try {
+    const deals = await Deal.findAll({
+      include: [
+        {
+          model: DealLead,
+          as: "dealLeads",
+          include: [
+            {
+              model: User,
+              as: "user",
+              attributes: ["id", "name"],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: "createdBy",
+          attributes: ["id", "name"],
+        },
+      ],
+    });
+
+    const statusData = {};
+    const allPeopleSet = new Set();
+
+    // Collect all data and unique people
+    deals.forEach(deal => {
+      const lead = deal.dealLeads[0]?.user?.name || deal.createdBy.name;
+      const status = deal.status;
+
+      allPeopleSet.add(lead);
+
+      if (!statusData[status]) {
+        statusData[status] = {};
+      }
+
+      if (!statusData[status][lead]) {
+        statusData[status][lead] = 0;
+      }
+
+      statusData[status][lead] += 1;
+    });
+
+    const allPeople = Array.from(allPeopleSet).sort();
+
+    // Create rawData with arrays for each status
+    const rawData = {};
+    Object.keys(statusData).forEach(status => {
+      rawData[status] = allPeople.map(person => statusData[status][person] || 0);
+    });
+
+    res.status(200).json({
+      status: true,
+      allPeople,
+      rawData
+    });
+  } catch (error) {
+    console.log('error', error);
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
 module.exports = {
   getDashboardStatistics,
+  getDealValuesByLead,
+  getDealStatusCounts,
+  getDealTypeDistribution,
+  getSectorDistribution,
+  getDealStatusDistribution,
 };

@@ -47,3 +47,130 @@ Authorization: Bearer {{ACCESS_TOKEN}}
 #     }
 #   }
 # }
+
+### Get Deal Values by Lead
+GET {{BASE_URL}}/statistics/deal-values-by-lead
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+# Returns the total deal value for each deal lead.
+# If a deal does not have a deal lead, the deal creator is used as the lead.
+
+# Example Response:
+# {
+#   "status": true,
+#   "statistics": [
+#     { "lead": "Amos G", "size": 470000 },
+#     { "lead": "Brenda C", "size": 200000 },
+#     { "lead": "Cliff N", "size": 150000 },
+#     { "lead": "Evans M", "size": 300000 },
+#     { "lead": "Evans W", "size": 250000 },
+#     { "lead": "James O", "size": 400000 },
+#     { "lead": "Sheilla W", "size": 350000 },
+#     { "lead": "Dancan M", "size": 450000 }
+#   ]
+# }
+
+### Get Deal Status Counts
+GET {{BASE_URL}}/statistics/deal-status-counts
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+# Returns the count of deals for each status.
+
+# Example Response:
+# {
+#   "open": 45,
+#   "closed": 25,
+#   "closed & reopened": 15,
+#   "onHold": 10
+# }
+
+### Get Sector Distribution by Deal Lead
+GET {{BASE_URL}}/statistics/sector-distribution
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+# Returns the distribution of deals by sector and deal lead.
+# Shows how many deals each lead has worked on within each sector.
+
+# Example Response:
+# {
+#   "status": true,
+#   "sectorData": {
+#     "Aviation": {
+#       "Amos G": 15,
+#       "Brenda C": 30,
+#       "Cliff N": 20,
+#       "Evans M": 50,
+#       "Evans W": 40,
+#       "James O": 35,
+#       "Sheilla W": 60,
+#       "Dancan M": 55
+#     },
+#     "Agribusiness": {
+#       "Amos G": 25,
+#       "Brenda C": 20,
+#       "Cliff N": 45,
+#       "Evans M": 35,
+#       "Evans W": 50,
+#       "James O": 30,
+#       "Sheilla W": 40,
+#       "Dancan M": 70
+#     },
+#     "Fintech": {
+#       "Amos G": 10,
+#       "Brenda C": 15,
+#       "Cliff N": 30,
+#       "Evans M": 40,
+#       "Evans W": 45,
+#       "James O": 50,
+#       "Sheilla W": 55,
+#       "Dancan M": 65
+#     },
+#     "Energy": {
+#       "Amos G": 20,
+#       "Brenda C": 35,
+#       "Cliff N": 25,
+#       "Evans M": 45,
+#       "Evans W": 30,
+#       "James O": 55,
+#       "Sheilla W": 50,
+#       "Dancan M": 60
+#     }
+#   }
+# }
+
+### Get Deal Type Distribution
+GET {{BASE_URL}}/statistics/deal-type-distribution
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+# Returns the deal type distribution by lead.
+
+# Example Response:
+# [
+#   { "category": "Equity", "Amos G": 120, "Brenda C": 80, "Cliff N": 150, "Evans M": 90, "Evans W": 110, "James O": 130, "Sheilla W": 70, "Dancan M": 140 },
+#   { "category": "Debt", "Amos G": 100, "Brenda C": 60, "Cliff N": 120, "Evans M": 80, "Evans W": 90, "James O": 110, "Sheilla W": 60, "Dancan M": 130 },
+#   { "category": "Equity and Debt", "Amos G": 200, "Brenda C": 150, "Cliff N": 180, "Evans M": 170, "Evans W": 200, "James O": 190, "Sheilla W": 140, "Dancan M": 220 }
+# ]
+
+### Get Deal Status Distribution
+GET {{BASE_URL}}/statistics/deal-status-distribution
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+# Returns the deal status distribution with all people and raw data arrays for charting.
+# This endpoint provides data suitable for creating charts showing deal counts by status and person.
+
+# Example Response:
+# {
+#   "status": true,
+#   "allPeople": ["Amos G", "Brenda C", "Cliff N", "Dancan M", "Evans M", "Evans W", "James O", "Sheilla W"],
+#   "rawData": {
+#     "Open": [45, 30, 25, 70, 40, 50, 35, 60],
+#     "Closed": [25, 20, 15, 45, 30, 35, 25, 40],
+#     "On Hold": [10, 5, 8, 15, 12, 18, 10, 20],
+#     "Closed & Reopened": [15, 10, 12, 25, 18, 22, 15, 30]
+#   }
+# }

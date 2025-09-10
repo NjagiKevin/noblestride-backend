@@ -2407,6 +2407,222 @@ const getDashboardStatistics = async (req, res) => {
   }
 };
 
+const getUsers = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const offset = (page - 1) * limit;
+
+    const { count: totalUsersCount, rows: users } = await User.findAndCountAll({
+      offset,
+      limit: parseInt(limit),
+      include: [
+        {
+          model: Role,
+          as: "userRole",
+          attributes: ["name"],
+        },
+      ],
+    });
+
+    const totalPages = Math.ceil(totalUsersCount / limit);
+
+    const formatter = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    });
+
+    const formattedUsers = users.map((user) => ({
+      ...user.toJSON(),
+      total_investments: user.total_investments
+        ? formatter.format(user.total_investments)
+        : null,
+      average_check_size: user.average_check_size
+        ? formatter.format(user.average_check_size)
+        : null,
+      portfolio_ipr: user.portfolio_ipr
+        ? formatter.format(user.portfolio_ipr)
+        : null,
+      addressable_market: user.addressable_market
+        ? formatter.format(user.addressable_market)
+        : null,
+      current_market: user.current_market
+        ? formatter.format(user.current_market)
+        : null,
+      total_assets: user.total_assets
+        ? formatter.format(user.total_assets)
+        : null,
+      ebitda: user.ebitda ? formatter.format(user.ebitda) : null,
+      gross_margin: user.gross_margin
+        ? formatter.format(user.gross_margin)
+        : null,
+      cac_payback_period: user.cac_payback_period
+        ? formatter.format(user.cac_payback_period)
+        : null,
+      tam: user.tam ? formatter.format(user.tam) : null,
+      sam: user.sam ? formatter.format(user.sam) : null,
+      som: user.som ? formatter.format(user.som) : null,
+    }));
+
+    await createAuditLog({
+      userId: req.user.id,
+      action: "GET_USERS",
+      details: `Fetched users - page ${page}, limit ${limit}`,
+      ip_address: req.ip,
+    });
+
+    res.status(200).json({
+      status: true,
+      users: formattedUsers,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages,
+        totalUsers: totalUsersCount,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
+const searchUsers = async (req, res) => {
+  try {
+    const { q, page = 1, limit = 10 } = req.query;
+    
+    if (!q || q.trim().length === 0) {
+      return res.status(400).json({
+        status: false,
+        message: "Search query parameter 'q' is required"
+      });
+    }
+
+    const searchTerm = q.trim();
+    const offset = (page - 1) * limit;
+
+    const whereClause = {
+      [db.Sequelize.Op.or]: [
+        {
+          name: {
+            [db.Sequelize.Op.iLike]: `%${searchTerm}%`
+          }
+        },
+        {
+          email: {
+            [db.Sequelize.Op.iLike]: `%${searchTerm}%`
+          }
+        },
+        {
+          location: {
+            [db.Sequelize.Op.iLike]: `%${searchTerm}%`
+          }
+        },
+        {
+          description: {
+            [db.Sequelize.Op.iLike]: `%${searchTerm}%`
+          }
+        },
+        {
+          [db.Sequelize.Op.and]: [
+            db.Sequelize.where(
+              db.Sequelize.cast(db.Sequelize.col('role'), 'text'),
+              {
+                [db.Sequelize.Op.iLike]: `%${searchTerm}%`
+              }
+            )
+          ]
+        },
+        {
+          phone: {
+            [db.Sequelize.Op.iLike]: `%${searchTerm}%`
+          }
+        }
+      ]
+    };
+
+    const { count: totalUsersCount, rows: users } = await User.findAndCountAll({
+      where: whereClause,
+      offset,
+      limit: parseInt(limit),
+      include: [
+        {
+          model: Role,
+          as: "userRole",
+          attributes: ["name"],
+        },
+      ],
+      order: [
+        [db.Sequelize.literal(`CASE 
+          WHEN LOWER("user"."name") LIKE LOWER('${searchTerm.replace(/'/g, "''")}%') THEN 1
+          WHEN LOWER("user"."email") LIKE LOWER('${searchTerm.replace(/'/g, "''")}%') THEN 2
+          ELSE 5 END`)],
+        [db.Sequelize.col("user.name"), "ASC"]
+      ]
+    });
+
+    const totalPages = Math.ceil(totalUsersCount / limit);
+
+    const formatter = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    });
+
+    const formattedUsers = users.map((user) => ({
+      ...user.toJSON(),
+      total_investments: user.total_investments
+        ? formatter.format(user.total_investments)
+        : null,
+      average_check_size: user.average_check_size
+        ? formatter.format(user.average_check_size)
+        : null,
+      portfolio_ipr: user.portfolio_ipr
+        ? formatter.format(user.portfolio_ipr)
+        : null,
+      addressable_market: user.addressable_market
+        ? formatter.format(user.addressable_market)
+        : null,
+      current_market: user.current_market
+        ? formatter.format(user.current_market)
+        : null,
+      total_assets: user.total_assets
+        ? formatter.format(user.total_assets)
+        : null,
+      ebitda: user.ebitda ? formatter.format(user.ebitda) : null,
+      gross_margin: user.gross_margin
+        ? formatter.format(user.gross_margin)
+        : null,
+      cac_payback_period: user.cac_payback_period
+        ? formatter.format(user.cac_payback_period)
+        : null,
+      tam: user.tam ? formatter.format(user.tam) : null,
+      sam: user.sam ? formatter.format(user.sam) : null,
+      som: user.som ? formatter.format(user.som) : null,
+    }));
+
+    await createAuditLog({
+      userId: req.user.id,
+      action: "SEARCH_USERS",
+      details: `Searched users with query: "${searchTerm}" - page ${page}, limit ${limit}`,
+      ip_address: req.ip,
+    });
+
+    res.status(200).json({
+      status: true,
+      searchQuery: searchTerm,
+      users: formattedUsers,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages,
+        totalUsers: totalUsersCount,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
 module.exports = {
   updateAddressableMarket,
   updateCurrentMarket,
@@ -2453,4 +2669,6 @@ module.exports = {
   getInvestorDetails,
   getSimilarInvestors,
   getMatchedDeals,
+  getUsers,
+  searchUsers,
 };
