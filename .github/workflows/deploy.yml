@@ -40,6 +40,8 @@ jobs:
             cd ../opt/docker/Noblestride/backend/noble_backend
             echo 'Pulling latest changes...'
             git pull origin main
+            echo 'Destroying build'
+            docker-compose down --remove-orphans
             echo 'Building and starting containers...'
             docker-compose build app
             docker-compose run --rm app npx sequelize-cli db:migrate
