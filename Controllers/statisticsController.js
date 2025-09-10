@@ -323,7 +323,7 @@ const getSectorDistribution = async (req, res) => {
 
     deals.forEach(deal => {
       const sectorName = deal.dealSector?.name;
-      const leadName = deal.dealLeads?.[0]?.user?.name || deal.createdBy?.name;
+      const leadName = deal.dealLeads?.[0]?.user?.name || deal.createdBy.name;
 
       if (sectorName && leadName) {
         if (!sectorData[sectorName]) {
