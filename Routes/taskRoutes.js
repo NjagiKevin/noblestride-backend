@@ -42,8 +42,8 @@ router.get("/deal/:dealId", authMiddleware, getTaskByDealId);
 router.get("/date/due-date-range", authMiddleware, getTasksByDueDateRange);
 router.delete(
   "/:id",
-  checkPermissions(["DELETE_TASK", "EDIT_DEAL"]),
   authMiddleware,
+  checkPermissions(["DELETE_TASK", "EDIT_DEAL"]),
   deleteTask
 );
 router.get("/filter/tasks", authMiddleware, filterTasks);
