@@ -732,7 +732,7 @@ const updateDeal = async (req, res) => {
         retainer_amount, // Add retainer_amount
         success_fee, // Add access_fee_amount
       } = req.body;
-      const deal = await Deal.findByPk(req.params.id);
+      let deal = await Deal.findByPk(req.params.id);
       const id = deal.deal_id;
       const success_fee_percentage = (success_fee / 100) * deal_size;
 
@@ -795,6 +795,9 @@ const updateDeal = async (req, res) => {
             user_id,
           });
         }
+        await deal.update({
+            deal_lead: Number(deal_leads[0])
+        })
       }
 
       // Update DealContinent entries
@@ -837,6 +840,7 @@ const updateDeal = async (req, res) => {
         ip_address: req.ip,
       });
 
+      deal = await Deal.findByPk(req.params.id, { include: [{ model: DealLead, as: "dealLeads"}] });
       res.status(200).json({ status: true, deal });
     } catch (error) {
       res.status(500).json({ status: false, message: error.message });
