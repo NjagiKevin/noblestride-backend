@@ -1647,6 +1647,7 @@ const adminUpdateUserProfile = async (req, res) => {
       som,
       year_founded,
       location,
+      role_id,
     } = req.body;
 
     const user = await User.findByPk(user_id);
@@ -1680,6 +1681,7 @@ const adminUpdateUserProfile = async (req, res) => {
     if (som) updatedFields.som = som;
     if (year_founded) updatedFields.year_founded = year_founded;
     if (location) updatedFields.location = location;
+    if (role_id) updatedFields.role_id = role_id;
 
     await user.update(updatedFields);
     await createNotification(
