@@ -335,44 +335,80 @@ const getAllDeals = async (req, res) => {
       .endOf("month")
       .toDate();
 
-    const lastMonthActiveDealsCount = deals.filter(
-      (deal) =>
-        deal.status === "Active" &&
-        moment(deal.createdAt).isBetween(startOfLastMonth, endOfLastMonth)
+    const lastMonthDeals = await Deal.findAll({
+      where: {
+        createdAt: {
+          [Op.between]: [startOfLastMonth, endOfLastMonth],
+        },
+      },
+    });
+
+    const currentMonthDeals = await Deal.findAll({
+      where: {
+        createdAt: {
+          [Op.gte]: startOfCurrentMonth,
+        },
+      },
+    });
+
+    const calculatePercentageChange = (current, previous) => {
+      if (previous > 0) {
+        return ((current - previous) / previous) * 100;
+      } else if (current > 0) {
+        return 100;
+      }
+      return 0;
+    };
+
+    const lastMonthOpenDeals = lastMonthDeals.filter(
+      (deal) => deal.status === "Open"
     ).length;
-
-    const currentMonthActiveDealsCount = deals.filter(
-      (deal) =>
-        deal.status === "Active" &&
-        moment(deal.createdAt).isSameOrAfter(startOfCurrentMonth)
+    const currentMonthOpenDeals = currentMonthDeals.filter(
+      (deal) => deal.status === "Open"
     ).length;
+    const openDealsPercentageChange = calculatePercentageChange(
+      currentMonthOpenDeals,
+      lastMonthOpenDeals
+    );
 
-    let activeDealsPercentageChange = 0;
-    if (lastMonthActiveDealsCount > 0) {
-      activeDealsPercentageChange =
-        ((currentMonthActiveDealsCount - lastMonthActiveDealsCount) /
-          lastMonthActiveDealsCount) *
-        100;
-    } else if (currentMonthActiveDealsCount > 0) {
-      activeDealsPercentageChange = 100;
-    }
-
-    const currentMonthDealsCount = deals.filter((deal) =>
-      moment(deal.createdAt).isSameOrAfter(startOfCurrentMonth)
+    const lastMonthClosedDeals = lastMonthDeals.filter(
+      (deal) => deal.status === "Closed"
     ).length;
-
-    const lastMonthDealsCount = deals.filter((deal) =>
-      moment(deal.createdAt).isBetween(startOfLastMonth, endOfLastMonth)
+    const currentMonthClosedDeals = currentMonthDeals.filter(
+      (deal) => deal.status === "Closed"
     ).length;
+    const closedDealsPercentageChange = calculatePercentageChange(
+      currentMonthClosedDeals,
+      lastMonthClosedDeals
+    );
 
-    let dealsPercentageChange = 0;
-    if (lastMonthDealsCount > 0) {
-      dealsPercentageChange =
-        ((currentMonthDealsCount - lastMonthDealsCount) / lastMonthDealsCount) *
-        100;
-    } else if (currentMonthDealsCount > 0) {
-      dealsPercentageChange = 100;
-    }
+    const lastMonthClosedAndReopenedDeals = lastMonthDeals.filter(
+      (deal) => deal.status === "Closed & Reopened"
+    ).length;
+    const currentMonthClosedAndReopenedDeals = currentMonthDeals.filter(
+      (deal) => deal.status === "Closed & Reopened"
+    ).length;
+    const closedAndReopenedDealsPercentageChange = calculatePercentageChange(
+      currentMonthClosedAndReopenedDeals,
+      lastMonthClosedAndReopenedDeals
+    );
+
+    const lastMonthOnHoldDeals = lastMonthDeals.filter(
+      (deal) => deal.status === "On Hold"
+    ).length;
+    const currentMonthOnHoldDeals = currentMonthDeals.filter(
+      (deal) => deal.status === "On Hold"
+    ).length;
+    const onHoldDealsPercentageChange = calculatePercentageChange(
+      currentMonthOnHoldDeals,
+      lastMonthOnHoldDeals
+    );
+
+    const allDealsPercentageChange = calculatePercentageChange(
+      currentMonthDeals.length,
+      lastMonthDeals.length
+    );
+
     const totalDealSize = deals.reduce((sum, deal) => sum + deal.deal_size, 0);
     const startOfYear = moment().startOf("year").toDate();
     const startOfLastYear = moment()
@@ -426,20 +462,42 @@ const getAllDeals = async (req, res) => {
         : null,
     }));
 
+    const openDeals = deals.filter((deal) => deal.status === "Open").length;
+    const closedDeals = deals.filter((deal) => deal.status === "Closed").length;
+    const closedAndReopenedDeals = deals.filter(
+      (deal) => deal.status === "Closed & Reopened"
+    ).length;
+    const onHoldDeals = deals.filter((deal) => deal.status === "On Hold").length;
+
     res.status(200).json({
       status: true,
       totalDealSize: totalDealSize,
       totalDeals: totalDeals,
       activeDeals: activeDeals,
       inactiveDeals: inactiveDeals,
-      dealsPercentageChange: dealsPercentageChange,
-      activeDealsPercentageChange: activeDealsPercentageChange,
+      dealsPercentageChange: allDealsPercentageChange,
+      activeDealsPercentageChange: openDealsPercentageChange,
       totalDealSizePercentageChange: totalDealSizePercentageChange,
       currentPage: parseInt(page),
       totalPages: totalPages,
       deals: formattedDeals,
+      dealStatusCounts: {
+        open: openDeals,
+        closed: closedDeals,
+        "closed & reopened": closedAndReopenedDeals,
+        onHold: onHoldDeals,
+        total: totalDeals,
+      },
+      dealStatusPercentageChange: {
+        open: openDealsPercentageChange,
+        closed: closedDealsPercentageChange,
+        "closed & reopened": closedAndReopenedDealsPercentageChange,
+        onHold: onHoldDealsPercentageChange,
+        total: allDealsPercentageChange,
+      },
     });
   } catch (error) {
+      console.log(error);
     res.status(500).json({ status: false, message: error.message });
   }
 };
