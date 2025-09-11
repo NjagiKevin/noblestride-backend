@@ -788,11 +788,11 @@ const updateDeal = async (req, res) => {
         region_ids, // Expecting array of region IDs
         country_ids, // Expecting array of country IDs
         retainer_amount, // Add retainer_amount
-        success_fee, // Add access_fee_amount
+        success_fee_percentage, // Add access_fee_amount
       } = req.body;
       let deal = await Deal.findByPk(req.params.id);
       const id = deal.deal_id;
-      const success_fee_percentage = (success_fee / 100) * deal_size;
+      const success_fee = (success_fee_percentage / 100) * deal_size;
 
       if (!deal) {
         return res
@@ -803,7 +803,6 @@ const updateDeal = async (req, res) => {
         ? `/uploads/${req.file.filename}`
         : deal.image_url;
       const image = req.file ? `/uploads/${req.file.filename}` : null;
-      // Validate that retainer_amount is less than deal_size
       // Validate that retainer_amount is less than deal_size
       if (parseInt(retainer_amount) >= parseInt(ticket_size)) {
         return res.status(400).json({
@@ -842,6 +841,7 @@ const updateDeal = async (req, res) => {
         model,
         retainer_amount, // Include retainer_amount
         success_fee_percentage, // Include access_fee_amount
+        success_fee,
         image_url: image,
       });
       // Update DealLead entries
