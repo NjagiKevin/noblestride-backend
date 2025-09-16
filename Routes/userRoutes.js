@@ -45,6 +45,7 @@ const {
   createEmployeeForInvestmentFirm,
   getEmployeesForInvestmentFirm,
   getInvestorDetails,
+  getAllInvestors,
   getSimilarInvestors,
   getMatchedDeals,
   getUsers,
@@ -135,6 +136,7 @@ router.post("/reset-password", resetPassword);
 router.post("/bulk-upload", authMiddleware, checkPermissions(["bulk-upload"]), bulkUploadUsers);
 router.get("/user/:id", authMiddleware, getUserById); // Add this line
 router.get("/investor/:id", authMiddleware, getInvestorDetails); // Add this line
+router.get("/investors", authMiddleware, getAllInvestors);
 router.get("/investor/:id/similar", authMiddleware, getSimilarInvestors); // Add this line
 router.get("/investor/:id/matched-deals", authMiddleware, getMatchedDeals); // Add this line
 router.get("/profile", authMiddleware, getProfile); // Add this line

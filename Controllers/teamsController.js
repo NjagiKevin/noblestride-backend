@@ -68,7 +68,8 @@ const scheduleDealMeeting = async (req, res) => {
       onlineMeetingProvider: "teamsForBusiness",
     };
 
-    const response = await graphClient
+      let CONFIG;
+      const response = await graphClient
       .api(`/users/${CONFIG.organizerEmail}/calendar/events`)
       .post(event);
 
@@ -98,9 +99,10 @@ const scheduleDealMeeting = async (req, res) => {
       meeting,
     });
   } catch (error) {
+    console.error(error);
     res
-      .status(200)
-      .json({ status: false, message: "Error scheduling meeting." });
+      .status(400)
+      .json({ status: false, message: "Error scheduling meeting. " + error.message });
   }
 };
 
