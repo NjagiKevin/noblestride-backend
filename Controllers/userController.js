@@ -1965,6 +1965,105 @@ const getInvestorDetails = async (req, res) => {
   }
 };
 
+const getAllInvestors = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const offset = (page - 1) * limit;
+
+    const { count, rows: users } = await User.findAndCountAll({
+      where: { role: "Investor" },
+      attributes: { exclude: ["password"] },
+      include: [
+        {
+          model: SectorPreference,
+          as: "sectorPreferences",
+          include: [
+            {
+              model: Sector,
+              as: "sector",
+              attributes: ["sector_id", "name"],
+            },
+          ],
+        },
+        {
+          model: RegionPreference,
+          as: "regionPreferences",
+          include: [
+            {
+              model: Region,
+              as: "region",
+              attributes: ["region_id", "name"],
+            },
+          ],
+        },
+        {
+          model: ContactPerson,
+          as: "contactPersons",
+          attributes: ["contact_id", "name", "email", "phone", "position"],
+        },
+      ],
+      offset,
+      limit: parseInt(limit),
+      distinct: true,
+    });
+
+    if (users.length === 0) {
+      return res
+        .status(200)
+        .json({ status: false, message: "No investors found." });
+    }
+
+    const formatter = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    });
+
+    const formattedInvestors = users.map(user => {
+      const sectorFocus = user.sectorPreferences?.map(pref => pref.sector?.name).filter(Boolean) || [];
+      const geographyFocus = user.regionPreferences?.map(pref => pref.region?.name).filter(Boolean) || [];
+      const team = user.contactPersons?.map(contact => ({
+        name: contact.name,
+        role: contact.position || "Team Member",
+        image: "https://placehold.co/100"
+      })) || [];
+
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        kyc_status: user.kyc_status,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        profileImage: user.profile_image || "https://via.placeholder.com/200",
+        description: user.description || "",
+        sectorFocus,
+        geographyFocus,
+        totalInvestments: user.total_investments ? formatter.format(user.total_investments) : "$0",
+        averageCheckSize: user.average_check_size ? formatter.format(user.average_check_size) : "$0",
+        successfulExits: user.successful_exits || 0,
+        portfolioIRR: user.portfolio_ipr ? `${user.portfolio_ipr}%` : "0%",
+        team,
+        history: [
+          { year: 2023, event: "Joined NobleStride platform" },
+          { year: 2022, event: "Updated investment preferences" }
+        ]
+      };
+    });
+
+    const totalPages = Math.ceil(count / limit);
+
+    res.status(200).json({
+      status: true,
+      totalInvestors: count,
+      totalPages,
+      currentPage: parseInt(page),
+      investors: formattedInvestors,
+    });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
 const getSimilarInvestors = async (req, res) => {
   try {
     const { id } = req.params;
@@ -2669,6 +2768,7 @@ module.exports = {
   getEmployeesForInvestmentFirm,
   deleteUser,
   getInvestorDetails,
+  getAllInvestors,
   getSimilarInvestors,
   getMatchedDeals,
   getUsers,

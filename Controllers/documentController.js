@@ -71,7 +71,7 @@ const createDocument = async (req, res) => {
 
     // Check if the document type exists
     const documentType = await DocumentType.findByPk(document_type_id);
-    if (!documentType) {
+    if (document_type_id && !documentType) {
       return res
         .status(404)
         .json({ status: false, message: "Document type not found." });
@@ -204,6 +204,7 @@ const getAllDocuments = async (req, res) => {
         include: [
           { model: User, as: "uploader" },
           { model: Deal, as: "deal" },
+          { model: Folder, as: "folder" },
         ],
         offset,
         limit: parseInt(limit),
@@ -324,7 +325,7 @@ const updateDocument = async (req, res) => {
 
     // Check if the document type exists
     const documentType = await DocumentType.findByPk(document_type_id);
-    if (!documentType) {
+    if (document_type_id && !documentType) {
       return res
         .status(404)
         .json({ status: false, message: "Document type not found." });

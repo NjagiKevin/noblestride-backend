@@ -6,6 +6,7 @@ const {
   getFolderById,
   getAcceptedAndPendingFolderInvites, // Add this line
   archiveFolder,
+  unArchiveFolder,
   filterFolders, // Add this line
 } = require("../Controllers/folderController");
 const authMiddleware = require("../Middlewares/authMiddleware");
@@ -45,5 +46,13 @@ router.get(
   getFolderById
 ); // Add this line
 router.put("/:id/archive", authMiddleware, archiveFolder); // Add this line
+router.get(
+  "/:id",
+  authMiddleware,
+  checkPermissions(["VIEW_FOLDER_BY_ID"]),
+
+  getFolderById
+); // Add this line
+router.put("/:id/unarchive", authMiddleware, unArchiveFolder); // Add this line
 
 module.exports = router;

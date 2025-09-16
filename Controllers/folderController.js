@@ -163,6 +163,36 @@ const archiveFolder = async (req, res) => {
   }
 };
 
+// Mark a folder as archived
+const unArchiveFolder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const folder = await Folder.findByPk(id);
+
+    if (!folder) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Folder not found." });
+    }
+
+    folder.archived = false;
+    await folder.save();
+
+    await createAuditLog({
+      userId: req.user.id,
+      action: "ARCHIVE_FOLDER",
+      description: `Folder with ID ${id} archived`,
+      ip_address: req.ip,
+    });
+
+    res
+      .status(200)
+      .json({ status: true, message: "Folder archived successfully." });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
 // Filter folders based on various criteria
 const filterFolders = async (req, res) => {
   try {
@@ -332,6 +362,7 @@ module.exports = {
   getAllFolders,
   getFolderById,
   archiveFolder,
+  unArchiveFolder,
   filterFolders, // Add this line
   getAcceptedAndPendingFolderInvites, // Add this line
 };
