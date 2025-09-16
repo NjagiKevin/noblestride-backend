@@ -30,6 +30,8 @@ const upload = require("../Middlewares/imageUpload");
 const path = require("path");
 const Permission = db.permissions;
 const RolePermission = db.role_permissions;
+const fs = require('fs');
+const csv = require('csv-parser');
 
 const personalEmailDomains = [
   "gmail.com",
@@ -337,6 +339,7 @@ const getUsersByType = async (req, res) => {
       where: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.cast(db.Sequelize.col('role'), 'VARCHAR')), db.Sequelize.fn('LOWER', type)),
       offset,
       limit: parseInt(limit),
+      order: [['updatedAt', 'DESC']]
     });
 
     const kycStatusCounts = await User.findAll({
@@ -944,6 +947,65 @@ const bulkUploadUsers = async (req, res) => {
   }
 };
 
+const bulkUploadCompanies = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        status: false,
+        message: "No file uploaded.",
+      });
+    }
+
+    const companies = [];
+    const hashedPassword = await bcrypt.hash("password123", 10);
+    const targetCompanyRole = await Role.findOne({
+      where: { name: "Target Company" },
+    });
+
+    if (!targetCompanyRole) {
+      return res.status(404).json({
+        status: false,
+        message: "Target Company role not found.",
+      });
+    }
+
+    fs.createReadStream(req.file.path)
+      .pipe(csv())
+      .on("data", (row) => {
+        const sectors = row.Sectors ? row.Sectors.split(",").map(s => s.trim()) : [];
+        const regions = row.Regions ? row.Regions.split(",").map(r => r.trim()) : [];
+
+        companies.push({
+          name: row.Name,
+          email: row.Email,
+          kyc_status: row["KYC Status"],
+          status: row.Status,
+          createdAt: new Date(row["Created At"]),
+          updatedAt: new Date(row["Updated At"]),
+          password: hashedPassword,
+          role: "Target Company",
+          role_id: targetCompanyRole.role_id,
+          preference_sector: JSON.stringify(sectors),
+          preference_region: JSON.stringify(regions),
+        });
+      })
+      .on("end", async () => {
+        try {
+          await User.bulkCreate(companies);
+          fs.unlinkSync(req.file.path); // remove uploaded file
+          res.status(200).json({
+            status: true,
+            message: "Companies uploaded successfully.",
+          });
+        } catch (error) {
+          res.status(500).json({ status: false, message: error.message });
+        }
+      });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
 // Get profile of the logged-in user
 const getProfile = async (req, res) => {
   try {
@@ -1033,7 +1095,7 @@ const markUserAsArchived = async (req, res) => {
 
     if (!user) {
       return res
-        .status(200)
+        .status(404 )
         .json({ status: false, message: "User not found." });
     }
 
@@ -2744,6 +2806,7 @@ module.exports = {
   resetPassword,
   getUsersByType,
   bulkUploadUsers,
+  bulkUploadCompanies,
   getUserById,
   getProfile,
   getEmployees,
