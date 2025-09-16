@@ -36,7 +36,7 @@ const createTransaction = async (req, res) => {
 // Get all transactions
 const getAllTransactions = async (req, res) => {
   try {
-    const transactions = await Transaction.findAll();
+    const transactions = await Transaction.findAll({ include: [{ model: Deal, as: 'deal' }, { model: db.users, as: 'user' }] });
     const totalAmount = await Transaction.sum("amount");
 
     const amountsByStatus = await Transaction.findAll({

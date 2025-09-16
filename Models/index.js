@@ -432,7 +432,7 @@ db.deals.hasMany(db.dealMeetings, { foreignKey: "deal_id", as: "meetings" });
 db.dealMeetings.belongsTo(db.deals, { foreignKey: "deal_id", as: "deal" });
 
 db.users.hasMany(db.Transaction, { foreignKey: "user_id" });
-db.Transaction.belongsTo(db.users, { foreignKey: "user_id" });
+db.Transaction.belongsTo(db.users, { foreignKey: "user_id", as: "user" });
 
 db.users.hasMany(db.AuditLog, { foreignKey: "user_id" });
 db.AuditLog.belongsTo(db.users, { foreignKey: "user_id" });
