@@ -18,8 +18,8 @@ const router = express.Router();
 router.get("/", getAllSubsectors);
 router.get("/sector/:sector_id", getSubsectorBySectorId); // Add this line
 router.get("/:id", getSubsectorById);
-router.post("/", checkPermissions(["CREATE_SUBSECTOR"]), createSubsector);
-router.put("/:id", checkPermissions(["UPDATE_SUBSECTOR"]), updateSubsector);
-router.delete("/:id", checkPermissions(["DELETE_SUBSECTOR"]), deleteSubsector);
+router.post("/", authMiddleware, checkPermissions(["CREATE_SUBSECTOR"]), createSubsector);
+router.put("/:id", authMiddleware, checkPermissions(["UPDATE_SUBSECTOR"]), updateSubsector);
+router.delete("/:id", authMiddleware, checkPermissions(["DELETE_SUBSECTOR"]), deleteSubsector);
 
 module.exports = router;

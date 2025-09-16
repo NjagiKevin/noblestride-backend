@@ -26,7 +26,10 @@ const updateSettings = async (req, res) => {
         city,
         location,
         address,
-        // logo,
+        two_factor_authentication,
+        login_notifications,
+        user_management_access,
+        system_log_access,
       } = req.body;
 
       let settings = await Settings.findOne();
@@ -46,6 +49,10 @@ const updateSettings = async (req, res) => {
           location,
           address,
           logo,
+          two_factor_authentication,
+          login_notifications,
+          user_management_access,
+          system_log_access,
         });
       } else {
         // Update existing settings
@@ -59,6 +66,10 @@ const updateSettings = async (req, res) => {
           location,
           address,
           logo,
+          two_factor_authentication,
+          login_notifications,
+          user_management_access,
+          system_log_access,
         });
       }
 
