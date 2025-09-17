@@ -18,6 +18,7 @@ const createMilestone = async (req, res) => {
       deal_stage_id,
       description,
       due_date,
+      created_by: req.user.id,
     });
     await createAuditLog({
       userId: req.user.id,
@@ -107,10 +108,14 @@ const filterMilestones = async (req, res) => {
       endDate,
       page = 1,
       limit = 10,
+      dueDateRange,
+      createdFrom,
+      creatorName,
     } = req.query;
     const offset = (page - 1) * limit;
 
     const whereClause = {};
+    const includeClause = [];
 
     if (title) {
       whereClause.title = { [Op.iLike]: `%${title}%` }; // Case-insensitive search
@@ -138,9 +143,29 @@ const filterMilestones = async (req, res) => {
       }
     }
 
+    if (dueDateRange) {
+      const selectedDate = new Date(dueDateRange);
+      const startDate = new Date(selectedDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+      const endDate = new Date(selectedDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+      whereClause.due_date = { [Op.between]: [startDate, endDate] };
+    }
+
+    if (createdFrom) {
+      whereClause.createdAt = { [Op.gte]: new Date(createdFrom) };
+    }
+
+    if (creatorName) {
+      includeClause.push({
+        model: db.users,
+        as: "creator",
+        where: { name: { [Op.iLike]: `%${creatorName}%` } },
+      });
+    }
+
     const { count: totalMilestones, rows: milestones } =
       await Milestone.findAndCountAll({
         where: whereClause,
+        include: includeClause,
         order: [["createdAt", "ASC"]],
         offset,
         limit: parseInt(limit),
