@@ -3,6 +3,16 @@ const jwt = require("jsonwebtoken");
 const db = require("../Models");
 
 const adminRoleMiddleware = async (req, res, next) => {
+  if (req.user) {
+    if (req.user.role !== "Administrator") {
+      return res.status(403).json({
+        status: "false",
+        message: "Access denied. Administrator role required."
+      });
+    }
+    return next();
+  }
+
   const token =
     req.header("Authorization")?.replace("Bearer ", "") || req.cookies.jwt;
   

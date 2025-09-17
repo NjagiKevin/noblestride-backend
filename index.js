@@ -94,7 +94,11 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
 
 const PORT = process.env.PORT || 3030;
 
+const apiKeyAuthMiddleware = require("./Middlewares/apiKeyAuthMiddleware");
+
 const app = express();
+
+app.use(apiKeyAuthMiddleware);
 
 // Logger middleware
 const loggerMiddleware = require('./Middlewares/loggerMiddleware');
