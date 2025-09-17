@@ -2786,6 +2786,28 @@ const searchUsers = async (req, res) => {
   }
 };
 
+const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const userId = req.user.id;
+
+    const user = await User.findByPk(userId);
+
+    const isSame = await bcrypt.compare(currentPassword, user.password);
+
+    if (!isSame) {
+      return res.status(400).json({ status: false, message: "Invalid current password" });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    res.status(200).json({ status: true, message: "Password changed successfully." });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
 module.exports = {
   updateAddressableMarket,
   updateCurrentMarket,
@@ -2836,4 +2858,5 @@ module.exports = {
   getMatchedDeals,
   getUsers,
   searchUsers,
+  changePassword,
 };
