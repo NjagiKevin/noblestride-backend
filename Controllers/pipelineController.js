@@ -30,33 +30,86 @@ const createPipeline = async (req, res) => {
 // Get all pipelines
 const getAllPipelines = async (req, res) => {
   try {
-    const pipelines = await Pipeline.findAll({
-      include: [
-        {
+    const { search, deal_stage_id, sort } = req.query;
+
+    const includeOptions = [
+      {
+        model: PipelineStage,
+        as: "stages",
+        include: [
+          {
+            model: StageCard,
+            as: "cards",
+            include: [
+              {
+                model: User,
+                as: "user",
+                attributes: ["id", "name", "email"], // Include specific user attributes
+                include: [
+                  {
+                    model: ContactPerson,
+                    as: "contactPersons", // Include contact persons
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const whereClause = {};
+
+    if (search) {
+      includeOptions[0].include[0].include[0].where = {
+        name: { [db.Sequelize.Op.iLike]: `%${search}%` },
+      };
+    }
+
+    if (deal_stage_id) {
+      includeOptions[0].where = {
+          stage_id: deal_stage_id,
+      };
+    }
+
+    const orderClause = [];
+
+    if (sort) {
+      if (sort === "name_asc") {
+        orderClause.push([{
           model: PipelineStage,
-          as: "stages",
-          include: [
-            {
-              model: StageCard,
-              as: "cards",
-              include: [
-                {
-                  model: User,
-                  as: "user",
-                  attributes: ["id", "name", "email"], // Include specific user attributes
-                  include: [
-                    {
-                      model: ContactPerson,
-                      as: "contactPersons", // Include contact persons
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
+          as: "stages"
+        }, {
+          model: StageCard,
+          as: "cards"
+        }, {
+          model: User,
+          as: "user"
+        }, "name", "ASC"]);
+      } else if (sort === "name_desc") {
+        orderClause.push([{
+          model: PipelineStage,
+          as: "stages"
+        }, {
+          model: StageCard,
+          as: "cards"
+        }, {
+          model: User,
+          as: "user"
+        }, "name", "DESC"]);
+      } else if (sort === "created_asc") {
+        orderClause.push(["createdAt", "ASC"]);
+      } else if (sort === "created_desc") {
+        orderClause.push(["createdAt", "DESC"]);
+      }
+    }
+
+    const pipelines = await Pipeline.findAll({
+      include: includeOptions,
+      where: whereClause,
+      order: orderClause,
     });
+
     await createAuditLog({
       userId: req.user.id,
       action: "GET_ALL_PIPELINES",
