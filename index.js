@@ -70,6 +70,7 @@ const swaggerSpec = require("./config/swagger");
 const swaggerUi = require("swagger-ui-express");
 const settingsRoutes = require("./Routes/settingsRoutes");
 const statisticsRoutes = require("./Routes/statisticsRoutes");
+const apiKeyRoutes = require("./Routes/apiKeyRoutes");
 const office365EmailRoutes = require("./Routes/office365EmailRoutes");
 const { connectProducer, disconnectProducer } = require("./Middlewares/kafka/kafkaProducer");
 const { connectConsumer, disconnectConsumer } = require("./Middlewares/kafka/tokenRefreshConsumer");
@@ -93,7 +94,11 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
 
 const PORT = process.env.PORT || 3030;
 
+const apiKeyAuthMiddleware = require("./Middlewares/apiKeyAuthMiddleware");
+
 const app = express();
+
+app.use(apiKeyAuthMiddleware);
 
 // Logger middleware
 const loggerMiddleware = require('./Middlewares/loggerMiddleware');
@@ -191,6 +196,7 @@ app.use("/api/emails", emailRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/settings", settingsRoutes);
 app.use("/api/statistics", statisticsRoutes);
+app.use("/api/api-keys", apiKeyRoutes);
 app.use("/api/office365", office365EmailRoutes);
 
 // Conditionally enable Bull Dashboard

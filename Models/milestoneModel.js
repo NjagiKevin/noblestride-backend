@@ -49,9 +49,24 @@ module.exports = (sequelize, DataTypes) => {
           key: "stage_id",
         },
       },
+      created_by: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "users",
+          key: "id",
+        },
+      },
     },
     { timestamps: true }
   );
+
+  Milestone.associate = (models) => {
+    Milestone.belongsTo(models.users, {
+      foreignKey: "created_by",
+      as: "creator",
+    });
+  };
 
   return Milestone;
 };

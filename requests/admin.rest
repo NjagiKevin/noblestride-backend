@@ -1,0 +1,5 @@
+### Get all users (Admin)
+GET {{BASE_URL}}/users
+Content-Type: application/json
+X-API-Key: {{API_KEY}}
+
