@@ -180,6 +180,7 @@ db.country_preferences = require("./CountryPreferenceModel")(
 db.deal_leads = require("./dealLeadModel")(sequelize, DataTypes);
 db.settings = require("./settingsModel")(sequelize, DataTypes);
 db.Office365Token = require("./office365token")(sequelize, DataTypes);
+db.user_sessions = require("./userSessionModel")(sequelize, DataTypes);
 
 // Define associations
 db.users.hasMany(db.deal_leads, {

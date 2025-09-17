@@ -141,5 +141,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
+  User.associate = (models) => {
+    User.hasMany(models.user_session, {
+      foreignKey: "user_id",
+      as: "sessions",
+    });
+  };
+
   return User;
 };

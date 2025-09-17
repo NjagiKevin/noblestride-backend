@@ -58,9 +58,25 @@ const maskEmail = (email) => {
 };
 
 //logout function
-const logout = (req, res) => {
-  res.cookie("jwt", "", { maxAge: 1, httpOnly: true });
-  return res.status(200).json({ status: true, message: "Logout successful." });
+const logout = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    res.cookie("jwt", "", { maxAge: 1, httpOnly: true });
+
+    const session = await db.user_sessions.findOne({
+      where: { user_id: userId },
+      order: [["login_time", "DESC"]],
+    });
+
+    if (session) {
+      session.logout_time = new Date();
+      await session.save();
+    }
+
+    return res.status(200).json({ status: true, message: "Logout successful." });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
 };
 
 const uploadProfileImage = async (req, res) => {
@@ -889,6 +905,13 @@ const login = async (req, res) => {
         });
 
         await sendEmail(user.email, "Your OTP Code", `Your OTP code is: ${verificationCode}`);
+
+        await db.user_sessions.create({
+          user_id: user.id,
+          ip_address: req.ip,
+          device: req.headers["user-agent"],
+          client: req.headers["user-agent"],
+        });
 
         //if password matches wit the one in the database
         //go ahead and generate a cookie for the user
@@ -2808,6 +2831,53 @@ const changePassword = async (req, res) => {
   }
 };
 
+const getUserSessions = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const userId = req.user.id;
+
+    const offset = (page - 1) * limit;
+
+    const { count: totalSessions, rows: sessions } = await db.user_sessions.findAndCountAll({
+      where: { user_id: userId },
+      order: [["login_time", "DESC"]],
+      offset,
+      limit: parseInt(limit),
+    });
+
+    const totalPages = Math.ceil(totalSessions / limit);
+
+    res.status(200).json({
+      status: true,
+      totalSessions,
+      totalPages,
+      currentPage: parseInt(page),
+      sessions,
+    });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
+const deleteUserSession = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    const session = await db.user_sessions.findOne({ where: { id, user_id: userId } });
+
+    if (!session) {
+      return res.status(404).json({ status: false, message: "Session not found." });
+    }
+
+    await session.destroy();
+
+    res.status(200).json({ status: true, message: "Session deleted successfully." });
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
+};
+
 module.exports = {
   updateAddressableMarket,
   updateCurrentMarket,
@@ -2859,4 +2929,6 @@ module.exports = {
   getUsers,
   searchUsers,
   changePassword,
+  getUserSessions,
+  deleteUserSession,
 };

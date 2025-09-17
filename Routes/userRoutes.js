@@ -59,7 +59,7 @@ const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 const checkPermissions = require("../Middlewares/permissionMiddleware");
 const checkRole = require("../Middlewares/roleMiddleware");
-const {changePassword} = require("../Controllers/userController");
+const {changePassword, getUserSessions, deleteUserSession} = require("../Controllers/userController");
 
 const User = db.users;
 
@@ -146,5 +146,8 @@ router.get("/profile", authMiddleware, getProfile); // Add this line
 router.put("/:id/status", authMiddleware, checkRole("Administrator"), updateUserStatus); // Add this line
 router.get("/employees", authMiddleware, getEmployees); // Add this line
 router.post("/change-password", authMiddleware, changePassword);
+
+router.get("/sessions", authMiddleware, getUserSessions);
+router.delete("/sessions/:id", authMiddleware, deleteUserSession);
 
 module.exports = router;
