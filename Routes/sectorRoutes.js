@@ -18,9 +18,9 @@ const router = express.Router();
 
 router.get("/", getAllSectors);
 router.get("/:id", getSectorById);
-router.post("/", checkPermissions(["CREATE_SECTOR"]), createSector);
-router.put("/:id", checkPermissions(["UPDATE_SECTOR"]), updateSector);
-router.delete("/:id", checkPermissions(["DELETE_SECTOR"]), deleteSector);
+router.post("/", authMiddleware, checkPermissions(["CREATE_SECTOR"]), createSector);
+router.put("/:id", authMiddleware, checkPermissions(["UPDATE_SECTOR"]), updateSector);
+router.delete("/:id", authMiddleware, checkPermissions(["DELETE_SECTOR"]), deleteSector);
 router.post(
   "/bulk-upload",
   upload.single("file"),
