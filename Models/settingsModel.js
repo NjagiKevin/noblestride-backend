@@ -43,6 +43,22 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      two_factor_authentication: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      login_notifications: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      user_management_access: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      system_log_access: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     },
     { timestamps: true }
   );
