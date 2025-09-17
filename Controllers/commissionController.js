@@ -20,6 +20,18 @@ const generateInvoice = async (milestone) => {
   return invoice;
 };
 
+const handleMilestoneStatusUpdate = async (milestone, status) => {
+  milestone.status = status;
+  await milestone.save();
+
+  if (milestone.status === "Completed" && milestone.commission_amount) {
+    const invoice = await generateInvoice(milestone);
+    return { milestone, invoice };
+  }
+
+  return { milestone };
+};
+
 // Function to update milestone status and generate invoice if needed
 const updateMilestoneStatus = async (req, res) => {
   try {
@@ -30,15 +42,16 @@ const updateMilestoneStatus = async (req, res) => {
         .json({ status: false, message: "Milestone not found." });
     }
 
-    milestone.status = req.body.status;
-    await milestone.save();
+    const { milestone: updatedMilestone, invoice } = await handleMilestoneStatusUpdate(
+      milestone,
+      req.body.status
+    );
 
-    if (milestone.status === "Completed" && milestone.commission_amount) {
-      const invoice = await generateInvoice(milestone);
-      return res.status(200).json({ status: true, milestone, invoice });
+    if (invoice) {
+      return res.status(200).json({ status: true, milestone: updatedMilestone, invoice });
     }
 
-    res.status(200).json({ status: true, milestone });
+    res.status(200).json({ status: true, milestone: updatedMilestone });
   } catch (error) {
     res.status(500).json({ status: false, message: error.message });
   }
@@ -70,4 +83,5 @@ const getInvoicesByDealId = async (req, res) => {
 module.exports = {
   updateMilestoneStatus,
   getInvoicesByDealId,
+  handleMilestoneStatusUpdate,
 };

@@ -6,7 +6,7 @@ const Deal = db.deals;
 // Create a new transaction
 const createTransaction = async (req, res) => {
   try {
-    const { deal_id, amount, transaction_type, payment_method } = req.body;
+    const { deal_id, amount, transaction_type, payment_method, status } = req.body;
     const user_id = req.user.id; // Assuming the user ID is available in req.user
 
     const deal = await Deal.findByPk(deal_id);
@@ -21,6 +21,7 @@ const createTransaction = async (req, res) => {
         amount,
         transaction_type,
         payment_method,
+        status
       });
       res.status(200).json({
         status: true,
@@ -36,7 +37,7 @@ const createTransaction = async (req, res) => {
 // Get all transactions
 const getAllTransactions = async (req, res) => {
   try {
-    const transactions = await Transaction.findAll();
+    const transactions = await Transaction.findAll({ include: [{ model: Deal, as: 'deal' }, { model: db.users, as: 'user' }] });
     const totalAmount = await Transaction.sum("amount");
 
     const amountsByStatus = await Transaction.findAll({

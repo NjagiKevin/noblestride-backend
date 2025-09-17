@@ -32,6 +32,9 @@ const getUserNotifications = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query; // Default to page 1 and limit 10 if not provided
 
+      console.log("page", page);
+      console.log("limit", limit);
+
     const offset = (page - 1) * limit;
 
     const { count: totalNotifications, rows: notifications } =
@@ -39,7 +42,7 @@ const getUserNotifications = async (req, res) => {
         where: { user_id: req.user.id },
         order: [["createdAt", "DESC"]],
         offset,
-        limit: parseInt(limit),
+        limit,
       });
 
     const totalPages = Math.ceil(totalNotifications / limit);
@@ -54,7 +57,7 @@ const getUserNotifications = async (req, res) => {
       status: "true",
       totalNotifications,
       totalPages,
-      currentPage: parseInt(page),
+      currentPage: page,
       notifications,
     });
   } catch (error) {
@@ -116,9 +119,30 @@ const sendPredictiveNotifications = async () => {
   }
 };
 
+const markAllNotificationsAsRead = async (req, res) => {
+  try {
+    await Notification.update(
+      { read: true },
+      { where: { user_id: req.user.id } }
+    );
+
+    await createAuditLog({
+      ip_address: req.ip,
+      userId: req.user.id,
+      action: "MARK_ALL_NOTIFICATIONS_AS_READ",
+      description: `All notifications marked as read by user ID ${req.user.id}.`,
+    });
+
+    res.status(200).json({ status: "true", message: "All notifications marked as read." });
+  } catch (error) {
+    res.status(500).json({ status: "false", message: error.message });
+  }
+};
+
 module.exports = {
   createNotification,
   getUserNotifications,
   markNotificationAsRead,
   sendPredictiveNotifications,
+  markAllNotificationsAsRead,
 };

@@ -4,7 +4,7 @@ const Milestone = db.milestones;
 const Deal = db.deals;
 const DealStage = db.deal_stages;
 const { Op } = require("sequelize");
-const { updateMilestoneStatus } = require("./commissionController");
+const { handleMilestoneStatusUpdate } = require("./commissionController");
 const { createAuditLog } = require("./auditLogService");
 
 // Create a new milestone
@@ -69,7 +69,7 @@ const updateMilestone = async (req, res) => {
     const milestone = await Milestone.findByPk(req.params.id);
     if (!milestone) {
       return res
-        .status(200)
+        .status(404)
         .json({ status: false, message: "Milestone not found." });
     }
 
@@ -80,10 +80,18 @@ const updateMilestone = async (req, res) => {
       ip_address: req.ip,
       description: `Milestone ${milestone.title} updated.`,
     });
-    await updateMilestoneStatus(req, res);
-    res.status(200).json({ status: true, milestone });
+    const { milestone: updatedMilestone, invoice } = await handleMilestoneStatusUpdate(
+      milestone,
+      req.body.status
+    );
+
+    if (invoice) {
+      return res.status(200).json({ status: true, milestone: updatedMilestone, invoice });
+    }
+
+    res.status(200).json({ status: true, milestone: updatedMilestone });
   } catch (error) {
-    res.status(200).json({ status: false, message: error.message });
+    return res.status(500).json({ status: false, message: error.message });
   }
 };
 

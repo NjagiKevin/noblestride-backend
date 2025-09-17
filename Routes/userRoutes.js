@@ -10,6 +10,7 @@ const {
   resetPassword,
   getUsersByType,
   bulkUploadUsers,
+  bulkUploadCompanies,
   getUserById,
   deleteUser,
   getProfile,
@@ -133,7 +134,8 @@ router.post("/reset-password", resetPassword);
 
 //bulk-upload
 
-router.post("/bulk-upload", authMiddleware, checkPermissions(["bulk-upload"]), bulkUploadUsers);
+router.post("/bulk-upload", authMiddleware, checkRole("Administrator"), bulkUploadUsers);
+router.post("/bulk-upload-companies", authMiddleware, checkRole("Administrator"), upload.single('file'), bulkUploadCompanies);
 router.get("/user/:id", authMiddleware, getUserById); // Add this line
 router.get("/investor/:id", authMiddleware, getInvestorDetails); // Add this line
 router.get("/investors", authMiddleware, getAllInvestors);
