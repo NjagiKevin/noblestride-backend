@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Wait for the database to be ready
 echo "Waiting for database to be ready..."
@@ -12,18 +13,18 @@ do
   sleep 2
 done
 
-echo "Database is up and running!"
+echo "✅ Database is up and running!"
 
 # Run migrations
-echo "Running migrations..."
+echo "🚀 Running migrations..."
 npx sequelize-cli db:migrate
 
 # Run the seeds
-echo "Running seeds..."
+echo "🌱 Running seeds..."
 npx sequelize-cli db:seed:all
 
-echo "Seeds completed successfully!"
+echo "✅ Seeds completed successfully!"
 
 # Start the application
-echo "Starting the application..."
+echo "📦 Starting the application..."
 npm start
